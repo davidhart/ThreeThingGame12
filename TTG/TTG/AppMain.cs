@@ -18,7 +18,7 @@ namespace TTG
 			Game game = new Game();
 			game.Initialise ();
 			game.Load ();
-			while (true) 
+			while(game.IsRunning) 
 			{
 				SystemEvents.CheckEvents ();
 				game.Update ();

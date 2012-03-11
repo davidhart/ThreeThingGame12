@@ -21,6 +21,8 @@ namespace TTG
 		private static int frameCount;
 		private static int prevTicks;
 		
+		public bool IsRunning = true;
+		
 		public Game ()
 		{
 		}

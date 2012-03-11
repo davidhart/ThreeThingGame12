@@ -1,0 +1,1276 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>TTG.Model</name>
+    </assembly>
+    <members>
+        <member name="T:TTG.Model">
+            @if LANG_JA
+            <summary>モデルを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model</summary>
+            @endif
+        </member>
+        <member name="M:TTG.Model.#ctor(System.String,System.Int32)">
+            @if LANG_JA
+            <summary>モデルを作成する(ファイルから)</summary>
+            <param name="fileName">ファイル名</param>
+            <param name="index">ファイル内のモデル番号</param>
+            @endif
+            @if LANG_EN
+            <summary>Creates a model (from a file)</summary>
+            <param name="fileName">Filename</param>
+            <param name="index">Model number in a file</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.#ctor(System.Byte[],System.Int32)">
+            @if LANG_JA
+            <summary>モデルを作成する(ファイルイメージから)</summary>
+            <param name="fileImage">ファイルイメージ</param>
+            <param name="index">ファイル内のモデル番号</param>
+            @endif
+            @if LANG_EN
+            <summary>Creates a model (from a file image)</summary>
+            <param name="fileImage">File image</param>
+            <param name="index">Model number in a file</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.Dispose">
+            @if LANG_JA
+            <summary>モデルのアンマネージドリソースを解放する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Frees unmanaged resources of a model</summary>
+            @endif
+        </member>
+        <member name="M:TTG.Model.BindPrograms(TTG.BasicProgramContainer)">
+            @if LANG_JA
+            <summary>モデルにプログラムを関連づける</summary>
+            <param name="container">プログラムコンテナ</param>
+            @endif
+            @if LANG_EN
+            <summary>Links a program to a model</summary>
+            <param name="container">Program Container</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.BindTextures(TTG.BasicTextureContainer)">
+            @if LANG_JA
+            <summary>モデルにテクスチャを関連づける</summary>
+            <param name="container">テクスチャコンテナ</param>
+            @endif
+            @if LANG_EN
+            <summary>Links a texture to a model</summary>
+            <param name="container">Texture Container</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.SetWorldMatrix(Sce.Pss.Core.Matrix4@)">
+            @if LANG_JA
+            <summary>ワールド行列を設定する</summary>
+            <param name="world">ワールド行列</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets a world matrix</summary>
+            <param name="world">World matrix</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.SetCurrentMotion(System.Int32,System.Single)">
+            @if LANG_JA
+            <summary>カレントモーションを設定する</summary>
+            <param name="index">モーション番号</param>
+            <param name="delay">遅延時間 (単位＝秒)</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the current motion</summary>
+            <param name="index">Motion number</param>
+            <param name="delay">Delay time (unit = s)</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.Animate(System.Single)">
+            @if LANG_JA
+            <summary>モデルのアニメーションを計算する</summary>
+            <param name="step">ステップ時間 (単位＝秒)</param>
+            @endif
+            @if LANG_EN
+            <summary>Calculates the model animation</summary>
+            <param name="step">Step time (unit = s)</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.Update">
+            @if LANG_JA
+            <summary>モデルのマトリクスを更新する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Updates the model matrix</summary>
+            @endif
+        </member>
+        <member name="M:TTG.Model.Draw(Sce.Pss.Core.Graphics.GraphicsContext)">
+            @if LANG_JA
+            <summary>モデルを描画する</summary>
+            <param name="graphics">グラフィックスコンテキスト</param>
+            @endif
+            @if LANG_EN
+            <summary>Renders a model</summary>
+            <param name="graphics">Graphics Context</param>
+            @endif
+        </member>
+        <member name="M:TTG.Model.Draw(Sce.Pss.Core.Graphics.GraphicsContext,TTG.BasicProgram)">
+            @if LANG_JA
+            <summary>モデルを描画する (指定されたプログラムで)</summary>
+            <param name="graphics">グラフィックスコンテキスト</param>
+            <param name="program">指定されたプログラム</param>
+            @endif
+            @if LANG_EN
+            <summary>Renders a model (with the specified program)</summary>
+            <param name="graphics">Graphics Context</param>
+            <param name="program">Specified program</param>
+            @endif
+        </member>
+        <member name="F:TTG.Model.WorldMatrix">
+            @if LANG_JA
+            <summary>ワールド行列</summary>
+            @endif
+            @if LANG_EN
+            <summary>World matrix</summary>
+            @endif
+        </member>
+        <member name="F:TTG.Model.CurrentMotion">
+            @if LANG_JA
+            <summary>カレントモーション番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Current motion number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.Model.Bones">
+            @if LANG_JA
+            <summary>モデルに含まれるボーンの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Bone array included in a model</summary>
+            @endif
+        </member>
+        <member name="F:TTG.Model.Parts">
+            @if LANG_JA
+            <summary>モデルに含まれるパートの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Part array included in a model</summary>
+            @endif
+        </member>
+        <member name="F:TTG.Model.Materials">
+            @if LANG_JA
+            <summary>モデルに含まれるマテリアルの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material array included in a model</summary>
+            @endif
+        </member>
+        <member name="F:TTG.Model.Textures">
+            @if LANG_JA
+            <summary>モデルに含まれるテクスチャの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Texture array included in a model</summary>
+            @endif
+        </member>
+        <member name="F:TTG.Model.Motions">
+            @if LANG_JA
+            <summary>モデルに含まれるモーションの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Motion array included in a model</summary>
+            @endif
+        </member>
+        <member name="F:TTG.Model.Programs">
+            @if LANG_JA
+            <summary>モデルに含まれるプログラムの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Program array included in a model</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicBone">
+            @if LANG_JA
+            <summary>モデルのボーンを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model bone</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicBone.#ctor">
+            @if LANG_JA
+            <summary>ボーンを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a bone</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.ParentBone">
+            @if LANG_JA
+            <summary>親ボーンの番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Parent bone number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.Visibility">
+            @if LANG_JA
+            <summary>ビジビリティ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Visibility</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.DrawParts">
+            @if LANG_JA
+            <summary>描画パートの番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Render part number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.BlendBones">
+            @if LANG_JA
+            <summary>スキニングの影響ボーンの番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Skinning effect bone number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.BlendOffsets">
+            @if LANG_JA
+            <summary>スキニングのオフセット行列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Skinning offset matrix</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.Pivot">
+            @if LANG_JA
+            <summary>ピボット位置</summary>
+            @endif
+            @if LANG_EN
+            <summary>Pivot position</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.Translation">
+            @if LANG_JA
+            <summary>移動量</summary>
+            @endif
+            @if LANG_EN
+            <summary>Movement amount</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.Rotation">
+            @if LANG_JA
+            <summary>回転量</summary>
+            @endif
+            @if LANG_EN
+            <summary>Rotation amount</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.Scaling">
+            @if LANG_JA
+            <summary>スケーリング</summary>
+            @endif
+            @if LANG_EN
+            <summary>Scaling</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicBone.WorldMatrix">
+            @if LANG_JA
+            <summary>ワールド行列</summary>
+            @endif
+            @if LANG_EN
+            <summary>World matrix</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicPart">
+            @if LANG_JA
+            <summary>モデルのパートを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model part</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicPart.#ctor">
+            @if LANG_JA
+            <summary>パートを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a part</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicPart.Meshes">
+            @if LANG_JA
+            <summary>パートに含まれるメッシュの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Mesh array included in a part</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicMesh">
+            @if LANG_JA
+            <summary>モデルのメッシュを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model mesh</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicMesh.#ctor">
+            @if LANG_JA
+            <summary>メッシュを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a mesh</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMesh.Material">
+            @if LANG_JA
+            <summary>マテリアルの番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMesh.BlendSubset">
+            @if LANG_JA
+            <summary>スキニングの部分集合</summary>
+            @endif
+            @if LANG_EN
+            <summary>Skinning subset</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMesh.VertexBuffer">
+            @if LANG_JA
+            <summary>頂点バッファ</summary>
+            @endif
+            @if LANG_EN
+            <summary>VertexBuffer</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicMaterial">
+            @if LANG_JA
+            <summary>モデルのマテリアルを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model material</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicMaterial.#ctor">
+            @if LANG_JA
+            <summary>マテリアルを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a material</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Program">
+            @if LANG_JA
+            <summary>プログラムの番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Program number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.FileName">
+            @if LANG_JA
+            <summary>プログラムのファイル名</summary>
+            @endif
+            @if LANG_EN
+            <summary>Program filename</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Diffuse">
+            @if LANG_JA
+            <summary>ディフューズカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Diffuse color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Specular">
+            @if LANG_JA
+            <summary>スペキュラーカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Specular color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Ambient">
+            @if LANG_JA
+            <summary>アンビエントカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Ambient color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Emission">
+            @if LANG_JA
+            <summary>エミッションカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Emission color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Opacity">
+            @if LANG_JA
+            <summary>不透明度</summary>
+            @endif
+            @if LANG_EN
+            <summary>Opacity</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Shininess">
+            @if LANG_JA
+            <summary>輝度</summary>
+            @endif
+            @if LANG_EN
+            <summary>Luminance</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMaterial.Layers">
+            @if LANG_JA
+            <summary>マテリアルに含まれるレイヤーの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Layer array included in a material</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicLayer">
+            @if LANG_JA
+            <summary>モデルのレイヤーを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model layer</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicLayer.#ctor">
+            @if LANG_JA
+            <summary>レイヤーを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a layer</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicLayer.Texture">
+            @if LANG_JA
+            <summary>テクスチャの番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Texture number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicLayer.TextureCrop">
+            @if LANG_JA
+            <summary>テクスチャクロップ矩形</summary>
+            @endif
+            @if LANG_EN
+            <summary>Texture crop rectangle</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicTexture">
+            @if LANG_JA
+            <summary>モデルのテクスチャを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model texture</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicTexture.#ctor">
+            @if LANG_JA
+            <summary>テクスチャを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a texture</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicTexture.Texture">
+            @if LANG_JA
+            <summary>使用するテクスチャ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Texture to be used</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicTexture.FileName">
+            @if LANG_JA
+            <summary>使用するテクスチャのファイル名</summary>
+            @endif
+            @if LANG_EN
+            <summary>Filename of texture to be used</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicMotion">
+            @if LANG_JA
+            <summary>モデルのモーションを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model motion</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicMotion.#ctor">
+            @if LANG_JA
+            <summary>モーションを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a motion</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotion.FrameStart">
+            @if LANG_JA
+            <summary>開始フレーム</summary>
+            @endif
+            @if LANG_EN
+            <summary>Start frame</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotion.FrameEnd">
+            @if LANG_JA
+            <summary>終了フレーム</summary>
+            @endif
+            @if LANG_EN
+            <summary>End frame</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotion.FrameRate">
+            @if LANG_JA
+            <summary>フレームレート</summary>
+            @endif
+            @if LANG_EN
+            <summary>Frame rate</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotion.FrameRepeat">
+            @if LANG_JA
+            <summary>繰り返しモード</summary>
+            @endif
+            @if LANG_EN
+            <summary>Repeat mode</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotion.Frame">
+            @if LANG_JA
+            <summary>現在のフレーム</summary>
+            @endif
+            @if LANG_EN
+            <summary>Current frame</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotion.Weight">
+            @if LANG_JA
+            <summary>現在のブレンド係数</summary>
+            @endif
+            @if LANG_EN
+            <summary>Current blend coefficient</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotion.FCurves">
+            @if LANG_JA
+            <summary>モーションに含まれる関数カーブの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Function curve array included in a motion</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicFCurve">
+            @if LANG_JA
+            <summary>モデルの関数カーブを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a model function curve</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicFCurve.#ctor">
+            @if LANG_JA
+            <summary>関数カーブを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a function curve</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurve.DimCount">
+            @if LANG_JA
+            <summary>次元数</summary>
+            @endif
+            @if LANG_EN
+            <summary>Dimensionality</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurve.KeyCount">
+            @if LANG_JA
+            <summary>キー数</summary>
+            @endif
+            @if LANG_EN
+            <summary>Number of keys</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurve.InterpType">
+            @if LANG_JA
+            <summary>アニメーションの補間タイプ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Animation interpolation type</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurve.TargetType">
+            @if LANG_JA
+            <summary>アニメーションのターゲットタイプ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Animation target type</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurve.ChannelType">
+            @if LANG_JA
+            <summary>アニメーションのチャンネルタイプ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Animation channel type</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurve.TargetIndex">
+            @if LANG_JA
+            <summary>アニメーションのターゲット番号</summary>
+            @endif
+            @if LANG_EN
+            <summary>Animation target number</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurve.KeyFrames">
+            @if LANG_JA
+            <summary>キーフレームの配列</summary>
+            @endif
+            @if LANG_EN
+            <summary>Key frame array</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicMotionRepeatMode">
+            @if LANG_JA
+            <summary>モーションの繰り返しモード</summary>
+            @endif
+            @if LANG_EN
+            <summary>Motion repeat mode</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotionRepeatMode.Hold">
+            @if LANG_JA
+            <summary>単発再生</summary>
+            @endif
+            @if LANG_EN
+            <summary>Individual playback</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicMotionRepeatMode.Cycle">
+            @if LANG_JA
+            <summary>繰り返し再生</summary>
+            @endif
+            @if LANG_EN
+            <summary>Repeat playback</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicFCurveInterpType">
+            @if LANG_JA
+            <summary>アニメーションの補間タイプ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Animation interpolation type</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveInterpType.Constant">
+            @if LANG_JA
+            <summary>定数補間</summary>
+            @endif
+            @if LANG_EN
+            <summary>Constant interpolation</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveInterpType.Linear">
+            @if LANG_JA
+            <summary>線形補間</summary>
+            @endif
+            @if LANG_EN
+            <summary>Linear interpolation</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveInterpType.Hermite">
+            @if LANG_JA
+            <summary>エルミート補間</summary>
+            @endif
+            @if LANG_EN
+            <summary>Hermite interpolation</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveInterpType.Cubic">
+            @if LANG_JA
+            <summary>キュービック補間</summary>
+            @endif
+            @if LANG_EN
+            <summary>Cubic interpolation</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveInterpType.Spherical">
+            @if LANG_JA
+            <summary>球面線形補間</summary>
+            @endif
+            @if LANG_EN
+            <summary>Spherical linear interpolation</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicFCurveTargetType">
+            @if LANG_JA
+            <summary>アニメーションのターゲットタイプ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Animation target type</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveTargetType.None">
+            @if LANG_JA
+            <summary>なし</summary>
+            @endif
+            @if LANG_EN
+            <summary>None</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveTargetType.Bone">
+            @if LANG_JA
+            <summary>ボーン</summary>
+            @endif
+            @if LANG_EN
+            <summary>Bone</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveTargetType.Material">
+            @if LANG_JA
+            <summary>マテリアル</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicFCurveChannelType">
+            @if LANG_JA
+            <summary>アニメーションのチャンネルタイプ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Animation channel type</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.None">
+            @if LANG_JA
+            <summary>なし</summary>
+            @endif
+            @if LANG_EN
+            <summary>None</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Visibility">
+            @if LANG_JA
+            <summary>ボーンのビジビリティ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Bone visibility</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Translation">
+            @if LANG_JA
+            <summary>ボーンの移動量</summary>
+            @endif
+            @if LANG_EN
+            <summary>Bone movement amount</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Rotation">
+            @if LANG_JA
+            <summary>ボーンの回転量</summary>
+            @endif
+            @if LANG_EN
+            <summary>Bone rotation amount</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Scaling">
+            @if LANG_JA
+            <summary>ボーンのスケーリング</summary>
+            @endif
+            @if LANG_EN
+            <summary>Bone scaling</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Diffuse">
+            @if LANG_JA
+            <summary>マテリアルのディフューズカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material diffuse color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Specular">
+            @if LANG_JA
+            <summary>マテリアルのスペキュラーカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material specular color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Emission">
+            @if LANG_JA
+            <summary>マテリアルのエミッションカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material emission color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Ambient">
+            @if LANG_JA
+            <summary>マテリアルのアンビエントカラー</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material ambient color</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Opacity">
+            @if LANG_JA
+            <summary>マテリアルの不透明度</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material opacity</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.Shininess">
+            @if LANG_JA
+            <summary>マテリアルの輝度</summary>
+            @endif
+            @if LANG_EN
+            <summary>Material luminance</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicFCurveChannelType.TextureCrop">
+            @if LANG_JA
+            <summary>レイヤーのテクスチャクロップ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Layer texture crop</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicProgram">
+            @if LANG_JA
+            <summary>基本プログラムを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a basic program</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgram.#ctor(TTG.BasicParameters)">
+            @if LANG_JA
+            <summary>プログラムを作成する</summary>
+            <param name="parameters">パラメータ (nullならば新規作成)</param>
+            @endif
+            @if LANG_EN
+            <summary>Creates a program</summary>
+            <param name="parameters">Parameters (creates new when null)</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgram.#ctor(System.String,System.String,TTG.BasicParameters)">
+            @if LANG_JA
+            <summary>プログラムを作成する (ファイルから)</summary>
+            <param name="vpFileName">頂点シェーダーのファイル名</param>
+            <param name="fpFileName">フラグメントシェーダーのファイル名</param>
+            <param name="parameters">パラメータ (nullならば新規作成)</param>
+            @endif
+            @if LANG_EN
+            <summary>Creates a program (from a file)</summary>
+            <param name="vpFileName">Vertex shader filename</param>
+            <param name="fpFileName">Fragment shader filename</param>
+            <param name="parameters">Parameters (creates new when null)</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgram.#ctor(TTG.BasicProgram)">
+            @if LANG_JA
+            <summary>プログラムを複製する</summary>
+            <param name="program">プログラム</param>
+            <remarks>プログラムを複製します。複製されたプログラムはアンマネージドリソースを共有します。すべての複製に対して Dispose() が呼び出されたとき、共有されたアンマネージドリソースが解放されます。</remarks>
+            @endif
+            @if LANG_EN
+            <summary>Creates a copy of a program</summary>
+            <param name="program">Program</param>
+            <remarks>Creates a copy of the program. The 2 programs will then share unmanaged resources. When Dispose() is called for all copies, the shared unmanaged resources will be freed.</remarks>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgram.Dispose">
+            @if LANG_JA
+            <summary>プログラムのアンマネージメントリソースを解放する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Frees the unmanaged resources of the program</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgram.UpdateShader">
+            @if LANG_JA
+            <summary>シェーダーの状態を更新する</summary>
+            <remarks>プリミティブ描画前にグラフィックスコンテキストから呼び出される仮想関数です。この関数はクラス内にキャッシュされた状態をシェーダーに反映する場合に使用します。</remarks>
+            @endif
+            @if LANG_EN
+            <summary>Updates the shader state</summary>
+            <remarks>A virtual function that is called from the graphics context before primitive rendering. This function is used when a cached state in a class is applied to the shader.</remarks>
+            @endif
+        </member>
+        <member name="P:TTG.BasicProgram.Parameters">
+            @if LANG_JA
+            <summary>パラメータ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Parameters</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicParameters">
+            @if LANG_JA
+            <summary>基本プログラムのパラメータを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing basic program parameters</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.#ctor">
+            @if LANG_JA
+            <summary>パラメータを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a parameter</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.Enable(TTG.BasicEnableMode,System.Boolean)">
+            @if LANG_JA
+            <summary>指定されたシェーダー機能を有効または無効にする</summary>
+            <param name="mode">有効または無効にするシェーダー機能</param>
+            <param name="status">有効ならばtrue</param>
+            @endif
+            @if LANG_EN
+            <summary>Enables or disables the specified shader feature</summary>
+            <param name="mode">Shader feature to enable or disable</param>
+            <param name="status">Specify true to enable</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.IsEnabled(TTG.BasicEnableMode)">
+            @if LANG_JA
+            <summary>指定されたシェーダー機能が有効かどうかを取得する</summary>
+            <param name="mode">有効または無効にするシェーダー機能</param>
+            @endif
+            @if LANG_EN
+            <summary>Obtains whether or not the specified shader feature is enabled</summary>
+            <param name="mode">Shader feature to enable or disable</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetProjectionMatrix(Sce.Pss.Core.Matrix4@)">
+            @if LANG_JA
+            <summary>プロジェクション行列を設定する</summary>
+            <param name="projection">プロジェクション行列</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the projection matrix</summary>
+            <param name="projection">Projection matrix</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetViewMatrix(Sce.Pss.Core.Matrix4@)">
+            @if LANG_JA
+            <summary>ビュー行列を設定する</summary>
+            <param name="view">ビュー行列</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets a view matrix</summary>
+            <param name="view">View matrix</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetWorldCount(System.Int32)">
+            @if LANG_JA
+            <summary>ワールド行列の数を設定する</summary>
+            <param name="count">ワールド行列の数</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the number of world matrices</summary>
+            <param name="count">Number of world matrices</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetWorldMatrix(System.Int32,Sce.Pss.Core.Matrix4@)">
+            @if LANG_JA
+            <summary>ワールド行列を設定する</summary>
+            <param name="index">ワールド行列の番号</param>
+            <param name="world">ワールド行列</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets a world matrix</summary>
+            <param name="index">World matrix number</param>
+            <param name="world">World matrix</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetLightCount(System.Int32)">
+            @if LANG_JA
+            <summary>ライトの数を設定する</summary>
+            <param name="count">ライトの数</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the number of lights</summary>
+            <param name="count">Number of lights</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetLightDirection(System.Int32,Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>ライトの方向ベクトルを設定する</summary>
+            <param name="index">ライトの番号</param>
+            <param name="direction">方向ベクトル</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the light direction vector</summary>
+            <param name="index">Light number</param>
+            <param name="direction">Direction vector</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetLightDiffuse(System.Int32,Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>ライトのディフューズカラーを設定する</summary>
+            <param name="index">ライトの番号</param>
+            <param name="diffuse">ディフューズカラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the light diffuse color</summary>
+            <param name="index">Light number</param>
+            <param name="diffuse">Diffuse color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetLightSpecular(System.Int32,Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>ライトのスペキュラカラーを設定する</summary>
+            <param name="index">ライトの番号</param>
+            <param name="specular">スペキュラカラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the light specular color</summary>
+            <param name="index">Light number</param>
+            <param name="specular">Specular color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetLightAmbient(Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>ライトのアンビエントカラーを設定する</summary>
+            <param name="ambient">アンビエントカラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the light ambient color</summary>
+            <param name="ambient">Ambient color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetFogRange(System.Single,System.Single)">
+            @if LANG_JA
+            <summary>フォグの範囲を設定する</summary>
+            <param name="start">開始距離</param>
+            <param name="end">終了距離</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the fog range</summary>
+            <param name="start">Start distance</param>
+            <param name="end">End distance</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetFogColor(Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>フォグのカラーを設定する</summary>
+            <param name="color">カラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the fog color</summary>
+            <param name="color">Color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetMaterialDiffuse(Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>マテリアルのディフューズカラーを設定する</summary>
+            <param name="diffuse">ディフューズカラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the material diffuse color</summary>
+            <param name="diffuse">Diffuse color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetMaterialSpecular(Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>マテリアルのスペキュラーカラーを設定する</summary>
+            <param name="specular">スペキュラーカラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the material specular color</summary>
+            <param name="specular">Specular color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetMaterialAmbient(Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>マテリアルのアンビエントカラーを設定する</summary>
+            <param name="ambient">アンビエントカラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the material ambient color</summary>
+            <param name="ambient">Ambient color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetMaterialEmission(Sce.Pss.Core.Vector3@)">
+            @if LANG_JA
+            <summary>マテリアルのエミッションカラーを設定する</summary>
+            <param name="emission">エミッションカラー</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the material emission color</summary>
+            <param name="emission">Emission color</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetMaterialOpacity(System.Single)">
+            @if LANG_JA
+            <summary>マテリアルの不透明度を設定する</summary>
+            <param name="opacity">不透明度</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the material opacity</summary>
+            <param name="opacity">Opacity</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicParameters.SetMaterialShininess(System.Single)">
+            @if LANG_JA
+            <summary>マテリアルの輝度を設定する</summary>
+            <param name="shininess">輝度</param>
+            @endif
+            @if LANG_EN
+            <summary>Sets the material luminance</summary>
+            <param name="shininess">Luminance</param>
+            @endif
+        </member>
+        <member name="T:TTG.BasicEnableMode">
+            @if LANG_JA
+            <summary>有効または無効にするシェーダー機能</summary>
+            @endif
+            @if LANG_EN
+            <summary>Shader feature to enable or disable</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicEnableMode.Lighting">
+            @if LANG_JA
+            <summary>ライティング</summary>
+            @endif
+            @if LANG_EN
+            <summary>Lighting</summary>
+            @endif
+        </member>
+        <member name="F:TTG.BasicEnableMode.Fog">
+            @if LANG_JA
+            <summary>フォグ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Fog</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicProgramContainer">
+            @if LANG_JA
+            <summary>プログラムコンテナを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a program container</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgramContainer.#ctor(TTG.BasicParameters)">
+            @if LANG_JA
+            <summary>プログラムコンテナを作成する</summary>
+            <param name="parameters">共有パラメータ (nullならば共有をおこなわない)</param>
+            @endif
+            @if LANG_EN
+            <summary>Creates a program container</summary>
+            <param name="parameters">Shared parameter (not shared when null)</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgramContainer.Dispose">
+            @if LANG_JA
+            <summary>プログラムコンテナのアンマネージドリソースを解放する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Frees the unmanaged resources of the program container</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgramContainer.Add(System.String,TTG.BasicProgram)">
+            @if LANG_JA
+            <summary>プログラムを登録する</summary>
+            <param name="key">検索キー</param>
+            <param name="program">プログラム</param>
+            @endif
+            @if LANG_EN
+            <summary>Registers a program</summary>
+            <param name="key">Search key</param>
+            <param name="program">Program</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicProgramContainer.Find(System.String)">
+            @if LANG_JA
+            <summary>プログラムを検索する</summary>
+            <param name="key">検索キー</param>
+            <returns>プログラム (nullならば検索失敗)</returns>
+            @endif
+            @if LANG_EN
+            <summary>Searches for a program</summary>
+            <param name="key">Search key</param>
+            <returns>Program (search fails when null)</returns>
+            @endif
+        </member>
+        <member name="F:TTG.BasicProgramContainer.Parameters">
+            @if LANG_JA
+            <summary>共有パラメータ</summary>
+            @endif
+            @if LANG_EN
+            <summary>Shared parameters</summary>
+            @endif
+        </member>
+        <member name="T:TTG.BasicTextureContainer">
+            @if LANG_JA
+            <summary>テクスチャコンテナを表すクラス</summary>
+            @endif
+            @if LANG_EN
+            <summary>Class representing a texture container</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicTextureContainer.#ctor">
+            @if LANG_JA
+            <summary>テクスチャコンテナを作成する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Creates a texture container</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicTextureContainer.Dispose">
+            @if LANG_JA
+            <summary>テクスチャコンテナのアンマネージドリソースを解放する</summary>
+            @endif
+            @if LANG_EN
+            <summary>Frees the unmanaged resources of the texture container</summary>
+            @endif
+        </member>
+        <member name="M:TTG.BasicTextureContainer.Add(System.String,Sce.Pss.Core.Graphics.Texture)">
+            @if LANG_JA
+            <summary>テクスチャを登録する</summary>
+            <param name="key">検索キー</param>
+            <param name="texture">テクスチャ</param>
+            @endif
+            @if LANG_EN
+            <summary>Registers a texture</summary>
+            <param name="key">Search key</param>
+            <param name="texture">Texture</param>
+            @endif
+        </member>
+        <member name="M:TTG.BasicTextureContainer.Find(System.String)">
+            @if LANG_JA
+            <summary>テクスチャを検索する</summary>
+            <param name="key">検索キー</param>
+            <returns>テクスチャ (nullならば検索失敗)</returns>
+            @endif
+            @if LANG_EN
+            <summary>Searches for a texture</summary>
+            <param name="key">Search key</param>
+            <returns>Texture (search fails when null)</returns>
+            @endif
+        </member>
+    </members>
+</doc>

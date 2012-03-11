@@ -43,6 +43,7 @@
     <Compile Include="Sprite.cs" />
     <Compile Include="GameObject2D.cs" />
     <Compile Include="GameObject3D.cs" />
+    <Compile Include="Game.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />

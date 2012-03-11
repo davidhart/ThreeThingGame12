@@ -36,6 +36,8 @@
     <Reference Include="Sce.Pss.Core" />
     <Reference Include="Sce.Pss.HighLevel.Model" />
     <Reference Include="Sce.Pss.HighLevel.Physics2D" />
+    <Reference Include="Sce.Pss.HighLevel.GameEngine2D" />
+    <Reference Include="Sce.Pss.HighLevel.UI" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMain.cs" />
@@ -50,6 +52,8 @@
     <ShaderProgram Include="shaders\Texture.vcg" />
     <ShaderProgram Include="shaders\Sprite.fcg" />
     <ShaderProgram Include="shaders\Sprite.vcg" />
+    <ShaderProgram Include="shaders\Toon.fcg" />
+    <ShaderProgram Include="shaders\Toon.vcg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Pss.CSharp.targets" />
 </Project>

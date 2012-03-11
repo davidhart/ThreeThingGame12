@@ -257,7 +257,7 @@ namespace TTG {
 						material.Opacity = ReadFloat( args + 12 ) ;
 						break ;
 					case ChunkType.Emission :
-						material.Emission = ReadVector3( args ) ;
+						ReadVector3( args ) ; // Ignore emission
 						break ;
 					case ChunkType.FileName	:
 						material.FileName = ReadString( args, args + child.ArgsSize ) ;

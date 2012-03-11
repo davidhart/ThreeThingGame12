@@ -52,15 +52,17 @@
     <ShaderProgram Include="shaders\Texture.vcg" />
     <ShaderProgram Include="shaders\Sprite.fcg" />
     <ShaderProgram Include="shaders\Sprite.vcg" />
+    <ShaderProgram Include="shaders\model.fcg" />
+    <ShaderProgram Include="shaders\model.vcg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Pss.CSharp.targets" />
+  <ItemGroup>
+    <Content Include="walker.mdx" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{EAFF76CD-10CE-417A-B81A-88F0C87A9D2B}</Project>
       <Name>Model</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="walker.mdx" />
   </ItemGroup>
 </Project>

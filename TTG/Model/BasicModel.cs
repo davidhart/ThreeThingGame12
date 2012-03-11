@@ -15,23 +15,11 @@ namespace TTG {
 	//	BasicModel
 	//------------------------------------------------------------
 
-	/// @if LANG_JA
-	/// <summary>モデルを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Class representing a model</summary>
-	/// @endif
 	public class Model {
-		/// @if LANG_JA
-		/// <summary>モデルを作成する(ファイルから)</summary>
-		/// <param name="fileName">ファイル名</param>
-		/// <param name="index">ファイル内のモデル番号</param>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>Creates a model (from a file)</summary>
 		/// <param name="fileName">Filename</param>
 		/// <param name="index">Model number in a file</param>
-		/// @endif
 		public Model( string fileName, int index = 0 ) {
 			WorldMatrix = Matrix4.Identity ;
 			CurrentMotion = 0 ;
@@ -39,16 +27,9 @@ namespace TTG {
 			var loader = new MdxLoader() ;
 			loader.Load( this, fileName, index ) ;
 		}
-		/// @if LANG_JA
-		/// <summary>モデルを作成する(ファイルイメージから)</summary>
-		/// <param name="fileImage">ファイルイメージ</param>
-		/// <param name="index">ファイル内のモデル番号</param>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>Creates a model (from a file image)</summary>
 		/// <param name="fileImage">File image</param>
 		/// <param name="index">Model number in a file</param>
-		/// @endif
 		public Model( byte[] fileImage, int index = 0 ) {
 			WorldMatrix = Matrix4.Identity ;
 			CurrentMotion = 0 ;
@@ -56,12 +37,8 @@ namespace TTG {
 			var loader = new MdxLoader() ;
 			loader.Load( this, fileImage, index ) ;
 		}
-		/// @if LANG_JA
-		/// <summary>モデルのアンマネージドリソースを解放する</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Frees unmanaged resources of a model</summary>
-		/// @endif
 		public void Dispose() {
 			foreach ( var part in Parts ) {
 				foreach ( var mesh in part.Meshes ) {
@@ -84,14 +61,8 @@ namespace TTG {
 			Programs = null ;
 		}
 
-		/// @if LANG_JA
-		/// <summary>モデルにプログラムを関連づける</summary>
-		/// <param name="container">プログラムコンテナ</param>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>Links a program to a model</summary>
 		/// <param name="container">Program Container</param>
-		/// @endif
 		public void BindPrograms( BasicProgramContainer container ) {
 			if ( Programs != null ) {
 				foreach ( var program in Programs ) program.Dispose() ;
@@ -106,14 +77,9 @@ namespace TTG {
 			}
 			Programs = programs.ToArray() ;
 		}
-		/// @if LANG_JA
-		/// <summary>モデルにテクスチャを関連づける</summary>
-		/// <param name="container">テクスチャコンテナ</param>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Links a texture to a model</summary>
 		/// <param name="container">Texture Container</param>
-		/// @endif
 		public void BindTextures( BasicTextureContainer container ) {
 			foreach ( var texture in Textures ) {
 				if ( texture.Texture == null ) {
@@ -125,48 +91,27 @@ namespace TTG {
 			}
 		}
 
-		/// @if LANG_JA
-		/// <summary>ワールド行列を設定する</summary>
-		/// <param name="world">ワールド行列</param>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>Sets a world matrix</summary>
 		/// <param name="world">World matrix</param>
-		/// @endif
 		public void SetWorldMatrix( ref Matrix4 world ) {
 			WorldMatrix = world ;
 		}
-		/// @if LANG_JA
-		/// <summary>カレントモーションを設定する</summary>
-		/// <param name="index">モーション番号</param>
-		/// <param name="delay">遅延時間 (単位＝秒)</param>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Sets the current motion</summary>
 		/// <param name="index">Motion number</param>
 		/// <param name="delay">Delay time (unit = s)</param>
-		/// @endif
 		public void SetCurrentMotion( int index, float delay = 0.0f ) {
 			CurrentMotion = index ;
 			Motions[ CurrentMotion ].Frame = Motions[ CurrentMotion ].FrameStart ;
 		}
-		/// @if LANG_JA
-		/// <summary>モデルのアニメーションを計算する</summary>
-		/// <param name="step">ステップ時間 (単位＝秒)</param>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Calculates the model animation</summary>
 		/// <param name="step">Step time (unit = s)</param>
-		/// @endif
 		public void Animate( float step ) {
 			if ( Motions.Length > 0 ) AnimateMotion( Motions[ CurrentMotion ], step ) ;
 		}
-		/// @if LANG_JA
-		/// <summary>モデルのマトリクスを更新する</summary>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Updates the model matrix</summary>
-		/// @endif
 		public void Update() {
 			foreach ( var bone in Bones ) {
 				Matrix4 local = Matrix4.Transformation( bone.Translation, bone.Rotation, bone.Scaling ) ;
@@ -178,25 +123,14 @@ namespace TTG {
 				}
 			}
 		}
-		/// @if LANG_JA
-		/// <summary>モデルを描画する</summary>
-		/// <param name="graphics">グラフィックスコンテキスト</param>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Renders a model</summary>
 		/// <param name="graphics">Graphics Context</param>
-		/// @endif
 		public void Draw( GraphicsContext graphics ) { Draw( graphics, null ) ; }
-		/// @if LANG_JA
-		/// <summary>モデルを描画する (指定されたプログラムで)</summary>
-		/// <param name="graphics">グラフィックスコンテキスト</param>
-		/// <param name="program">指定されたプログラム</param>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Renders a model (with the specified program)</summary>
 		/// <param name="graphics">Graphics Context</param>
 		/// <param name="program">Specified program</param>
-		/// @endif
 		public void Draw( GraphicsContext graphics, BasicProgram program ) {
 			bool worldDirty = false ;
 			foreach ( var bone in Bones ) {
@@ -240,12 +174,7 @@ namespace TTG {
 							}
 							worldDirty = true ;
 						}
-						parameters.SetMaterialDiffuse( ref material.Diffuse ) ;
-						parameters.SetMaterialSpecular( ref material.Specular ) ;
-						parameters.SetMaterialEmission( ref material.Emission ) ;
-						parameters.SetMaterialAmbient( ref material.Ambient ) ;
-						parameters.SetMaterialOpacity( material.Opacity ) ;
-						parameters.SetMaterialShininess( material.Shininess ) ;
+			
 						Texture texture = null ;
 						if ( material.Layers.Length > 0 ) {
 							texture = Textures[ material.Layers[ 0 ].Texture ].Texture ;
@@ -260,7 +189,7 @@ namespace TTG {
 		}
 
 		//	Subroutines
-
+		
 		void AnimateMotion( BasicMotion motion, float step ) {
 			motion.Frame += step * motion.FrameRate ;
 			if ( motion.Frame > motion.FrameEnd ) motion.Frame = motion.FrameStart ;
@@ -413,63 +342,27 @@ namespace TTG {
 			return ( t3 - t0 ) * x + t0 ;
 		}
 
-		/// @if LANG_JA
-		/// <summary>ワールド行列</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>World matrix</summary>
-		/// @endif
-		public Matrix4 WorldMatrix ;
-		/// @if LANG_JA
-		/// <summary>カレントモーション番号</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Current motion number</summary>
-		/// @endif
-		public int CurrentMotion ;
+		public Matrix4 WorldMatrix;
+		public int CurrentMotion;
 
-		/// @if LANG_JA
-		/// <summary>モデルに含まれるボーンの配列</summary>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>Bone array included in a model</summary>
-		/// @endif
-		public BasicBone[] Bones ;
-		/// @if LANG_JA
-		/// <summary>モデルに含まれるパートの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+		public BasicBone[] Bones;
+
 		/// <summary>Part array included in a model</summary>
-		/// @endif
-		public BasicPart[] Parts ;
-		/// @if LANG_JA
-		/// <summary>モデルに含まれるマテリアルの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+		public BasicPart[] Parts;
+
 		/// <summary>Material array included in a model</summary>
-		/// @endif
-		public BasicMaterial[] Materials ;
-		/// @if LANG_JA
-		/// <summary>モデルに含まれるテクスチャの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+		public BasicMaterial[] Materials;
+
 		/// <summary>Texture array included in a model</summary>
-		/// @endif
-		public BasicTexture[] Textures ;
-		/// @if LANG_JA
-		/// <summary>モデルに含まれるモーションの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+		public BasicTexture[] Textures;
+
+		
 		/// <summary>Motion array included in a model</summary>
-		/// @endif
-		public BasicMotion[] Motions ;
-		/// @if LANG_JA
-		/// <summary>モデルに含まれるプログラムの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+		public BasicMotion[] Motions;
+
 		/// <summary>Program array included in a model</summary>
-		/// @endif
-		public BasicProgram[] Programs ;
+		public BasicProgram[] Programs;
 
 		static Matrix4[] matrixBuffer = new Matrix4[ 0 ] ;
 		static int[] defaultBlendSubset = { 0, 1, 2, 3 } ;
@@ -480,19 +373,10 @@ namespace TTG {
 	//	BasicBone
 	//----------------------------------------------------------------
 
-	/// @if LANG_JA
-	/// <summary>モデルのボーンを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Class representing a model bone</summary>
-	/// @endif
 	public class BasicBone {
-		/// @if LANG_JA
-		/// <summary>ボーンを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Creates a bone</summary>
-		/// @endif
 		public BasicBone() {
 			ParentBone = -1 ;
 			Visibility = ~0U ;
@@ -505,75 +389,37 @@ namespace TTG {
 			Scaling = Vector3.One ;
 			WorldMatrix = Matrix4.Identity ;
 		}
-		/// @if LANG_JA
-		/// <summary>親ボーンの番号</summary>
-		/// @endif
-		/// @if LANG_EN
+
+		
 		/// <summary>Parent bone number</summary>
-		/// @endif
 		public int ParentBone ;
-		/// @if LANG_JA
-		/// <summary>ビジビリティ</summary>
-		/// @endif
-		/// @if LANG_EN
+
+		
 		/// <summary>Visibility</summary>
-		/// @endif
 		public uint Visibility ;
-		/// @if LANG_JA
-		/// <summary>描画パートの番号</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Render part number</summary>
-		/// @endif
 		public int[] DrawParts ;
-		/// @if LANG_JA
-		/// <summary>スキニングの影響ボーンの番号</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Skinning effect bone number</summary>
-		/// @endif
 		public int[] BlendBones ;
-		/// @if LANG_JA
-		/// <summary>スキニングのオフセット行列</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Skinning offset matrix</summary>
-		/// @endif
 		public Matrix4[] BlendOffsets ;
-		/// @if LANG_JA
-		/// <summary>ピボット位置</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Pivot position</summary>
-		/// @endif
+
+		/// <summary>Pivot position</summary>if
 		public Vector3 Pivot ;
-		/// @if LANG_JA
-		/// <summary>移動量</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Movement amount</summary>
-		/// @endif
 		public Vector3 Translation ;
-		/// @if LANG_JA
-		/// <summary>回転量</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Rotation amount</summary>
-		/// @endif
 		public Quaternion Rotation ;
-		/// @if LANG_JA
-		/// <summary>スケーリング</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Scaling</summary>
-		/// @endif
 		public Vector3 Scaling ;
-		/// @if LANG_JA
-		/// <summary>ワールド行列</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>World matrix</summary>
-		/// @endif
 		public Matrix4 WorldMatrix ;
 	}
 
@@ -581,69 +427,32 @@ namespace TTG {
 	//	BasicPart / BasicMesh
 	//----------------------------------------------------------------
 
-	/// @if LANG_JA
-	/// <summary>モデルのパートを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Class representing a model part</summary>
-	/// @endif
 	public class BasicPart {
-		/// @if LANG_JA
-		/// <summary>パートを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Creates a part</summary>
-		/// @endif
 		public BasicPart() {
 			Meshes = null ;
 		}
-		/// @if LANG_JA
-		/// <summary>パートに含まれるメッシュの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Mesh array included in a part</summary>
-		/// @endif
 		public BasicMesh[] Meshes ;
 	}
 
-	/// @if LANG_JA
-	/// <summary>モデルのメッシュを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Class representing a model mesh</summary>
-	/// @endif
 	public class BasicMesh {
-		/// @if LANG_JA
-		/// <summary>メッシュを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Creates a mesh</summary>
-		/// @endif
+
 		public BasicMesh() {
 			Material = -1 ;
 			BlendSubset = null ;
 			VertexBuffer = null ;
 		}
-		/// @if LANG_JA
-		/// <summary>マテリアルの番号</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Material number</summary>
-		/// @endif
 		public int Material ;
-		/// @if LANG_JA
-		/// <summary>スキニングの部分集合</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Skinning subset</summary>
-		/// @endif
 		public int[] BlendSubset ;
-		/// @if LANG_JA
-		/// <summary>頂点バッファ</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>VertexBuffer</summary>
-		/// @endif
 		public VertexBuffer VertexBuffer ;
 	}
 
@@ -651,125 +460,60 @@ namespace TTG {
 	//	BasicMaterial / BasicLayer
 	//----------------------------------------------------------------
 
-	/// @if LANG_JA
-	/// <summary>モデルのマテリアルを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Class representing a model material</summary>
-	/// @endif
 	public class BasicMaterial {
-		/// @if LANG_JA
-		/// <summary>マテリアルを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Creates a material</summary>
-		/// @endif
 		public BasicMaterial() {
 			Program = -1 ;
 			FileName = null ;
 			Diffuse = Vector3.One ;
 			Specular = Vector3.Zero ;
 			Ambient = Vector3.One ;
-			Emission = Vector3.Zero ;
 			Opacity = 1.0f ;
 			Shininess = 0.0f ;
 			Layers = null ;
 		}
-		/// @if LANG_JA
-		/// <summary>プログラムの番号</summary>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Program number</summary>
-		/// @endif
-		public int Program ;
-		/// @if LANG_JA
-		/// <summary>プログラムのファイル名</summary>
-		/// @endif
-		/// @if LANG_EN
+		public int Program;
+		
 		/// <summary>Program filename</summary>
-		/// @endif
-		public string FileName ;
-		/// @if LANG_JA
-		/// <summary>ディフューズカラー</summary>
-		/// @endif
-		/// @if LANG_EN
+		public string FileName;
+
 		/// <summary>Diffuse color</summary>
-		/// @endif
 		public Vector3 Diffuse ;
-		/// @if LANG_JA
-		/// <summary>スペキュラーカラー</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Specular color</summary>
-		/// @endif
 		public Vector3 Specular ;
-		/// @if LANG_JA
-		/// <summary>アンビエントカラー</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Ambient color</summary>
-		/// @endif
 		public Vector3 Ambient ;
-		/// @if LANG_JA
-		/// <summary>エミッションカラー</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Emission color</summary>
-		/// @endif
-		public Vector3 Emission ;
-		/// @if LANG_JA
-		/// <summary>不透明度</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Opacity</summary>
-		/// @endif
 		public float Opacity ;
-		/// @if LANG_JA
-		/// <summary>輝度</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Luminance</summary>
-		/// @endif
 		public float Shininess ;
-		/// @if LANG_JA
-		/// <summary>マテリアルに含まれるレイヤーの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Layer array included in a material</summary>
-		/// @endif
 		public BasicLayer[] Layers ;
 	}
 
-	/// @if LANG_JA
-	/// <summary>モデルのレイヤーを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
+
 	/// <summary>Class representing a model layer</summary>
-	/// @endif
 	public class BasicLayer {
-		/// @if LANG_JA
-		/// <summary>レイヤーを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Creates a layer</summary>
-		/// @endif
 		public BasicLayer() {
 			Texture = -1 ;
 			TextureCrop = new Vector4( 0.0f, 0.0f, 1.0f, 1.0f ) ;
 		}
-		/// @if LANG_JA
-		/// <summary>テクスチャの番号</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Texture number</summary>
-		/// @endif
 		public int Texture ;
-		/// @if LANG_JA
-		/// <summary>テクスチャクロップ矩形</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Texture crop rectangle</summary>
-		/// @endif
 		public Vector4 TextureCrop ;
 	}
 
@@ -777,36 +521,17 @@ namespace TTG {
 	//	BasicTexture
 	//----------------------------------------------------------------
 
-	/// @if LANG_JA
-	/// <summary>モデルのテクスチャを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
+
 	/// <summary>Class representing a model texture</summary>
-	/// @endif
 	public class BasicTexture {
-		/// @if LANG_JA
-		/// <summary>テクスチャを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Creates a texture</summary>
-		/// @endif
+
 		public BasicTexture() {
 			Texture = null ;
 			FileName = null ;
 		}
-		/// @if LANG_JA
-		/// <summary>使用するテクスチャ</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Texture to be used</summary>
-		/// @endif
+
 		public Texture Texture ;
-		/// @if LANG_JA
-		/// <summary>使用するテクスチャのファイル名</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Filename of texture to be used</summary>
-		/// @endif
+
 		public string FileName ;
 	}
 
@@ -814,19 +539,11 @@ namespace TTG {
 	//	BasicMotion / BasicFCurve
 	//----------------------------------------------------------------
 
-	/// @if LANG_JA
-	/// <summary>モデルのモーションを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
+
 	/// <summary>Class representing a model motion</summary>
-	/// @endif
 	public class BasicMotion {
-		/// @if LANG_JA
-		/// <summary>モーションを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Creates a motion</summary>
-		/// @endif
 		public BasicMotion() {
 			FrameStart = 0.0f ;
 			FrameEnd = 1000000.0f ;
@@ -836,70 +553,20 @@ namespace TTG {
 			Weight = 0.0f ;
 			FCurves = null ;
 		}
-		/// @if LANG_JA
-		/// <summary>開始フレーム</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Start frame</summary>
-		/// @endif
+
 		public float FrameStart ;
-		/// @if LANG_JA
-		/// <summary>終了フレーム</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>End frame</summary>
-		/// @endif
 		public float FrameEnd ;
-		/// @if LANG_JA
-		/// <summary>フレームレート</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Frame rate</summary>
-		/// @endif
 		public float FrameRate ;
-		/// @if LANG_JA
-		/// <summary>繰り返しモード</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Repeat mode</summary>
-		/// @endif
 		public BasicMotionRepeatMode FrameRepeat ;
-		/// @if LANG_JA
-		/// <summary>現在のフレーム</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Current frame</summary>
-		/// @endif
 		public float Frame ;
-		/// @if LANG_JA
-		/// <summary>現在のブレンド係数</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Current blend coefficient</summary>
-		/// @endif
 		public float Weight ;
-		/// @if LANG_JA
-		/// <summary>モーションに含まれる関数カーブの配列</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Function curve array included in a motion</summary>
-		/// @endif
 		public BasicFCurve[] FCurves ;
 	}
 
-	/// @if LANG_JA
-	/// <summary>モデルの関数カーブを表すクラス</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Class representing a model function curve</summary>
-	/// @endif
 	public class BasicFCurve {
-		/// @if LANG_JA
-		/// <summary>関数カーブを作成する</summary>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Creates a function curve</summary>
-		/// @endif
 		public BasicFCurve() {
 			DimCount = 0 ;
 			KeyCount = 0 ;
@@ -909,54 +576,26 @@ namespace TTG {
 			TargetIndex = -1 ;
 			KeyFrames = null ;
 		}
-		/// @if LANG_JA
-		/// <summary>次元数</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Dimensionality</summary>
-		/// @endif
 		public int DimCount ;
-		/// @if LANG_JA
-		/// <summary>キー数</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Number of keys</summary>
-		/// @endif
 		public int KeyCount ;
-		/// @if LANG_JA
-		/// <summary>アニメーションの補間タイプ</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Animation interpolation type</summary>
-		/// @endif
 		public BasicFCurveInterpType InterpType ;
-		/// @if LANG_JA
-		/// <summary>アニメーションのターゲットタイプ</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Animation target type</summary>
-		/// @endif
 		public BasicFCurveTargetType TargetType ;
-		/// @if LANG_JA
-		/// <summary>アニメーションのチャンネルタイプ</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Animation channel type</summary>
-		/// @endif
 		public BasicFCurveChannelType ChannelType ;
-		/// @if LANG_JA
-		/// <summary>アニメーションのターゲット番号</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Animation target number</summary>
-		/// @endif
 		public int TargetIndex ;
-		/// @if LANG_JA
-		/// <summary>キーフレームの配列</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Key frame array</summary>
-		/// @endif
 		public float[] KeyFrames ;
 	} ;
 
@@ -964,195 +603,83 @@ namespace TTG {
 	//	Public Enums
 	//----------------------------------------------------------------
 
-	/// @if LANG_JA
-	/// <summary>モーションの繰り返しモード</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Motion repeat mode</summary>
-	/// @endif
 	public enum BasicMotionRepeatMode {
-		/// @if LANG_JA
-		/// <summary>単発再生</summary>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>Individual playback</summary>
-		/// @endif
 		Hold,
-		/// @if LANG_JA
-		/// <summary>繰り返し再生</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Repeat playback</summary>
-		/// @endif
 		Cycle
 	}
 
-	/// @if LANG_JA
-	/// <summary>アニメーションの補間タイプ</summary>
-	/// @endif
-	/// @if LANG_EN
 	/// <summary>Animation interpolation type</summary>
-	/// @endif
 	public enum BasicFCurveInterpType {
-		/// @if LANG_JA
-		/// <summary>定数補間</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Constant interpolation</summary>
-		/// @endif
 		Constant,
-		/// @if LANG_JA
-		/// <summary>線形補間</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Linear interpolation</summary>
-		/// @endif
 		Linear,
-		/// @if LANG_JA
-		/// <summary>エルミート補間</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Hermite interpolation</summary>
-		/// @endif
 		Hermite,
-		/// @if LANG_JA
-		/// <summary>キュービック補間</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Cubic interpolation</summary>
-		/// @endif
 		Cubic,
-		/// @if LANG_JA
-		/// <summary>球面線形補間</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Spherical linear interpolation</summary>
-		/// @endif
 		Spherical
 	} ;
 
-	/// @if LANG_JA
-	/// <summary>アニメーションのターゲットタイプ</summary>
-	/// @endif
-	/// @if LANG_EN
+
 	/// <summary>Animation target type</summary>
-	/// @endif
 	public enum BasicFCurveTargetType {
-		/// @if LANG_JA
-		/// <summary>なし</summary>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>None</summary>
-		/// @endif
 		None,
-		/// @if LANG_JA
-		/// <summary>ボーン</summary>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Bone</summary>
-		/// @endif
 		Bone,
-		/// @if LANG_JA
-		/// <summary>マテリアル</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Material</summary>
-		/// @endif
 		Material,
 	} ;
 
-	/// @if LANG_JA
-	/// <summary>アニメーションのチャンネルタイプ</summary>
-	/// @endif
-	/// @if LANG_EN
+
 	/// <summary>Animation channel type</summary>
-	/// @endif
 	public enum BasicFCurveChannelType {
-		/// @if LANG_JA
-		/// <summary>なし</summary>
-		/// @endif
-		/// @if LANG_EN
 		/// <summary>None</summary>
-		/// @endif
 		None,
-		/// @if LANG_JA
-		/// <summary>ボーンのビジビリティ</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Bone visibility</summary>
-		/// @endif
 		Visibility,
-		/// @if LANG_JA
-		/// <summary>ボーンの移動量</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Bone movement amount</summary>
-		/// @endif
 		Translation,
-		/// @if LANG_JA
-		/// <summary>ボーンの回転量</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Bone rotation amount</summary>
-		/// @endif
 		Rotation,
-		/// @if LANG_JA
-		/// <summary>ボーンのスケーリング</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Bone scaling</summary>
-		/// @endif
 		Scaling,
-		/// @if LANG_JA
-		/// <summary>マテリアルのディフューズカラー</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Material diffuse color</summary>
-		/// @endif
 		Diffuse,
-		/// @if LANG_JA
-		/// <summary>マテリアルのスペキュラーカラー</summary>
-		/// @endif
-		/// @if LANG_EN
+		
 		/// <summary>Material specular color</summary>
-		/// @endif
 		Specular,
-		/// @if LANG_JA
-		/// <summary>マテリアルのエミッションカラー</summary>
-		/// @endif
-		/// @if LANG_EN
-		/// <summary>Material emission color</summary>
-		/// @endif
-		Emission,
-		/// @if LANG_JA
-		/// <summary>マテリアルのアンビエントカラー</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Material ambient color</summary>
-		/// @endif
 		Ambient,
-		/// @if LANG_JA
-		/// <summary>マテリアルの不透明度</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Material opacity</summary>
-		/// @endif
 		Opacity,
-		/// @if LANG_JA
-		/// <summary>マテリアルの輝度</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Material luminance</summary>
-		/// @endif
 		Shininess,
-		/// @if LANG_JA
-		/// <summary>レイヤーのテクスチャクロップ</summary>
-		/// @endif
-		/// @if LANG_EN
+
 		/// <summary>Layer texture crop</summary>
-		/// @endif
 		TextureCrop
 	} ;
 
 
-} // namespace
+}

@@ -1,7 +1,6 @@
 using System;
 using Sce.Pss.Core ;
 using Sce.Pss.Core.Graphics ;
-using TTG;
 
 namespace TTG
 {

@@ -33,7 +33,15 @@ namespace TTG
 			graphics = new GraphicsContext ();
 			
 			model = new Model("walker.mdx");
-			program = new BasicProgram();
+			
+			// Custom Program with color attribute
+			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
+			program.SetUniformBinding(4, "Color");
+			Vector4 color = new Vector4(1, 0, 0, 1);
+			program.SetUniformValue(4, ref color);
+			
+			// Default unlit program
+			//program = new BasicProgram();
 			
 			stopwatch = new Stopwatch();
 			stopwatch.Start();
@@ -76,31 +84,19 @@ namespace TTG
 			
 			
 			Matrix4 projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
-			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -100));
+			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -25));
 			
 			
-			Vector3 litDirection = new Vector3 (1.0f, -1.0f, -1.0f).Normalize ();
-			Vector3 litDirection2 = new Vector3 (0.0f, 1.0f, 0.0f).Normalize ();
+			Vector3 litDirection = new Vector3 (0.0f, -1.0f, -1.0f).Normalize ();
 			Vector3 litColor = new Vector3 (1.0f, 1.0f, 1.0f);
-			Vector3 litColor2 = new Vector3 (1.0f, 0.0f, 0.0f);
+
 			Vector3 litAmbient = new Vector3 (0.3f, 0.3f, 0.3f);
 			Vector3 fogColor = new Vector3 (0.0f, 0.5f, 1.0f);
 
 			BasicParameters parameters = program.Parameters;
-			parameters.Enable (BasicEnableMode.Lighting, true);
 
 			parameters.SetProjectionMatrix (ref projectionMatrix);
 			parameters.SetViewMatrix (ref viewMatrix);
-			parameters.SetLightCount (2);
-			parameters.SetLightDirection (0, ref litDirection);
-			parameters.SetLightDiffuse (0, ref litColor);
-			parameters.SetLightSpecular (0, ref litColor);
-			parameters.SetLightDirection (1, ref litDirection2);
-			parameters.SetLightDiffuse (1, ref litColor2);
-			parameters.SetLightSpecular (1, ref litColor2);
-			parameters.SetLightAmbient (ref litAmbient);
-			parameters.SetFogRange (10.0f, 50.0f);
-			parameters.SetFogColor (ref fogColor);
 			
 			Matrix4 world = Matrix4.RotationY( FMath.Radians( 0 ) ) ;
 			model.SetWorldMatrix( ref world ) ;

@@ -11,16 +11,23 @@ using Sce.Pss.Core.Input;
 
 namespace TTG
 {
+	public enum GameState
+	{
+		Playing,
+		Title,
+		Help
+	}
+	
 	public class Game
 	{
 		private static GraphicsContext graphics;
 		private static Model model;
 		private static BasicProgram program;
 		private static Stopwatch stopwatch;
-		
+		public GameState gameState = GameState.Title;
 		private static int frameCount;
 		private static int prevTicks;
-		
+		TitleScreen titleScreen;
 		public bool IsRunning = true;
 		
 		public Game ()
@@ -45,7 +52,8 @@ namespace TTG
 			
 			stopwatch = new Stopwatch();
 			stopwatch.Start();
-			
+			titleScreen = new TitleScreen();
+			titleScreen.Initialise(graphics, this);
 		}
 		
 		public void Load()
@@ -55,6 +63,23 @@ namespace TTG
 		public void Update()
 		{
 			var gamePadData = GamePad.GetData (0);
+			List<TouchData> touchData = Touch.GetData(0);
+			switch (gameState)
+			{
+			case GameState.Title:
+			{
+				titleScreen.Update(touchData);
+				break;
+			}
+			case GameState.Help:
+			{
+				break;
+			}
+			case GameState.Playing:
+			{
+				break;
+			}
+			}
 		}
 		
 		public void Draw()
@@ -63,8 +88,23 @@ namespace TTG
 			graphics.SetClearColor (0.0f, 0.0f, 0.0f, 0.0f);
 			graphics.Clear ();
 			
-			
-			RenderModel();
+			switch (gameState)
+			{
+			case GameState.Title:
+			{
+				titleScreen.Draw();
+				break;
+			}
+			case GameState.Help:
+			{
+				break;
+			}
+			case GameState.Playing:
+			{
+				RenderModel();
+				break;
+			}
+			}
 			
 			// Present the screen
 			graphics.SwapBuffers ();

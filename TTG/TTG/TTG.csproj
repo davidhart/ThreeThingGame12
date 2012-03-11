@@ -58,6 +58,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Pss.CSharp.targets" />
   <ItemGroup>
     <Content Include="walker.mdx" />
+    <Content Include="box.mdx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

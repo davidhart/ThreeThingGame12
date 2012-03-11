@@ -32,12 +32,12 @@ namespace TTG
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			
-			model = new Model("walker.mdx");
+			model = new Model("box.mdx");
 			
 			// Custom Program with color attribute
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
 			program.SetUniformBinding(4, "Color");
-			Vector4 color = new Vector4(1, 0, 0, 1);
+			Vector4 color = new Vector4(1, 1, 1, 1);
 			program.SetUniformValue(4, ref color);
 			
 			// Default unlit program
@@ -98,7 +98,7 @@ namespace TTG
 			parameters.SetProjectionMatrix (ref projectionMatrix);
 			parameters.SetViewMatrix (ref viewMatrix);
 			
-			Matrix4 world = Matrix4.RotationY( FMath.Radians( 0 ) ) ;
+			Matrix4 world = Matrix4.RotationY( FMath.Radians( 20.0f * stopwatch.ElapsedMilliseconds / 1000.0f ) ) ;
 			model.SetWorldMatrix( ref world ) ;
 			
 			graphics.Enable( EnableMode.Blend ) ;

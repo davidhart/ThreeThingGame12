@@ -8,5 +8,6 @@ void main(
 	float4 out color		: COLOR
 )
 {
+	//color = float4(v_TexCoord.x, v_TexCoord.y, 0, 1);
 	color = tex2D(Texture0, v_TexCoord) * Color;
 }

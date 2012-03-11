@@ -34,7 +34,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Sce.Pss.Core" />
-    <Reference Include="Sce.Pss.HighLevel.Model" />
     <Reference Include="Sce.Pss.HighLevel.Physics2D" />
     <Reference Include="Sce.Pss.HighLevel.GameEngine2D" />
     <Reference Include="Sce.Pss.HighLevel.UI" />
@@ -54,4 +53,13 @@
     <ShaderProgram Include="shaders\Sprite.vcg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Pss.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{EAFF76CD-10CE-417A-B81A-88F0C87A9D2B}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="walker.mdx" />
+  </ItemGroup>
 </Project>

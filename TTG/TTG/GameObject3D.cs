@@ -1,17 +1,17 @@
 using System;
 using Sce.Pss.Core ;
 using Sce.Pss.Core.Graphics ;
-using Sce.Pss.HighLevel.Model ;
+using TTG;
 
 namespace TTG
 {
 	public class GameObject3D
 	{
-		BasicModel model;
+		Model model;
 		GraphicsContext graphics;
 		
 		public GameObject3D (GraphicsContext inGraphics, 
-		                     BasicModel inModel)
+		                     Model inModel)
 		{
 			graphics = inGraphics;
 			model = inModel;

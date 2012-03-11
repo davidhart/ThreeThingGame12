@@ -1,0 +1,134 @@
+uniform bool EnableLighting ;
+uniform bool EnableFog ;
+uniform int WorldCount ;
+uniform int LightCount ;
+
+uniform float4x4 ViewProjection ;
+uniform float3 EyePosition ;
+uniform float4 FogVector ;
+
+uniform float4x4 WorldMatrix[ 4 ] ;
+
+uniform float3 LightDirection[ 4 ] ;
+uniform float3 LightDiffuse[ 4 ] ;
+uniform float3 LightSpecular[ 4 ] ;
+uniform float3 LightAmbient ;
+
+uniform float3 MaterialDiffuse ;
+uniform float3 MaterialSpecular ;
+uniform float3 MaterialAmbient ;
+uniform float3 MaterialEmission ;
+uniform float3 MaterialFactor ;
+
+void main(
+	float4 a_Position		: POSITION,
+	float3 a_Normal			: NORMAL,
+	//float4 a_Color		: COLOR,
+	float2 a_TexCoord		: TEXCOORD0,
+	float4 a_Weight			: TEXCOORD1,
+
+	out float4 v_Position	: POSITION,
+	out float4 v_Color		: COLOR0,
+	out float3 v_Color2		: COLOR1,
+	out float2 v_TexCoord	: TEXCOORD0,
+	out float v_FogCoord	: TEXCOORD1
+)
+{
+	float4 P = float4( 0.0 ) ;
+	float3 N = float3( 0.0 ) ;
+	if ( WorldCount <= 1 ) {
+		P = mul( a_Position, WorldMatrix[ 0 ] ) ;
+		N = mul( float4( a_Normal, 0.0 ), WorldMatrix[ 0 ] ).xyz ;
+	} else {
+		/*
+		for ( int i = 0 ; i < 4 ; i ++ ) {
+			if ( i == WorldCount ) break ;
+			float weight = a_Weight[ i ] ;
+			P += mul( a_Position, WorldMatrix[ i ] ) * weight ;
+			N += ( mul( float4( a_Normal, 0.0 ), WorldMatrix[ i ] ) ).xyz * weight ;
+		}
+		*/
+		P = mul( a_Position, WorldMatrix[ 0 ] ) * a_Weight.x ;
+		N = ( mul( float4( a_Normal, 0.0 ), WorldMatrix[ 0 ] ) ).xyz * a_Weight.x ;
+		if ( WorldCount > 1 ) {
+			P += mul( a_Position, WorldMatrix[ 1 ] ) * a_Weight.y ;
+			N += ( mul( float4( a_Normal, 0.0 ), WorldMatrix[ 1 ] ) ).xyz * a_Weight.y ;
+			if ( WorldCount > 2 ) {
+				P += mul( a_Position, WorldMatrix[ 2 ] ) * a_Weight.z ;
+				N += ( mul( float4( a_Normal, 0.0 ), WorldMatrix[ 2 ] ) ).xyz * a_Weight.z ;
+				if ( WorldCount > 3 ) {
+					P += mul( a_Position, WorldMatrix[ 3 ] ) * a_Weight.w ;
+					N += ( mul( float4( a_Normal, 0.0 ), WorldMatrix[ 3 ] ) ).xyz * a_Weight.w ;
+				}
+			}
+		}
+		N = normalize( N ) ;
+	}
+
+	v_Position = mul( P, ViewProjection ) ;
+	v_FogCoord = !EnableFog ? 0.0 : dot( P, FogVector ) ;
+	v_TexCoord = a_TexCoord ;
+
+	float3 diffuse = float3( 0.0 ) ;
+	float3 specular = float3( 0.0 ) ;
+	float3 ambient = float3( 1.0 ) ;
+	if ( EnableLighting ) {
+		float3 V = normalize( EyePosition - P.xyz ) ;
+		/*
+		for ( int i = 0 ; i < 4 ; i ++ ) {
+			if ( i == LightCount ) break ;
+			float3 L = -LightDirection[ i ] ;
+			float d = max( dot( N, L ), 0.0 ) ;
+			diffuse += LightDiffuse[ i ] * d ;
+			if ( d > 0.0 ) {
+				float3 H = normalize( L + V ) ;
+				float s = max( dot( N, H ), 0.0 ) ;
+				specular += LightSpecular[ i ] * pow( s, MaterialFactor.y ) ;
+			}
+		}
+		*/
+		float3 L = -LightDirection[ 0 ] ;
+		float d = max( dot( N, L ), 0.0 ) ;
+		diffuse += LightDiffuse[ 0 ] * d ;
+		if ( d > 0.0 ) {
+			float3 H = normalize( L + V ) ;
+			float s = max( dot( N, H ), 0.0 ) ;
+			specular += LightSpecular[ 0 ] * pow( s, MaterialFactor.y ) ;
+		}
+		if ( LightCount > 1 ) {
+			L = -LightDirection[ 1 ] ;
+			d = max( dot( N, L ), 0.0 ) ;
+			diffuse += LightDiffuse[ 1 ] * d ;
+			if ( d > 0.0 ) {
+				float3 H = normalize( L + V ) ;
+				float s = max( dot( N, H ), 0.0 ) ;
+				specular += LightSpecular[ 1 ] * pow( s, MaterialFactor.y ) ;
+			}
+			if ( LightCount > 2 ) {
+				L = -LightDirection[ 2 ] ;
+				d = max( dot( N, L ), 0.0 ) ;
+				diffuse += LightDiffuse[ 2 ] * d ;
+				if ( d > 0.0 ) {
+					float3 H = normalize( L + V ) ;
+					float s = max( dot( N, H ), 0.0 ) ;
+					specular += LightSpecular[ 2 ] * pow( s, MaterialFactor.y ) ;
+				}
+				if ( LightCount > 3 ) {
+					L = -LightDirection[ 3 ] ;
+					d = max( dot( N, L ), 0.0 ) ;
+					diffuse += LightDiffuse[ 3 ] * d ;
+					if ( d > 0.0 ) {
+						float3 H = normalize( L + V ) ;
+						float s = max( dot( N, H ), 0.0 ) ;
+						specular += LightSpecular[ 3 ] * pow( s, MaterialFactor.y ) ;
+					}
+				}
+			}
+		}
+	}
+
+	v_Color.xyz = MaterialDiffuse * diffuse + MaterialAmbient * ambient ;
+	v_Color.w = MaterialFactor.x ;
+	v_Color2 = MaterialSpecular * specular + MaterialEmission ;
+	// v_Color *= a_Color ;
+}

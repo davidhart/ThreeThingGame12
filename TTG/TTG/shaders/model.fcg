@@ -8,6 +8,8 @@ void main(
 	float4 out color		: COLOR
 )
 {
+	float NdotL = saturate(dot(v_Normal, normalize(float3(0.0f, 0.7f, 0.7f))));
+
 	//color = float4(v_TexCoord.x, v_TexCoord.y, 0, 1);
-	color = tex2D(Texture0, v_TexCoord) * Color;
+	color = tex2D(Texture0, v_TexCoord) * Color * float4(NdotL, NdotL, NdotL, 1);
 }

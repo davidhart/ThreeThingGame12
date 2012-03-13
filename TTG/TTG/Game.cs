@@ -24,7 +24,7 @@ namespace TTG
 		private static Model model;
 		private static BasicProgram program;
 		private static Stopwatch stopwatch;
-		public GameState gameState = GameState.Title;
+		public GameState gameState = GameState.Playing;
 		private static int frameCount;
 		private static int prevTicks;
 		TitleScreen titleScreen;
@@ -39,7 +39,8 @@ namespace TTG
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			
-			model = new Model("box.mdx");
+			model = new Model("penguin.mdx");
+			//model.SetCurrentMotion(1, 0);
 			
 			// Custom Program with color attribute
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
@@ -124,7 +125,8 @@ namespace TTG
 			
 			
 			Matrix4 projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
-			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -25));
+			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -10));
+			viewMatrix = Matrix4.LookAt(new Vector3(0, 10, 10), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
 			
 			
 			Vector3 litDirection = new Vector3 (0.0f, -1.0f, -1.0f).Normalize ();
@@ -138,6 +140,7 @@ namespace TTG
 			parameters.SetProjectionMatrix (ref projectionMatrix);
 			parameters.SetViewMatrix (ref viewMatrix);
 			
+			//Matrix4 world = Matrix4.Identity;
 			Matrix4 world = Matrix4.RotationY( FMath.Radians( 20.0f * stopwatch.ElapsedMilliseconds / 1000.0f ) ) ;
 			model.SetWorldMatrix( ref world ) ;
 			

@@ -20,15 +20,20 @@ namespace TTG
 	
 	public class Game
 	{
-		private static GraphicsContext graphics;
-		private static Model model;
-		private static BasicProgram program;
-		private static Stopwatch stopwatch;
+		private GraphicsContext graphics;
+		private Model model;
+		private BasicProgram program;
+		private Stopwatch stopwatch;
+		
+		private int frameCount;
+		private int prevTicks;
+		
+		private AnimationState[] pengState;
+		
 		public GameState gameState = GameState.Playing;
-		private static int frameCount;
-		private static int prevTicks;
-		TitleScreen titleScreen;
+		private TitleScreen titleScreen;
 		public bool IsRunning = true;
+		
 		
 		public Game ()
 		{
@@ -40,16 +45,19 @@ namespace TTG
 			graphics = new GraphicsContext ();
 			
 			model = new Model("penguin.mdx");
-			//model.SetCurrentMotion(1, 0);
+			Random r = new Random();
+			pengState = new AnimationState[9];
+			for (int i = 0; i < pengState.Length; ++i)
+			{
+				pengState[i] = new AnimationState(model);
+				pengState[i].Update((float)r.NextDouble() * 4.0f);
+			}
 			
 			// Custom Program with color attribute
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
 			program.SetUniformBinding(4, "Color");
 			Vector4 color = new Vector4(1, 1, 1, 1);
 			program.SetUniformValue(4, ref color);
-			
-			// Default unlit program
-			//program = new BasicProgram();
 			
 			stopwatch = new Stopwatch();
 			stopwatch.Start();
@@ -117,17 +125,26 @@ namespace TTG
 		
 		public void RenderModel()
 		{
+			graphics.Enable( EnableMode.Blend ) ;
+			graphics.SetBlendFunc( BlendFuncMode.Add, BlendFuncFactor.SrcAlpha, BlendFuncFactor.OneMinusSrcAlpha ) ;
+			graphics.Enable( EnableMode.CullFace ) ;
+			graphics.SetCullFace( CullFaceMode.Back, CullFaceDirection.Ccw ) ;
+			graphics.Enable( EnableMode.DepthTest ) ;
+			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;
+			
+			
 			int currTicks = (int)stopwatch.ElapsedTicks;
 			if (frameCount ++ == 0)
 				prevTicks = currTicks;
 			float stepTime = (currTicks - prevTicks) / (float)Stopwatch.Frequency;
 			prevTicks = currTicks;
 			
+			float elapsed = stopwatch.ElapsedMilliseconds / 1000.0f;
+			
 			
 			Matrix4 projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
 			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -10));
-			viewMatrix = Matrix4.LookAt(new Vector3(0, 10, 10), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-			
+			viewMatrix = Matrix4.LookAt(new Vector3(0, 20, 20), new Vector3(0, 0, 0), new Vector3(0, 1, 0));			
 			
 			Vector3 litDirection = new Vector3 (0.0f, -1.0f, -1.0f).Normalize ();
 			Vector3 litColor = new Vector3 (1.0f, 1.0f, 1.0f);
@@ -141,19 +158,18 @@ namespace TTG
 			parameters.SetViewMatrix (ref viewMatrix);
 			
 			//Matrix4 world = Matrix4.Identity;
-			Matrix4 world = Matrix4.RotationY( FMath.Radians( 20.0f * stopwatch.ElapsedMilliseconds / 1000.0f ) ) ;
-			model.SetWorldMatrix( ref world ) ;
+			//Matrix4 world = Matrix4.RotationY( FMath.Radians( 20.0f * stopwatch.ElapsedMilliseconds / 1000.0f ) ) ;
 			
-			graphics.Enable( EnableMode.Blend ) ;
-			graphics.SetBlendFunc( BlendFuncMode.Add, BlendFuncFactor.SrcAlpha, BlendFuncFactor.OneMinusSrcAlpha ) ;
-			graphics.Enable( EnableMode.CullFace ) ;
-			graphics.SetCullFace( CullFaceMode.Back, CullFaceDirection.Ccw ) ;
-			graphics.Enable( EnableMode.DepthTest ) ;
-			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;
+			for (int i = 0; i < pengState.Length; ++i)
+			{
+				Matrix4 world = Matrix4.Translation(new Vector3((- pengState.Length / 2 + i) * 4.0f, 0, elapsed * 0.5f));
+				model.SetWorldMatrix( ref world ) ;
 			
-			model.Animate(stepTime);
-			model.Update();
-			model.Draw(graphics, program);
+				pengState[i].Update(stepTime);
+				model.SetAnimationState(pengState[i]);
+				model.Update();
+				model.Draw(graphics, program);
+			}
 		}
 	}
 }

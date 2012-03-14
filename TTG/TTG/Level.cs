@@ -3,126 +3,144 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
+using Sce.Pss.Core;
+using Sce.Pss.Core.Graphics;
+
 namespace TTG
 {
-	//This is how we boost a mixed array :P
-	//levels are 15*15
-	
-	struct LevelItem
+	enum CellType
 	{
-		public char[] Item;
-		public int LineNumber; //mainly in for debugging purposes
-		public byte Type;
+		Trench,
+		Platform
+	}
+	
+	struct LevelCell
+	{
+		public CellType type;
+		public byte modelLookup;
+		
+		public bool IsTrench()
+		{
+			return type == CellType.Trench;	
+		}
 	}
 	
 	public class Level
-	{
-		const int MAX = 15;
-		LevelItem[] levelArray = new LevelItem[MAX];
-		int lineCount = 0;
+	{	
+		LevelCell[,] levelData;
+		int width;
+		int height;
 		
-		byte[,] worldGrid = new byte [15,15];
+		private Model[] models;
+		private BasicProgram program;
 		
-		//TODO add the items to be drawn
-		GameObject3D[] levelObjects = new GameObject3D[MAX * MAX];
-		
-		public Level()
+		public Level(BasicProgram program)
 		{
-			for (int i = 0; i < MAX; i++)
+			this.program = program;
+			
+			models = new Model[17];
+			for (int i = 0; i < models.Length; ++i)
 			{
-				levelArray[i].Item = new char[MAX];
+				models[i] = new Model("mapparts/part" + i.ToString() + ".mdx", 0);	
 			}
 		}
 		
-		void Load(string filename)
+		public void Load(string filename)
 		{
 			try
-			{
-				char [] line = new char [MAX];
-				using (File.OpenText(filename))
-				{
-					lineCount++;
-				}  
+			{				
 				TextReader tr = new StreamReader(filename);
 				
-				for(int i = 0; i < lineCount; ++lineCount)
-				{
-					//Reads in the current line and converts to char array
-					levelArray[i].LineNumber = i;
-					line = tr.ReadLine().ToCharArray();
-					
-					for(int j = 0; j < line.Length; ++j)
-					{
-						levelArray[i].Item[j] = line[j];
-					}
-				}
+				string fileContents = tr.ReadToEnd();
+				
+				GenerateLevel(fileContents);
 			}
 			catch
 			{
 				throw new Exception("Cannot read level file");
 			}
+		}
+		
+		void GenerateLevel(string fileContents)
+		{
+			string [] lines = fileContents.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 			
-			for(int i = 0; i < MAX; ++i)
+			width = lines[0].Length; // Assume all lines are the same length;
+			height = lines.Length;
+			levelData = new LevelCell[width, height];
+			
+			// map characters onto type
+			for (int y = 0; y < height; ++y)
 			{
-				for (int j = 0; j < MAX; ++j)
+				for (int x = 0; x < width; ++x)
 				{
-					if (levelArray[i].Item[j] == '#') //Upper level
-					{
-					}
+					char c = lines[y][x];
 					
-					if (levelArray[i].Item[j] == '@') //Penguin Path/Trench
+					if (c == '.')
 					{
-						//don't do it for top and bottom lines
-						if(i != 0 && i != MAX-1 && j!= 0 && j != MAX-1)
-						{
-							//do the 4 square check
-							
-							byte counter = 0;
-							
-							//check left square
-							if(levelArray[i].Item[j-1] == '#')
-							{
-								
-							}
-							
-							//check right square
-							if(levelArray[i].Item[j + 1] == '#')
-							{
-							}
-							
-							//check top square
-							if(levelArray[i-1].Item[j] == '#')
-							{
-							
-							}
-							
-							else if(levelArray[i+1].Item[j] == '#')
-							{
-							}
-							else
-							{
-							}
-						}
+						levelData[x,y].type = CellType.Trench;
+					}
+					else // represented by character #
+					{
+						levelData[x,y].type = CellType.Platform;
+					}
+				}
+			}
+			
+			for (int y = 0; y < height; ++y)
+			{
+				for (int x = 0; x < width; ++x)
+				{
+					if (!IsCellTrench(x, y))
+					{
+						levelData[x,y].modelLookup = 16;
+					}
+					else
+					{
+						byte index = 0;
 						
-					}
-					if (levelArray[i].Item[j] == '.') //Turret Emplacement
-					{
-						//turrets should be surrounded by #
-					}
-					if (levelArray[i].Item[j] == 'T') //Tank Start
-					{
-					}
-					if (levelArray[i].Item[j] == 'P') //Penguin Start
-					{
+						if (IsCellTrench(x - 1, y)) index += 1;
+						if (IsCellTrench(x, y - 1)) index += 2;
+						if (IsCellTrench(x + 1, y)) index += 4;
+						if (IsCellTrench(x, y + 1)) index += 8;
+						
+						levelData[x,y].modelLookup = index;
 					}
 				}
 			}
 			
 		}
 		
-		void Draw()
+		bool IsCellTrench(int x, int y)
 		{
+			if (x < 0)
+				return false;
+							
+			if (y < 0)
+				return false;
+							
+			if (x >= width)
+				return false;
 			
+			if (y >= height)
+				return false;
+			
+			return levelData[x, y].IsTrench();
+		}
+		
+		public void Draw(GraphicsContext graphics)
+		{	
+			for (int y = 0; y < width; y++)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					byte index = levelData[x,y].modelLookup;
+					Matrix4 world = Matrix4.Translation(new Vector3((- width / 2 + x) * 2.0f, 0.0f, (- height / 2 + y) * 2.0f));
+					models[index].SetWorldMatrix( ref world );
+					models[index].Update();
+					models[index].Draw(graphics, program);
+				}
+			}
 		}
 		
 		void Update()

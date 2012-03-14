@@ -80,6 +80,7 @@
     <Content Include="mapparts\part7.mdx" />
     <Content Include="mapparts\part8.mdx" />
     <Content Include="mapparts\part9.mdx" />
+    <Content Include="testlevel.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

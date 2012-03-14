@@ -21,7 +21,6 @@ namespace TTG
 	public class Game
 	{
 		private GraphicsContext graphics;
-		private Model[] models;
 		private Model penguin;
 		private BasicProgram program;
 		private Stopwatch stopwatch;
@@ -38,6 +37,8 @@ namespace TTG
 		private Vector3 cameraOffset;
 		private Vector3 cameraTarget;
 		
+		private Level level;
+		
 		public Game ()
 		{
 		}
@@ -46,12 +47,6 @@ namespace TTG
 		{
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
-			
-			models = new Model[17];
-			for (int i = 0; i < models.Length; ++i)
-			{
-				models[i] = new Model("mapparts/part" + i.ToString() + ".mdx", 0);	
-			}
 			
 			penguin = new Model("penguin.mdx", 0);
 			pengState = new AnimationState(penguin);
@@ -69,6 +64,9 @@ namespace TTG
 			stopwatch.Start();
 			titleScreen = new TitleScreen();
 			titleScreen.Initialise(graphics, this);
+			
+			level = new Level(program);
+			level.Load("testlevel.txt");
 		}
 		
 		public void Load()
@@ -191,14 +189,8 @@ namespace TTG
 			penguin.SetAnimationState(pengState);
 			penguin.Update();
 			penguin.Draw(graphics, program);
-
-			for (int i = 0; i < models.Length; ++i)
-			{
-				world = Matrix4.Translation(new Vector3((- models.Length / 2 + i) * 2.0f, 0, 0.0f /*elapsed * 0.5f*/));
-				models[i].SetWorldMatrix( ref world );
-				models[i].Update();
-				models[i].Draw(graphics, program);
-			}
+			
+			level.Draw(graphics);
 		}
 	}
 }

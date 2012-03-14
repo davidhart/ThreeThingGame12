@@ -63,6 +63,23 @@
     <Content Include="box.mdx" />
     <Content Include="assets\team.jpg" />
     <Content Include="penguin.mdx" />
+    <Content Include="mapparts\part0.mdx" />
+    <Content Include="mapparts\part1.mdx" />
+    <Content Include="mapparts\part10.mdx" />
+    <Content Include="mapparts\part11.mdx" />
+    <Content Include="mapparts\part12.mdx" />
+    <Content Include="mapparts\part13.mdx" />
+    <Content Include="mapparts\part14.mdx" />
+    <Content Include="mapparts\part15.mdx" />
+    <Content Include="mapparts\part16.mdx" />
+    <Content Include="mapparts\part2.mdx" />
+    <Content Include="mapparts\part3.mdx" />
+    <Content Include="mapparts\part4.mdx" />
+    <Content Include="mapparts\part5.mdx" />
+    <Content Include="mapparts\part6.mdx" />
+    <Content Include="mapparts\part7.mdx" />
+    <Content Include="mapparts\part8.mdx" />
+    <Content Include="mapparts\part9.mdx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

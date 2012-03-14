@@ -21,19 +21,21 @@ namespace TTG
 	public class Game
 	{
 		private GraphicsContext graphics;
-		private Model model;
+		private Model[] models;
+		private Model penguin;
 		private BasicProgram program;
 		private Stopwatch stopwatch;
 		
 		private int frameCount;
 		private int prevTicks;
 		
-		private AnimationState[] pengState;
+		private AnimationState pengState;
 		
 		public GameState gameState = GameState.Playing;
 		private TitleScreen titleScreen;
 		public bool IsRunning = true;
 		
+		private int currentModel;		
 		
 		public Game ()
 		{
@@ -44,14 +46,15 @@ namespace TTG
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			
-			model = new Model("penguin.mdx");
-			Random r = new Random();
-			pengState = new AnimationState[9];
-			for (int i = 0; i < pengState.Length; ++i)
+			models = new Model[17];
+			currentModel = 0;
+			for (int i = 0; i < models.Length; ++i)
 			{
-				pengState[i] = new AnimationState(model);
-				pengState[i].Update((float)r.NextDouble() * 4.0f);
+				models[i] = new Model("mapparts/part" + i.ToString() + ".mdx", 0);	
 			}
+			
+			penguin = new Model("penguin.mdx", 0);
+			pengState = new AnimationState(penguin);
 			
 			// Custom Program with color attribute
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
@@ -72,6 +75,14 @@ namespace TTG
 		public void Update()
 		{
 			var gamePadData = GamePad.GetData (0);
+			
+			if (gamePadData.ButtonsDown.HasFlag(GamePadButtons.Left))
+			{
+				currentModel++;
+				if (currentModel >= models.Length)
+					currentModel = 0;
+			}
+			
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
 			{
@@ -127,11 +138,10 @@ namespace TTG
 		{
 			graphics.Enable( EnableMode.Blend ) ;
 			graphics.SetBlendFunc( BlendFuncMode.Add, BlendFuncFactor.SrcAlpha, BlendFuncFactor.OneMinusSrcAlpha ) ;
-			graphics.Enable( EnableMode.CullFace ) ;
+			//graphics.Enable( EnableMode.CullFace ) ;
 			graphics.SetCullFace( CullFaceMode.Back, CullFaceDirection.Ccw ) ;
 			graphics.Enable( EnableMode.DepthTest ) ;
-			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;
-			
+			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;			
 			
 			int currTicks = (int)stopwatch.ElapsedTicks;
 			if (frameCount ++ == 0)
@@ -157,18 +167,19 @@ namespace TTG
 			parameters.SetProjectionMatrix (ref projectionMatrix);
 			parameters.SetViewMatrix (ref viewMatrix);
 			
-			//Matrix4 world = Matrix4.Identity;
-			//Matrix4 world = Matrix4.RotationY( FMath.Radians( 20.0f * stopwatch.ElapsedMilliseconds / 1000.0f ) ) ;
-			
-			for (int i = 0; i < pengState.Length; ++i)
+			Matrix4 world = Matrix4.Identity;
+			pengState.Update(stepTime);
+			penguin.SetWorldMatrix(ref world);
+			penguin.SetAnimationState(pengState);
+			penguin.Update();
+			penguin.Draw(graphics, program);
+
+			for (int i = 0; i < models.Length; ++i)
 			{
-				Matrix4 world = Matrix4.Translation(new Vector3((- pengState.Length / 2 + i) * 4.0f, 0, elapsed * 0.5f));
-				model.SetWorldMatrix( ref world ) ;
-			
-				pengState[i].Update(stepTime);
-				model.SetAnimationState(pengState[i]);
-				model.Update();
-				model.Draw(graphics, program);
+				world = Matrix4.Translation(new Vector3((- models.Length / 2 + i) * 2.0f, 0, 0.0f /*elapsed * 0.5f*/));
+				models[i].SetWorldMatrix( ref world );
+				models[i].Update();
+				models[i].Draw(graphics, program);
 			}
 		}
 	}

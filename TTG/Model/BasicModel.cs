@@ -161,8 +161,11 @@ namespace TTG {
 		
 		public void SetAnimationState( AnimationState state )
 		{
-			Motions[state.motion].Frame = state.frame;
-			AnimateMotion(Motions[state.motion], 0.0f);
+			if (Motions.Length > 0)
+			{
+				Motions[state.motion].Frame = state.frame;
+				AnimateMotion(Motions[state.motion], 0.0f);
+			}
 		}
 		
 		/// <summary>Renders a model (with the specified program)</summary>

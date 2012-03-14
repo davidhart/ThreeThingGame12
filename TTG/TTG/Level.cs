@@ -7,10 +7,12 @@ namespace TTG
 {
 	//This is how we boost a mixed array :P
 	//levels are 15*15
+	
 	struct LevelItem
 	{
 		public char[] Item;
 		public int LineNumber; //mainly in for debugging purposes
+		public byte Type;
 	}
 	
 	public class Level
@@ -18,6 +20,8 @@ namespace TTG
 		const int MAX = 15;
 		LevelItem[] levelArray = new LevelItem[MAX];
 		int lineCount = 0;
+		
+		byte[,] worldGrid = new byte [15,15];
 		
 		//TODO add the items to be drawn
 		GameObject3D[] levelObjects = new GameObject3D[MAX * MAX];
@@ -69,11 +73,72 @@ namespace TTG
 					if (levelArray[i].Item[j] == '#') //Upper level
 					{
 					}
-					if (levelArray[i].Item[j] == '@') //Penguin Path
+					
+					if (levelArray[i].Item[j] == '@') //Penguin Path/Trench
 					{
+						//don't do it for top and bottom lines
+						if(i != 0 && i != MAX-1 && j!= 0 && j != MAX-1)
+						{
+							//do the 4 square check
+							
+							//check left square
+							if(levelArray[i].Item[j-1] == '#')
+							{
+								//check top square and draw top left
+								if(levelArray[i-1].Item[j])
+								{
+								}
+								
+								//check bottom square and draw btm left
+								else if(levelArray[i+1].Item[j])
+								{
+								}
+								 
+								//draw standard left trench
+								else
+								{
+								}
+							}
+							
+							//check right square
+							else if(levelArray[i].Item[j + 1] == '#')
+							{
+								//check top square and draw top right
+								if(levelArray[i-1].Item[j])
+								{
+								}
+								
+								//check bottom square and draw btm right
+								else if(levelArray[i+1].Item[j])
+								{
+								}
+								 
+								//draw standard left trench
+								else
+								{
+								}
+							}
+							
+							//check top square
+							else if(levelArray[i-1].Item[j] == '#')
+							{
+								//Draw standard top square
+							}
+							
+							//check btm square
+							else if(levelArray[i+1].Item[j] == '#')
+							{
+								//draw stanard btm square
+							}
+							else
+							{
+							}
+						}
+						
 					}
 					if (levelArray[i].Item[j] == '.') //Turret Emplacement
 					{
+						//turrets should be surrounded by #
 					}
 					if (levelArray[i].Item[j] == 'T') //Tank Start
 					{

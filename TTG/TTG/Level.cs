@@ -62,10 +62,6 @@ namespace TTG
 				throw new Exception("Cannot read level file");
 			}
 			
-		}
-		
-		void Draw()
-		{
 			for(int i = 0; i < MAX; ++i)
 			{
 				for (int j = 0; j < MAX; ++j)
@@ -81,54 +77,27 @@ namespace TTG
 						{
 							//do the 4 square check
 							
+							byte counter = 0;
+							
 							//check left square
 							if(levelArray[i].Item[j-1] == '#')
 							{
-								//check top square and draw top left
-								if(levelArray[i-1].Item[j])
-								{
-								}
 								
-								//check bottom square and draw btm left
-								else if(levelArray[i+1].Item[j])
-								{
-								}
-								 
-								//draw standard left trench
-								else
-								{
-								}
 							}
 							
 							//check right square
-							else if(levelArray[i].Item[j + 1] == '#')
+							if(levelArray[i].Item[j + 1] == '#')
 							{
-								//check top square and draw top right
-								if(levelArray[i-1].Item[j])
-								{
-								}
-								
-								//check bottom square and draw btm right
-								else if(levelArray[i+1].Item[j])
-								{
-								}
-								 
-								//draw standard left trench
-								else
-								{
-								}
 							}
 							
 							//check top square
-							else if(levelArray[i-1].Item[j] == '#')
+							if(levelArray[i-1].Item[j] == '#')
 							{
-								//Draw standard top square
+							
 							}
 							
-							//check btm square
 							else if(levelArray[i+1].Item[j] == '#')
 							{
-								//draw stanard btm square
 							}
 							else
 							{
@@ -148,6 +117,12 @@ namespace TTG
 					}
 				}
 			}
+			
+		}
+		
+		void Draw()
+		{
+			
 		}
 		
 		void Update()

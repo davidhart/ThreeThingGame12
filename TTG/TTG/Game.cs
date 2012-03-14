@@ -35,7 +35,8 @@ namespace TTG
 		private TitleScreen titleScreen;
 		public bool IsRunning = true;
 		
-		private int currentModel;		
+		private Vector3 cameraOffset;
+		private Vector3 cameraTarget;
 		
 		public Game ()
 		{
@@ -47,7 +48,6 @@ namespace TTG
 			graphics = new GraphicsContext ();
 			
 			models = new Model[17];
-			currentModel = 0;
 			for (int i = 0; i < models.Length; ++i)
 			{
 				models[i] = new Model("mapparts/part" + i.ToString() + ".mdx", 0);	
@@ -62,6 +62,9 @@ namespace TTG
 			Vector4 color = new Vector4(1, 1, 1, 1);
 			program.SetUniformValue(4, ref color);
 			
+			cameraOffset = new Vector3(0, 13, 10);
+			cameraTarget = Vector3.Zero;
+			
 			stopwatch = new Stopwatch();
 			stopwatch.Start();
 			titleScreen = new TitleScreen();
@@ -74,14 +77,39 @@ namespace TTG
 		
 		public void Update()
 		{
+			int currTicks = (int)stopwatch.ElapsedTicks;
+			if (frameCount ++ == 0)
+				prevTicks = currTicks;
+			float stepTime = (currTicks - prevTicks) / (float)Stopwatch.Frequency;
+			prevTicks = currTicks;
+			
+			float elapsed = stopwatch.ElapsedMilliseconds / 1000.0f;			
+			
 			var gamePadData = GamePad.GetData (0);
 			
-			if (gamePadData.ButtonsDown.HasFlag(GamePadButtons.Left))
-			{
-				currentModel++;
-				if (currentModel >= models.Length)
-					currentModel = 0;
-			}
+			const float CameraPanSpeed = 7.5f;
+			
+			float cameraXDir = 0;
+			float cameraYDir = 0;
+			
+			if (gamePadData.Buttons.HasFlag(GamePadButtons.Right))
+				cameraXDir += 1;
+			
+			if (gamePadData.Buttons.HasFlag(GamePadButtons.Left))
+				cameraXDir -= 1;
+			
+			if (gamePadData.Buttons.HasFlag(GamePadButtons.Up))
+				cameraYDir -= 1;
+			
+			if (gamePadData.Buttons.HasFlag(GamePadButtons.Down))
+				cameraYDir += 1;
+			
+			
+			cameraTarget.X += cameraXDir * stepTime * CameraPanSpeed;
+			cameraTarget.Z += cameraYDir * stepTime * CameraPanSpeed;		
+			
+			
+			pengState.Update(stepTime);
 			
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
@@ -141,20 +169,11 @@ namespace TTG
 			//graphics.Enable( EnableMode.CullFace ) ;
 			graphics.SetCullFace( CullFaceMode.Back, CullFaceDirection.Ccw ) ;
 			graphics.Enable( EnableMode.DepthTest ) ;
-			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;			
-			
-			int currTicks = (int)stopwatch.ElapsedTicks;
-			if (frameCount ++ == 0)
-				prevTicks = currTicks;
-			float stepTime = (currTicks - prevTicks) / (float)Stopwatch.Frequency;
-			prevTicks = currTicks;
-			
-			float elapsed = stopwatch.ElapsedMilliseconds / 1000.0f;
-			
+			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;						
 			
 			Matrix4 projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
 			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -10));
-			viewMatrix = Matrix4.LookAt(new Vector3(0, 20, 20), new Vector3(0, 0, 0), new Vector3(0, 1, 0));			
+			viewMatrix = Matrix4.LookAt(cameraOffset + cameraTarget, cameraTarget, new Vector3(0, 0, -1));			
 			
 			Vector3 litDirection = new Vector3 (0.0f, -1.0f, -1.0f).Normalize ();
 			Vector3 litColor = new Vector3 (1.0f, 1.0f, 1.0f);
@@ -167,8 +186,7 @@ namespace TTG
 			parameters.SetProjectionMatrix (ref projectionMatrix);
 			parameters.SetViewMatrix (ref viewMatrix);
 			
-			Matrix4 world = Matrix4.Identity;
-			pengState.Update(stepTime);
+			Matrix4 world = Matrix4.Scale(new Vector3(0.6f));
 			penguin.SetWorldMatrix(ref world);
 			penguin.SetAnimationState(pengState);
 			penguin.Update();

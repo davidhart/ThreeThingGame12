@@ -14,6 +14,43 @@ namespace TTG {
 	//------------------------------------------------------------
 	//	BasicModel
 	//------------------------------------------------------------
+	
+	/// <summary>Represents the active animation and animation frame</summary>
+	public class AnimationState
+	{
+		public AnimationState(Model model)
+		{
+			this.model = model;
+			this.motion = 0;
+			
+			if (model.Motions.Length > 0)
+				frame = model.Motions[0].FrameStart;
+		}
+		
+		public void Update(float dt)
+		{
+			if (model.Motions.Length > 0)
+			{
+				BasicMotion m = model.Motions[motion];
+				frame += dt * m.FrameRate;
+				
+				while (frame > m.FrameEnd)
+				{
+					frame -= m.FrameEnd - m.FrameStart;
+				}
+			}
+		}
+		
+		public void SetMotion(int index)
+		{
+			motion = index;
+			frame = model.Motions[motion].FrameStart;
+		}
+		
+		internal Model model;
+		internal int motion;
+		internal float frame;
+	}
 
 	/// <summary>Class representing a model</summary>
 	public class Model {
@@ -104,12 +141,6 @@ namespace TTG {
 			CurrentMotion = index ;
 			Motions[ CurrentMotion ].Frame = Motions[ CurrentMotion ].FrameStart ;
 		}
-
-		/// <summary>Calculates the model animation</summary>
-		/// <param name="step">Step time (unit = s)</param>
-		public void Animate( float step ) {
-			if ( Motions.Length > 0 ) AnimateMotion( Motions[ CurrentMotion ], step ) ;
-		}
 		
 		/// <summary>Updates the model matrix</summary>
 		public void Update() {
@@ -127,6 +158,12 @@ namespace TTG {
 		/// <summary>Renders a model</summary>
 		/// <param name="graphics">Graphics Context</param>
 		public void Draw( GraphicsContext graphics ) { Draw( graphics, null ) ; }
+		
+		public void SetAnimationState( AnimationState state )
+		{
+			Motions[state.motion].Frame = state.frame;
+			AnimateMotion(Motions[state.motion], 0.0f);
+		}
 		
 		/// <summary>Renders a model (with the specified program)</summary>
 		/// <param name="graphics">Graphics Context</param>
@@ -191,8 +228,8 @@ namespace TTG {
 		//	Subroutines
 		
 		void AnimateMotion( BasicMotion motion, float step ) {
-			motion.Frame += step * motion.FrameRate ;
-			if ( motion.Frame > motion.FrameEnd ) motion.Frame = motion.FrameStart ;
+			//motion.Frame += step * motion.FrameRate ;
+			//if ( motion.Frame > motion.FrameEnd ) motion.Frame = motion.FrameStart ;
 			float weight = 1.0f ;
 
 			float[] value = new float[ 4 ] ;

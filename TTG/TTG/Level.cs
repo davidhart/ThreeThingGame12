@@ -6,6 +6,8 @@ using System.IO;
 using Sce.Pss.Core;
 using Sce.Pss.Core.Graphics;
 
+using Sce.Pss.HighLevel.UI;
+
 namespace TTG
 {
 	enum CellType
@@ -48,6 +50,7 @@ namespace TTG
 		private LevelCell[,] levelData;
 		private int width;
 		private int height;
+		private int fish;
 		
 		private Model[] models;
 		private BasicProgram program;
@@ -55,6 +58,11 @@ namespace TTG
 		
 		Vector2 spawnPos;
 		Direction spawnDir;
+		
+		Scene scene;
+		Label fishLabel, healthLabel, pointsLabel;
+		Button bearImage, fishImage, pointsImage;
+		
 		public Vector2 SpawnPos
 		{
 			get
@@ -254,7 +262,7 @@ namespace TTG
 			}
 		}
 		
-		void Update()
+		public void Update()
 		{
 		}
 	}

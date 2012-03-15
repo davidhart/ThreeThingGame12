@@ -7,7 +7,7 @@ using Sce.Pss.Core;
 using Sce.Pss.Core.Environment;
 using Sce.Pss.Core.Graphics;
 using Sce.Pss.Core.Input;
-
+using Sce.Pss.HighLevel.UI;
 
 namespace TTG
 {
@@ -27,7 +27,7 @@ namespace TTG
 		private int frameCount;
 		private int prevTicks;
 		
-		public GameState gameState = GameState.Playing;
+		public GameState gameState = GameState.Title;
 		private TitleScreen titleScreen;
 		public bool IsRunning = true;
 		
@@ -39,8 +39,9 @@ namespace TTG
 		private EnemyType basicEnemy;
 		private Enemy testEnemy;
 		
-		private SpriteBatch testBatch;
-		private Texture testSprite;
+		private SpriteBatch spriteBatch;
+		
+		GameUI UI;
 		
 		public Game ()
 		{
@@ -51,6 +52,7 @@ namespace TTG
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			graphics.SetViewport(0, 0, graphics.Screen.Width, graphics.Screen.Height);
+			UISystem.Initialize(graphics);
 			
 			// Custom Program with color attribute (for demonstration)
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
@@ -78,8 +80,8 @@ namespace TTG
 			
 			player = new Player(graphics, program);
 			
-			testBatch = new SpriteBatch(graphics);
-			testSprite = new Texture2D("assets/testsprite.png", false);
+			spriteBatch = new SpriteBatch(graphics);
+			UI = new GameUI();
 		}
 		
 		public void Load()
@@ -98,8 +100,7 @@ namespace TTG
 			
 			var gamePadData = GamePad.GetData (0);			
 			
-			player.Update(gamePadData, dt);
-			testEnemy.Update(dt);
+			
 			
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
@@ -115,6 +116,9 @@ namespace TTG
 			}
 			case GameState.Playing:
 			{
+				player.Update(gamePadData, dt);
+				testEnemy.Update(dt);
+				level.Update();
 				break;
 			}
 			}
@@ -140,15 +144,14 @@ namespace TTG
 			case GameState.Playing:
 			{
 				RenderModel();
+				graphics.Clear(ClearMask.Depth);
+				UI.Draw(spriteBatch);
 				break;
 			}
 			}
 			
-			graphics.Clear(ClearMask.Depth);
 			
-			testBatch.Begin();
-			testBatch.Draw(new Vector2(0, 0), testSprite);
-			testBatch.End();
+			
 			
 			// Present the screen
 			graphics.SwapBuffers ();

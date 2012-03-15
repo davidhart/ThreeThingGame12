@@ -3,6 +3,7 @@ using Sce.Pss.Core;
 using Sce.Pss.Core.Graphics;
 using Sce.Pss.Core.Input;
 
+
 using System.Diagnostics;
 
 namespace TTG
@@ -21,7 +22,7 @@ namespace TTG
 		Model lowerModel;
 		Model upperModel;
 		
-		float health = 100;
+		float health = 100, points = 0;
 		
 		public float Health
 		{
@@ -32,6 +33,18 @@ namespace TTG
 			set
 			{
 				health = value;
+			}
+		}
+		
+		public float Points
+		{
+			get
+			{
+				return points;
+			}
+			set
+			{
+				points = value;
 			}
 		}
 		
@@ -86,6 +99,7 @@ namespace TTG
 			upperModel.SetWorldMatrix( ref turret );
 			upperModel.Update();
 			upperModel.Draw(graphics, program);
+			
 		}
 		
 		public void Update (GamePadData padData, float dt)

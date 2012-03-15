@@ -19,14 +19,14 @@ namespace TTG
 		}
 		public void Initialise(GraphicsContext graphics, Game game)
 		{
-			UISystem.Initialize(graphics);
+			
 			Scene scene = new Scene();
 			
 			//Rendered title image as a button
 			titleButton = new Button();
-			titleButton.IconImage = new ImageAsset("assets/team.jpg");
-			titleButton.X = 125.0f;
-			titleButton.Y = 125.0f;
+			titleButton.IconImage = new ImageAsset("assets/title.png");
+			titleButton.X = 320;
+			titleButton.Y = 212;
 			scene.RootWidget.AddChildLast(titleButton);
 			
 			//Buttons

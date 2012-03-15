@@ -49,6 +49,7 @@
     <Compile Include="TitleScreen.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="SpriteBatch.cs" />
+    <Compile Include="GameUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -87,6 +88,9 @@
     <Content Include="assets\tank_lower.mdx" />
     <Content Include="assets\tank_upper.mdx" />
     <Content Include="assets\testsprite.png" />
+    <Content Include="assets\CoinIcon.png" />
+    <Content Include="assets\fishIcon.png" />
+    <Content Include="assets\title.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

@@ -50,6 +50,7 @@
     <Compile Include="Level.cs" />
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="GameUI.cs" />
+    <Compile Include="BitmapFont.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -91,6 +92,7 @@
     <Content Include="assets\CoinIcon.png" />
     <Content Include="assets\fishIcon.png" />
     <Content Include="assets\title.png" />
+    <Content Include="assets\fonts\font.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

@@ -85,12 +85,39 @@ namespace TTG
 			Flush();
 		}
 		
-		public void Draw(Vector2 position, Texture texture)
+		public void Draw(Texture2D texture, Vector2 position)
 		{
-			Draw (position.Xy1, texture, new Rgba(255, 255, 255, 255));
+			Draw (texture, position.Xy1, new Rgba(255, 255, 255, 255));
 		}
 		
-		public void Draw(Vector3 position, Texture texture, Rgba color)
+		public void Draw(Texture2D texture, ImageRect destRect, ImageRect srcRect)
+		{
+			Draw (texture, destRect, srcRect, new Rgba(255, 255, 255, 255));
+		}
+		
+		
+		public void Draw(Texture2D texture, ImageRect destRect, ImageRect srcRect, Rgba color)
+		{
+			Draw (texture, 
+			      new Vector2(destRect.X, destRect.Y),
+			      new Vector2(destRect.X + destRect.Width, destRect.Y + destRect.Height),
+			      new Vector2(srcRect.X / (float)texture.Width, srcRect.Y / (float)texture.Height),
+				  new Vector2((srcRect.X + srcRect.Width) / (float)texture.Width, (srcRect.Y + srcRect.Height) / (float)texture.Height),
+			      1.0f,
+				  color);
+		}
+		
+		public void Draw(Texture2D texture, Vector3 position, Rgba color)
+		{			
+			Draw(texture, 
+			     position.Xy, 
+			     position.Xy + new Vector2(texture.Width, texture.Height),
+			     new Vector2(0, 0), new Vector2(1, 1),
+			     position.Z,
+			     color);
+		}
+		
+		private void Draw(Texture2D texture, Vector2 destP1, Vector2 destP2, Vector2 srcP1, Vector2 srcP2, float depth, Rgba color)
 		{
 			if (currentTexture != texture)
 			{
@@ -98,33 +125,33 @@ namespace TTG
 				currentTexture = texture;
 			}
 			
-			vertices[sprites * 4 * 3] = position.X;
-			vertices[sprites * 4 * 3 + 1] = position.Y;
-			vertices[sprites * 4 * 3 + 2] = -position.Z;
+			vertices[sprites * 4 * 3] = destP1.X;
+			vertices[sprites * 4 * 3 + 1] = destP1.Y;
+			vertices[sprites * 4 * 3 + 2] = -depth;
 			
-			vertices[sprites * 4 * 3 + 3] = position.X + texture.Width;
-			vertices[sprites * 4 * 3 + 4] = position.Y;
-			vertices[sprites * 4 * 3 + 5] = -position.Z;
+			vertices[sprites * 4 * 3 + 3] = destP2.X;
+			vertices[sprites * 4 * 3 + 4] = destP1.Y;
+			vertices[sprites * 4 * 3 + 5] = -depth;
 			
-			vertices[sprites * 4 * 3 + 6] = position.X + texture.Width;
-			vertices[sprites * 4 * 3 + 7] = position.Y + texture.Height;
-			vertices[sprites * 4 * 3 + 8] = -position.Z;
+			vertices[sprites * 4 * 3 + 6] = destP2.X;
+			vertices[sprites * 4 * 3 + 7] = destP2.Y;
+			vertices[sprites * 4 * 3 + 8] = -depth;
 			
-			vertices[sprites * 4 * 3 + 9] = position.X;
-			vertices[sprites * 4 * 3 + 10] = position.Y + texture.Height;
-			vertices[sprites * 4 * 3 + 11] = -position.Z;
+			vertices[sprites * 4 * 3 + 9] = destP1.X;
+			vertices[sprites * 4 * 3 + 10] = destP2.Y;
+			vertices[sprites * 4 * 3 + 11] = -depth;
 			
-			textureCoordinates[sprites * 8] = 0;
-			textureCoordinates[sprites * 8 + 1] = 0;
+			textureCoordinates[sprites * 8] = srcP1.X;
+			textureCoordinates[sprites * 8 + 1] = srcP1.Y;
 			
-			textureCoordinates[sprites * 8 + 2] = 1;
-			textureCoordinates[sprites * 8 + 3] = 0;
+			textureCoordinates[sprites * 8 + 2] = srcP2.X;
+			textureCoordinates[sprites * 8 + 3] = srcP1.Y;
 			
-			textureCoordinates[sprites * 8 + 4] = 1;
-			textureCoordinates[sprites * 8 + 5] = 1;
+			textureCoordinates[sprites * 8 + 4] = srcP2.X;
+			textureCoordinates[sprites * 8 + 5] = srcP2.Y;
 			
-			textureCoordinates[sprites * 8 + 6] = 0;
-			textureCoordinates[sprites * 8 + 7] = 1;
+			textureCoordinates[sprites * 8 + 6] = srcP1.X;
+			textureCoordinates[sprites * 8 + 7] = srcP2.Y;
 			
 			colours[sprites * 16] = color.R;
 			colours[sprites * 16 + 1] = color.G;

@@ -8,19 +8,23 @@ namespace TTG
 	public class GameUI
 	{
 		Texture2D bearTex, fishTex, pointsTex;
+		BitmapFont font;
 		public GameUI ()
 		{
 			bearTex = new Texture2D("assets/testsprite.png", false);
 			fishTex = new Texture2D("assets/fishIcon.png", false);
 			pointsTex = new Texture2D("assets/CoinIcon.png", false);
+			font = new BitmapFont("assets/fonts/font.png", 37, 4);
 		}
 		
 		public void Draw(SpriteBatch spritebatch)
 		{
 			spritebatch.Begin();
-			spritebatch.Draw(new Vector2(0,0), bearTex);
-			spritebatch.Draw(new Vector2(0,32), pointsTex);
-			spritebatch.Draw(new Vector2(0, 64), fishTex);
+			spritebatch.Draw(bearTex, new Vector2(0,0));
+			spritebatch.Draw(pointsTex, new Vector2(0,32));
+			spritebatch.Draw(fishTex, new Vector2(0, 64));
+			
+			font.DrawText(spritebatch, "TEST", Vector2.Zero, 4.0f);
 			spritebatch.End();
 		}
 	}

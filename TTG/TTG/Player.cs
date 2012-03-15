@@ -36,7 +36,7 @@ namespace TTG
 			
 			if(padData.Buttons.HasFlag(GamePadButtons.Cross) || padData.Buttons.HasFlag(GamePadButtons.R))
 			{
-				speed += accleration;
+				speed += acceleration;
 			}
 			else
 			{

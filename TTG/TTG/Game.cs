@@ -67,7 +67,7 @@ namespace TTG
 			basicEnemy.speed = 1.2f;
 			
 			testEnemy = new Enemy(graphics, basicEnemy, level, program);
-			testEnemy.SetPosition(2, 1, Direction.Right);
+			testEnemy.SetPosition((int)level.SpawnPos.X, (int)level.SpawnPos.Y, level.SpawnDir);
 			
 			cameraOffset = new Vector3(0, 13, 10);
 			

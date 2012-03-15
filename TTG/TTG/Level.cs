@@ -53,6 +53,31 @@ namespace TTG
 		private BasicProgram program;
 		private GraphicsContext graphics;
 		
+		Vector2 spawnPos;
+		Direction spawnDir;
+		public Vector2 SpawnPos
+		{
+			get
+			{
+				return spawnPos;
+			}
+			set
+			{
+				spawnPos = value;
+			}
+		}
+		public Direction SpawnDir
+		{
+			get
+			{
+				return spawnDir;
+			}
+			set
+			{
+				spawnDir = value;
+			}
+		}
+		
 		public Level(GraphicsContext graphics, BasicProgram program)
 		{
 			this.graphics = graphics;
@@ -96,11 +121,16 @@ namespace TTG
 				{
 					char c = lines[y][x];
 					
-					if (c == '.')
+					//trench
+					if (c == '.') 
 					{
 						levelData[x,y].type = CellType.Trench;
 						levelData[x,y].pathOption = PathOption.Continue;
 					}
+					
+					//
+					
+					//penguin orientation
 					else if (c == '>')
 					{
 						levelData[x,y].type = CellType.Trench;
@@ -120,6 +150,41 @@ namespace TTG
 					{
 						levelData[x,y].type = CellType.Trench;
 						levelData[x,y].pathOption = PathOption.Up;	
+					}
+					else if(c == '+')
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Continue;
+					}
+					
+					//spawners
+					else if(c == '1') //spawn dacing downwards
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Down;	
+						spawnPos = new Vector2(x,y);
+						spawnDir = Direction.Down;
+					}
+					else if(c == '2')//upwards
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Up;	
+						spawnPos = new Vector2(x,y);
+						spawnDir = Direction.Up;
+					}
+					else if(c == '3')//left
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Left;	
+						spawnPos = new Vector2(x,y);
+						spawnDir = Direction.Left;
+					}
+					else if(c == '4')//right
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Right;	
+						spawnPos = new Vector2(x,y);
+						spawnDir = Direction.Right;
 					}
 					else // represented by character #
 					{

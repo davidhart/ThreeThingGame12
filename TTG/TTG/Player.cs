@@ -3,6 +3,8 @@ using Sce.Pss.Core;
 using Sce.Pss.Core.Graphics;
 using Sce.Pss.Core.Input;
 
+using System.Diagnostics;
+
 namespace TTG
 {
 	public class Player
@@ -12,8 +14,9 @@ namespace TTG
 		const float acceleration = 5, turn = 3, deceleration = 3;*/
 		
 		Vector3 position;
-		Vector2 direction;
-		
+		Vector2 forward = new Vector2(1,0);
+		float angle;
+		const float turnSpeed = 0.5f;
 		Model lowerModel;
 		Model upperModel;
 		
@@ -39,6 +42,10 @@ namespace TTG
 			//translate the model by acceleration depending on direction
 			//Matrix4 world = Matrix4.Identity;
 			Matrix4 world = Matrix4.Translation(position) * tankScale;
+			
+			Matrix4 tank;
+			
+			Vector3 tUp = new Vector3(0,1,0);
 			
 			lowerModel.SetWorldMatrix( ref world );
 			lowerModel.Update();
@@ -74,18 +81,35 @@ namespace TTG
 			Vector2 cameraDir = Vector2.Zero;
 			
 			if (padData.Buttons.HasFlag(GamePadButtons.Right))
+			{
 				cameraDir.X += 1;
+				angle += turnSpeed;
+				forward = forward.Rotate(angle);
+				Debug.WriteLine("X:"+ forward.X + "Y:" + forward.Y);
+			}
 			
 			if (padData.Buttons.HasFlag(GamePadButtons.Left))
+			{
 				cameraDir.X -= 1;
+				angle -= turnSpeed;
+				forward = forward.Rotate(angle);
+				Debug.WriteLine("X:"+ forward.X + "Y:" + forward.Y);
+			}
 			
 			if (padData.Buttons.HasFlag(GamePadButtons.Up))
+			{
+				//position += new Vector3(direction.X, 0, direction.Y) * dt * CameraPanSpeed;
 				cameraDir.Y -= 1;
+				position += new Vector3(forward.X, 0, forward.Y) * dt * CameraPanSpeed;
+			}
 			
 			if (padData.Buttons.HasFlag(GamePadButtons.Down))
+			{
 				cameraDir.Y += 1;
+			}
 			
-			position += new Vector3(cameraDir.X, 0, cameraDir.Y) * dt * CameraPanSpeed;
+			
+			//position += new Vector3(cameraDir.X, 0, cameraDir.Y) * dt * CameraPanSpeed;
 			
 			
 			/*
@@ -110,6 +134,8 @@ namespace TTG
 				}
 			}
 			*/
+			
+			
 		}
 		
 		public Vector3 GetPosition()
@@ -117,7 +143,7 @@ namespace TTG
 			return position;
 		}
 		
-
+		
 	}
 }
 

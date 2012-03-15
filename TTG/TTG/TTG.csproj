@@ -46,6 +46,7 @@
     <Compile Include="TitleScreen.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="Player.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />

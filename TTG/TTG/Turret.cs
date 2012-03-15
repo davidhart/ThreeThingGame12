@@ -23,7 +23,7 @@ namespace TTG
 		{
 		}
 		
-		public override void Update ()
+		public override void Update (float dt)
 		{
 			switch (TType)
 			{
@@ -44,7 +44,7 @@ namespace TTG
 				break;
 			}
 			}
-			base.Update ();
+			base.Update (dt);
 		}
 		
 		public override void Draw ()

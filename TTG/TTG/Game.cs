@@ -21,14 +21,11 @@ namespace TTG
 	public class Game
 	{
 		private GraphicsContext graphics;
-		private Model penguin;
 		private BasicProgram program;
 		private Stopwatch stopwatch;
 		
 		private int frameCount;
 		private int prevTicks;
-		
-		private AnimationState pengState;
 		
 		public GameState gameState = GameState.Playing;
 		private TitleScreen titleScreen;
@@ -39,23 +36,34 @@ namespace TTG
 		private Level level;
 		private Player player;
 		
+		private EnemyType basicEnemy;
+		private Enemy testEnemy;
+		
 		public Game ()
 		{
 		}
 		
 		public void Initialise()
-		{
+		{			
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			
-			penguin = new Model("penguin.mdx", 0);
-			pengState = new AnimationState(penguin);
-			
-			// Custom Program with color attribute
+			// Custom Program with color attribute (for demonstration)
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
 			program.SetUniformBinding(4, "Color");
 			Vector4 color = new Vector4(1, 1, 1, 1);
 			program.SetUniformValue(4, ref color);
+			
+			
+			level = new Level(graphics, program);
+			level.Load("testlevel.txt");
+			
+			basicEnemy = new EnemyType();
+			basicEnemy.model = new Model("penguin.mdx", 0);
+			basicEnemy.speed = 1.2f;
+			
+			testEnemy = new Enemy(graphics, basicEnemy, level, program);
+			testEnemy.SetPosition(2, 1, Direction.Right);
 			
 			cameraOffset = new Vector3(0, 13, 10);
 			
@@ -63,9 +71,6 @@ namespace TTG
 			stopwatch.Start();
 			titleScreen = new TitleScreen();
 			titleScreen.Initialise(graphics, this);
-			
-			level = new Level(graphics, program);
-			level.Load("testlevel.txt");
 			
 			player = new Player(graphics, program);
 		}
@@ -86,8 +91,8 @@ namespace TTG
 			
 			var gamePadData = GamePad.GetData (0);			
 			
-			pengState.Update(dt);
 			player.Update(gamePadData, dt);
+			testEnemy.Update(dt);
 			
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
@@ -163,14 +168,9 @@ namespace TTG
 
 			parameters.SetProjectionMatrix (ref projectionMatrix);
 			parameters.SetViewMatrix (ref viewMatrix);
-			
-			Matrix4 world = Matrix4.Scale(new Vector3(0.6f));
-			penguin.SetWorldMatrix(ref world);
-			penguin.SetAnimationState(pengState);
-			penguin.Update();
-			penguin.Draw(graphics, program);
-			
+
 			level.Draw();
+			testEnemy.Draw();
 			player.Draw();
 		}
 	}

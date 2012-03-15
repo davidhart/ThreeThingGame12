@@ -14,14 +14,32 @@ namespace TTG
 		Platform
 	}
 	
+	public enum PathOption
+	{
+		Continue,
+		Up,
+		Down,
+		Left,
+		Right,
+	}
+	
 	struct LevelCell
 	{
 		public CellType type;
+		public PathOption pathOption;
+		
 		public byte modelLookup;
 		
 		public bool IsTrench()
 		{
-			return type == CellType.Trench;	
+			return type == CellType.Trench;
+		}
+		
+		public PathOption GetPathingOption()
+		{
+			Debug.Assert(IsTrench());
+			
+			return pathOption;			
 		}
 	}
 	
@@ -81,6 +99,27 @@ namespace TTG
 					if (c == '.')
 					{
 						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Continue;
+					}
+					else if (c == '>')
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Right;
+					}
+					else if (c == '<')
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Left;
+					}
+					else if (c == 'v')
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Down;	
+					}
+					else if (c == '^')
+					{
+						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Up;	
 					}
 					else // represented by character #
 					{
@@ -130,6 +169,11 @@ namespace TTG
 			return levelData[x, y].IsTrench();
 		}
 		
+		public PathOption GetCellPathOption(int x, int y)
+		{
+			return levelData[x, y].GetPathingOption();	
+		}
+		
 		public void Draw()
 		{	
 			for (int y = 0; y < height; y++)
@@ -137,7 +181,7 @@ namespace TTG
 				for (int x = 0; x < width; x++)
 				{
 					byte index = levelData[x,y].modelLookup;
-					Matrix4 world = Matrix4.Translation(new Vector3((- width / 2 + x) * 2.0f, 0.0f, (- height / 2 + y) * 2.0f));
+					Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y * 2.0f));
 					models[index].SetWorldMatrix( ref world );
 					models[index].Update();
 					models[index].Draw(graphics, program);

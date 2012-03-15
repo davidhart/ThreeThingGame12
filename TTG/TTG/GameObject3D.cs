@@ -17,7 +17,7 @@ namespace TTG
 		{
 		}
 		
-		public virtual void Update()
+		public virtual void Update(float dt)
 		{
 		}
 		

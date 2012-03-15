@@ -21,6 +21,20 @@ namespace TTG
 		Model lowerModel;
 		Model upperModel;
 		
+		float health = 100;
+		
+		public float Health
+		{
+			get
+			{
+				return health;
+			}
+			set
+			{
+				health = value;
+			}
+		}
+		
 		GraphicsContext graphics;
 		BasicProgram program;
 		
@@ -89,13 +103,15 @@ namespace TTG
 			Vector2 forward = new Vector2(1,0);
 			forward = forward.Rotate(-angle);
 					
-			if (padData.Buttons.HasFlag(GamePadButtons.Down) 
-			    && !padData.Buttons.HasFlag(GamePadButtons.Left) && !padData.Buttons.HasFlag(GamePadButtons.Right))
+			if (padData.Buttons.HasFlag(GamePadButtons.L) 
+			    && !padData.Buttons.HasFlag(GamePadButtons.Left) 
+			    && !padData.Buttons.HasFlag(GamePadButtons.Right))
 			{
 				forward *= -1;
 			}
-			else if (padData.Buttons.HasFlag(GamePadButtons.Up)
-			         && !padData.Buttons.HasFlag(GamePadButtons.Left) && !padData.Buttons.HasFlag(GamePadButtons.Right))
+			else if (padData.Buttons.HasFlag(GamePadButtons.R)
+			         && !padData.Buttons.HasFlag(GamePadButtons.Left) 
+			         && !padData.Buttons.HasFlag(GamePadButtons.Right))
 			{
 				forward *= 1;	
 			}

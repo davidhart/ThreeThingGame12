@@ -6,7 +6,7 @@ namespace TTG
 {
 	public class Enemy : GameObject3D
 	{
-		float health;
+		protected float health;
 		public float Health
 		{
 			get
@@ -17,15 +17,6 @@ namespace TTG
 			{
 				health = value;
 			}
-		}
-		
-		public enum PenguinType
-		{
-			Normal,
-			Fast,
-			Slow,
-			Tank,
-			Motorcycle
 		}
 		
 		public Enemy (GraphicsContext graphics, Model model)

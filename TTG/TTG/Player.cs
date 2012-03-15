@@ -14,9 +14,10 @@ namespace TTG
 		const float acceleration = 5, turn = 3, deceleration = 3;*/
 		
 		Vector3 position;
-		Vector2 forward = new Vector2(1,0);
 		float angle;
-		const float turnSpeed = 0.5f;
+		
+		const float forwardSpeed = 7.5f;
+		const float turnSpeed = 1.5f;
 		Model lowerModel;
 		Model upperModel;
 		
@@ -43,11 +44,11 @@ namespace TTG
 			//Matrix4 world = Matrix4.Identity;
 			Matrix4 world = Matrix4.Translation(position) * tankScale;
 			
-			Matrix4 tank;
+			Matrix4 tank = world * Matrix4.RotationY(angle);
 			
 			Vector3 tUp = new Vector3(0,1,0);
 			
-			lowerModel.SetWorldMatrix( ref world );
+			lowerModel.SetWorldMatrix( ref tank );
 			lowerModel.Update();
 			lowerModel.Draw(graphics, program);
 			
@@ -74,67 +75,30 @@ namespace TTG
 		}
 		
 		public void Update (GamePadData padData, float dt)
-		{
-			/*temporary*/
-			const float CameraPanSpeed = 7.5f;
-			
-			Vector2 cameraDir = Vector2.Zero;
-			
+		{			
 			if (padData.Buttons.HasFlag(GamePadButtons.Right))
 			{
-				cameraDir.X += 1;
-				angle += turnSpeed;
-				forward = forward.Rotate(angle);
-				Debug.WriteLine("X:"+ forward.X + "Y:" + forward.Y);
+				angle -= turnSpeed * dt;
 			}
 			
 			if (padData.Buttons.HasFlag(GamePadButtons.Left))
 			{
-				cameraDir.X -= 1;
-				angle -= turnSpeed;
-				forward = forward.Rotate(angle);
-				Debug.WriteLine("X:"+ forward.X + "Y:" + forward.Y);
+				angle += turnSpeed * dt;
 			}
 			
-			if (padData.Buttons.HasFlag(GamePadButtons.Up))
-			{
-				//position += new Vector3(direction.X, 0, direction.Y) * dt * CameraPanSpeed;
-				cameraDir.Y -= 1;
-				position += new Vector3(forward.X, 0, forward.Y) * dt * CameraPanSpeed;
-			}
-			
+			Vector2 forward = new Vector2(1,0);
+			forward = forward.Rotate(-angle);
+					
 			if (padData.Buttons.HasFlag(GamePadButtons.Down))
 			{
-				cameraDir.Y += 1;
+				forward *= -1;
 			}
-			
-			
-			//position += new Vector3(cameraDir.X, 0, cameraDir.Y) * dt * CameraPanSpeed;
-			
-			
-			/*
-			if(padData.AnalogLeftX > 0.25f || padData.Buttons.HasFlag(GamePadButtons.Right))
+			else if (!padData.Buttons.HasFlag(GamePadButtons.Up))
 			{
-				direction += turn;
-			}
-			if(padData.AnalogLeftX < -0.25f || padData.Buttons.HasFlag(GamePadButtons.Left))
-			{
-				direction += turn;
+				forward *= 0;	
 			}
 			
-			if(padData.Buttons.HasFlag(GamePadButtons.Cross) || padData.Buttons.HasFlag(GamePadButtons.R))
-			{
-				speed += acceleration;
-			}
-			else
-			{
-				if(speed > 0)
-				{
-					speed -= deceleration;
-				}
-			}
-			*/
-			
+			position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
 			
 		}
 		

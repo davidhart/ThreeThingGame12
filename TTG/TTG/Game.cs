@@ -145,7 +145,7 @@ namespace TTG
 			{
 				RenderModel();
 				graphics.Clear(ClearMask.Depth);
-				UI.Draw(spriteBatch);
+				UI.Draw(spriteBatch, player);
 				break;
 			}
 			}

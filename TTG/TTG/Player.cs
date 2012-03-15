@@ -22,7 +22,7 @@ namespace TTG
 		Model lowerModel;
 		Model upperModel;
 		
-		float health = 100, points = 0;
+		float health = 100, points = 0, fish = 1000;
 		
 		public float Health
 		{
@@ -45,6 +45,18 @@ namespace TTG
 			set
 			{
 				points = value;
+			}
+		}
+		
+		public float Fish
+		{
+			get
+			{
+				return fish;
+			}
+			set
+			{
+				fish = value;
 			}
 		}
 		

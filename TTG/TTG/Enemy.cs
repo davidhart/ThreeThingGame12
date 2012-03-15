@@ -146,7 +146,7 @@ namespace TTG
 		
 		public override void Update (float dt)
 		{
-			state.Update(dt * type.speed);
+			state.Update(dt * type.speed * 1.2f);
 			
 			offset += dt * type.speed;
 			

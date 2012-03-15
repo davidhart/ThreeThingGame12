@@ -89,13 +89,19 @@ namespace TTG
 			Vector2 forward = new Vector2(1,0);
 			forward = forward.Rotate(-angle);
 					
-			if (padData.Buttons.HasFlag(GamePadButtons.Down))
+			if (padData.Buttons.HasFlag(GamePadButtons.Down) 
+			    && !padData.Buttons.HasFlag(GamePadButtons.Left) && !padData.Buttons.HasFlag(GamePadButtons.Right))
 			{
 				forward *= -1;
 			}
-			else if (!padData.Buttons.HasFlag(GamePadButtons.Up))
+			else if (padData.Buttons.HasFlag(GamePadButtons.Up)
+			         && !padData.Buttons.HasFlag(GamePadButtons.Left) && !padData.Buttons.HasFlag(GamePadButtons.Right))
 			{
-				forward *= 0;	
+				forward *= 1;	
+			}
+			else
+			{
+				forward *= 0;
 			}
 			
 			position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;

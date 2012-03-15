@@ -39,6 +39,9 @@ namespace TTG
 		private EnemyType basicEnemy;
 		private Enemy testEnemy;
 		
+		private SpriteBatch testBatch;
+		private Texture testSprite;
+		
 		public Game ()
 		{
 		}
@@ -47,6 +50,7 @@ namespace TTG
 		{			
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
+			graphics.SetViewport(0, 0, graphics.Screen.Width, graphics.Screen.Height);
 			
 			// Custom Program with color attribute (for demonstration)
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
@@ -73,6 +77,9 @@ namespace TTG
 			titleScreen.Initialise(graphics, this);
 			
 			player = new Player(graphics, program);
+			
+			testBatch = new SpriteBatch(graphics);
+			testSprite = new Texture2D("assets/testsprite.png", false);
 		}
 		
 		public void Load()
@@ -136,6 +143,12 @@ namespace TTG
 				break;
 			}
 			}
+			
+			graphics.Clear(ClearMask.Depth);
+			
+			testBatch.Begin();
+			testBatch.Draw(new Vector2(0, 0), testSprite);
+			testBatch.End();
 			
 			// Present the screen
 			graphics.SwapBuffers ();

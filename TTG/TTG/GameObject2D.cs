@@ -14,16 +14,15 @@ namespace TTG
 {
 	public class GameObject2D
 	{
-		Sprite gameSprite;
 		public GameObject2D (GraphicsContext graphics, 
 		                     Texture2D tex2D)
 		{
-			gameSprite = new Sprite(graphics, tex2D);
+			
 		}
 		
 		public virtual void Draw()
 		{
-			gameSprite.Draw();
+			
 		}
 		
 		public virtual void Update()

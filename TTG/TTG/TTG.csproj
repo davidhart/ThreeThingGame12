@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppMain.cs" />
-    <Compile Include="Sprite.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="GameObject2D.cs" />
@@ -49,16 +48,17 @@
     <Compile Include="GameObject3D.cs" />
     <Compile Include="TitleScreen.cs" />
     <Compile Include="Level.cs" />
+    <Compile Include="SpriteBatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
     <ShaderProgram Include="shaders\Simple.vcg" />
     <ShaderProgram Include="shaders\Texture.fcg" />
     <ShaderProgram Include="shaders\Texture.vcg" />
-    <ShaderProgram Include="shaders\Sprite.fcg" />
-    <ShaderProgram Include="shaders\Sprite.vcg" />
     <ShaderProgram Include="shaders\model.fcg" />
     <ShaderProgram Include="shaders\model.vcg" />
+    <ShaderProgram Include="shaders\sprite.fcg" />
+    <ShaderProgram Include="shaders\sprite.vcg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Pss.CSharp.targets" />
   <ItemGroup>
@@ -86,6 +86,7 @@
     <Content Include="testlevel.txt" />
     <Content Include="assets\tank_lower.mdx" />
     <Content Include="assets\tank_upper.mdx" />
+    <Content Include="assets\testsprite.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

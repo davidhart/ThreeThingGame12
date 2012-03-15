@@ -7,14 +7,11 @@ namespace TTG
 {
 	public class GameObject3D
 	{
-		protected Model model;
 		protected GraphicsContext graphics;
 		
-		public GameObject3D (GraphicsContext inGraphics, 
-		                     Model inModel)
+		public GameObject3D (GraphicsContext inGraphics)
 		{
 			graphics = inGraphics;
-			model = inModel;
 		}
 		public virtual void Draw()
 		{

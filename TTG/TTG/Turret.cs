@@ -18,8 +18,8 @@ namespace TTG
 		
 		public TurretType TType;
 		
-		public Turret (GraphicsContext graphics, Model model)
-			: base (graphics, model)
+		public Turret (GraphicsContext graphics)
+			: base (graphics)
 		{
 		}
 		

@@ -19,8 +19,8 @@ namespace TTG
 			}
 		}
 		
-		public Enemy (GraphicsContext graphics, Model model)
-			: base(graphics, model)
+		public Enemy (GraphicsContext graphics)
+			: base(graphics)
 		{
 		}
 		

@@ -35,9 +35,9 @@ namespace TTG
 		public bool IsRunning = true;
 		
 		private Vector3 cameraOffset;
-		private Vector3 cameraTarget;
 		
 		private Level level;
+		private Player player;
 		
 		public Game ()
 		{
@@ -58,15 +58,16 @@ namespace TTG
 			program.SetUniformValue(4, ref color);
 			
 			cameraOffset = new Vector3(0, 13, 10);
-			cameraTarget = Vector3.Zero;
 			
 			stopwatch = new Stopwatch();
 			stopwatch.Start();
 			titleScreen = new TitleScreen();
 			titleScreen.Initialise(graphics, this);
 			
-			level = new Level(program);
+			level = new Level(graphics, program);
 			level.Load("testlevel.txt");
+			
+			player = new Player(graphics, program);
 		}
 		
 		public void Load()
@@ -78,36 +79,15 @@ namespace TTG
 			int currTicks = (int)stopwatch.ElapsedTicks;
 			if (frameCount ++ == 0)
 				prevTicks = currTicks;
-			float stepTime = (currTicks - prevTicks) / (float)Stopwatch.Frequency;
+			float dt = (currTicks - prevTicks) / (float)Stopwatch.Frequency;
 			prevTicks = currTicks;
 			
 			float elapsed = stopwatch.ElapsedMilliseconds / 1000.0f;			
 			
-			var gamePadData = GamePad.GetData (0);
+			var gamePadData = GamePad.GetData (0);			
 			
-			const float CameraPanSpeed = 7.5f;
-			
-			float cameraXDir = 0;
-			float cameraYDir = 0;
-			
-			if (gamePadData.Buttons.HasFlag(GamePadButtons.Right))
-				cameraXDir += 1;
-			
-			if (gamePadData.Buttons.HasFlag(GamePadButtons.Left))
-				cameraXDir -= 1;
-			
-			if (gamePadData.Buttons.HasFlag(GamePadButtons.Up))
-				cameraYDir -= 1;
-			
-			if (gamePadData.Buttons.HasFlag(GamePadButtons.Down))
-				cameraYDir += 1;
-			
-			
-			cameraTarget.X += cameraXDir * stepTime * CameraPanSpeed;
-			cameraTarget.Z += cameraYDir * stepTime * CameraPanSpeed;		
-			
-			
-			pengState.Update(stepTime);
+			pengState.Update(dt);
+			player.Update(gamePadData, dt);
 			
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
@@ -171,7 +151,7 @@ namespace TTG
 			
 			Matrix4 projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
 			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -10));
-			viewMatrix = Matrix4.LookAt(cameraOffset + cameraTarget, cameraTarget, new Vector3(0, 0, -1));			
+			viewMatrix = Matrix4.LookAt(cameraOffset + player.GetPosition(), player.GetPosition(), new Vector3(0, 0, -1));			
 			
 			Vector3 litDirection = new Vector3 (0.0f, -1.0f, -1.0f).Normalize ();
 			Vector3 litColor = new Vector3 (1.0f, 1.0f, 1.0f);
@@ -190,7 +170,8 @@ namespace TTG
 			penguin.Update();
 			penguin.Draw(graphics, program);
 			
-			level.Draw(graphics);
+			level.Draw();
+			player.Draw();
 		}
 	}
 }

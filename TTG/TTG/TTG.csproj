@@ -84,6 +84,8 @@
     <Content Include="mapparts\part8.mdx" />
     <Content Include="mapparts\part9.mdx" />
     <Content Include="testlevel.txt" />
+    <Content Include="assets\tank_lower.mdx" />
+    <Content Include="assets\tank_upper.mdx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

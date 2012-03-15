@@ -27,15 +27,17 @@ namespace TTG
 	
 	public class Level
 	{	
-		LevelCell[,] levelData;
-		int width;
-		int height;
+		private LevelCell[,] levelData;
+		private int width;
+		private int height;
 		
 		private Model[] models;
 		private BasicProgram program;
+		private GraphicsContext graphics;
 		
-		public Level(BasicProgram program)
+		public Level(GraphicsContext graphics, BasicProgram program)
 		{
+			this.graphics = graphics;
 			this.program = program;
 			
 			models = new Model[17];
@@ -128,7 +130,7 @@ namespace TTG
 			return levelData[x, y].IsTrench();
 		}
 		
-		public void Draw(GraphicsContext graphics)
+		public void Draw()
 		{	
 			for (int y = 0; y < height; y++)
 			{

@@ -14,7 +14,8 @@ namespace TTG
 	{
 		Trench,
 		Platform,
-		Bridge
+		Bridge,
+		FishPile
 	}
 	
 	public enum PathOption
@@ -35,7 +36,7 @@ namespace TTG
 		
 		public bool IsTrench()
 		{
-			return type == CellType.Trench || type == CellType.Bridge;
+			return type == CellType.Trench || type == CellType.Bridge || type == CellType.FishPile;
 		}
 		
 		public PathOption GetPathingOption()
@@ -46,7 +47,7 @@ namespace TTG
 		}
 	}
 	
-	class Bridge
+	class MapObject
 	{
 		public Matrix4 worldMatrix;	
 	}
@@ -59,6 +60,7 @@ namespace TTG
 		//private int fish;
 		
 		private Model[] models;
+		private Model fishPileModel;
 		private Model bridgeModel;
 		
 		private BasicProgram program;
@@ -67,7 +69,8 @@ namespace TTG
 		Vector2 spawnPos;
 		Direction spawnDir;
 		
-		List<Bridge> bridges;
+		List<MapObject> bridges;
+		List<MapObject> fishPiles;
 		
 		//Scene scene;
 		//Label fishLabel, healthLabel, pointsLabel;
@@ -108,6 +111,7 @@ namespace TTG
 			}
 			
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
+			fishPileModel = new Model("mapparts/fish.mdx", 0);
 		}
 		
 		public void Load(string filename)
@@ -133,7 +137,8 @@ namespace TTG
 			width = lines[0].Length; // Assume all lines are the same length;
 			height = lines.Length;
 			levelData = new LevelCell[width, height];
-			bridges = new List<Bridge>();
+			bridges = new List<MapObject>();
+			fishPiles = new List<MapObject>();
 			
 			// map characters onto type
 			for (int y = 0; y < height; ++y)
@@ -181,6 +186,12 @@ namespace TTG
 					else if (c == 'B')
 					{
 						levelData[x,y].type = CellType.Bridge;
+						levelData[x,y].pathOption = PathOption.Continue;
+					}
+					// fish pile
+					else if (c == 'F')
+					{
+						levelData[x,y].type = CellType.FishPile;
 						levelData[x,y].pathOption = PathOption.Continue;
 					}
 					
@@ -253,10 +264,18 @@ namespace TTG
 							
 							Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y * 2.0f)) * orientation;
 							
-							Bridge b = new Bridge();
+							MapObject b = new MapObject();
 							b.worldMatrix = world;
 							
 							bridges.Add(b);
+						}
+						
+						if (levelData[x,y].type == CellType.FishPile)
+						{
+							Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y * 2.0f));
+							MapObject f = new MapObject();
+							f.worldMatrix = world;
+							fishPiles.Add(f);
 						}
 					}
 				}
@@ -305,6 +324,13 @@ namespace TTG
 				bridgeModel.SetWorldMatrix(ref bridges[i].worldMatrix);
 				bridgeModel.Update();
 				bridgeModel.Draw(graphics, program);
+			}
+			
+			for (int i = 0; i < fishPiles.Count; ++i)
+			{
+				fishPileModel.SetWorldMatrix(ref fishPiles[i].worldMatrix);
+				fishPileModel.Update();
+				fishPileModel.Draw(graphics, program);
 			}
 		}
 		

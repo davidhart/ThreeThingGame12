@@ -13,7 +13,8 @@ namespace TTG
 	enum CellType
 	{
 		Trench,
-		Platform
+		Platform,
+		Bridge
 	}
 	
 	public enum PathOption
@@ -34,7 +35,7 @@ namespace TTG
 		
 		public bool IsTrench()
 		{
-			return type == CellType.Trench;
+			return type == CellType.Trench || type == CellType.Bridge;
 		}
 		
 		public PathOption GetPathingOption()
@@ -45,23 +46,32 @@ namespace TTG
 		}
 	}
 	
+	class Bridge
+	{
+		public Matrix4 worldMatrix;	
+	}
+	
 	public class Level
 	{	
 		private LevelCell[,] levelData;
 		private int width;
 		private int height;
-		private int fish;
+		//private int fish;
 		
 		private Model[] models;
+		private Model bridgeModel;
+		
 		private BasicProgram program;
 		private GraphicsContext graphics;
 		
 		Vector2 spawnPos;
 		Direction spawnDir;
 		
-		Scene scene;
-		Label fishLabel, healthLabel, pointsLabel;
-		Button bearImage, fishImage, pointsImage;
+		List<Bridge> bridges;
+		
+		//Scene scene;
+		//Label fishLabel, healthLabel, pointsLabel;
+		//Button bearImage, fishImage, pointsImage;
 		
 		public Vector2 SpawnPos
 		{
@@ -96,6 +106,8 @@ namespace TTG
 			{
 				models[i] = new Model("mapparts/part" + i.ToString() + ".mdx", 0);	
 			}
+			
+			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 		}
 		
 		public void Load(string filename)
@@ -121,6 +133,7 @@ namespace TTG
 			width = lines[0].Length; // Assume all lines are the same length;
 			height = lines.Length;
 			levelData = new LevelCell[width, height];
+			bridges = new List<Bridge>();
 			
 			// map characters onto type
 			for (int y = 0; y < height; ++y)
@@ -162,6 +175,12 @@ namespace TTG
 					else if(c == '+')
 					{
 						levelData[x,y].type = CellType.Trench;
+						levelData[x,y].pathOption = PathOption.Continue;
+					}
+					// bridge
+					else if (c == 'B')
+					{
+						levelData[x,y].type = CellType.Bridge;
 						levelData[x,y].pathOption = PathOption.Continue;
 					}
 					
@@ -219,6 +238,26 @@ namespace TTG
 						if (IsCellTrench(x, y + 1)) index += 8;
 						
 						levelData[x,y].modelLookup = index;
+						
+						if (levelData[x,y].type == CellType.Bridge)
+						{
+							Matrix4 orientation;
+							
+							if (((index & 2) != 0) && ((index & 8) != 0))
+								orientation = Matrix4.Identity;
+							else
+								orientation = new Matrix4(new Vector3(0, 0, 1),
+								                          new Vector3(0, 1, 0),
+								                          new Vector3(1, 0, 0),
+								                          new Vector3(0, 0, 0));
+							
+							Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y * 2.0f)) * orientation;
+							
+							Bridge b = new Bridge();
+							b.worldMatrix = world;
+							
+							bridges.Add(b);
+						}
 					}
 				}
 			}
@@ -259,6 +298,13 @@ namespace TTG
 					models[index].Update();
 					models[index].Draw(graphics, program);
 				}
+			}
+			
+			for (int i = 0; i < bridges.Count; ++i)
+			{
+				bridgeModel.SetWorldMatrix(ref bridges[i].worldMatrix);
+				bridgeModel.Update();
+				bridgeModel.Draw(graphics, program);
 			}
 		}
 		

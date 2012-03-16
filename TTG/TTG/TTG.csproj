@@ -93,6 +93,7 @@
     <Content Include="assets\fishIcon.png" />
     <Content Include="assets\title.png" />
     <Content Include="assets\fonts\font.png" />
+    <Content Include="mapparts\bridge.mdx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

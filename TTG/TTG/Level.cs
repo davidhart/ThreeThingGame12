@@ -154,8 +154,6 @@ namespace TTG
 						levelData[x,y].pathOption = PathOption.Continue;
 					}
 					
-					//
-					
 					//penguin orientation
 					else if (c == '>')
 					{

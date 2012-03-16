@@ -17,7 +17,10 @@ namespace TTG
 			font = new BitmapFont("assets/fonts/font.png", 37, 4);
 		}
 		
-		public void Draw(SpriteBatch spritebatch, float health, float points, float fish)
+		public void Draw(SpriteBatch spritebatch, 
+		                 float health, 
+		                 float points, 
+		                 float fish)
 		{
 			spritebatch.Begin();
 			spritebatch.Draw(bearTex, new Vector2(0,0));

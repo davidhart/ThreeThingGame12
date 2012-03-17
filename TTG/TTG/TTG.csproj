@@ -51,6 +51,7 @@
     <Compile Include="SpriteBatch.cs" />
     <Compile Include="GameUI.cs" />
     <Compile Include="BitmapFont.cs" />
+    <Compile Include="TurretPlacement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />

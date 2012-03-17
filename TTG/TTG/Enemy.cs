@@ -177,6 +177,7 @@ namespace TTG
 						health = 0;
 						direction = Direction.Stop;
 					}
+					
 				}
 			}
 		}

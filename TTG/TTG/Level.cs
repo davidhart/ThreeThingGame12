@@ -21,7 +21,8 @@ namespace TTG
 		Platform,
 		Bridge,
 		FishPile,
-		TurretPlacement
+		TurretPlacement,
+		Switch
 	}
 	
 	public enum PathOption
@@ -40,7 +41,7 @@ namespace TTG
 	{
 		public CellType type;
 		public PathOption pathOption;
-		
+		public PathOption switchOption;
 		public byte modelLookup;
 		
 		public bool IsTrench()
@@ -51,8 +52,18 @@ namespace TTG
 		public PathOption GetPathingOption()
 		{
 			Debug.Assert(IsTrench());
-			
+			if(type == CellType.Switch)
+			{
+				Switch ();
+			}
 			return pathOption;			
+		}
+		
+		private void Switch()
+		{
+			PathOption temp = switchOption;
+			switchOption = pathOption;
+			pathOption = temp;
 		}
 	}
 	
@@ -187,10 +198,42 @@ namespace TTG
 						levelData[x,y].type = CellType.Trench;
 						levelData[x,y].pathOption = PathOption.Up;	
 					}
-					else if(c == '+')
+					// switches
+					else if (c == 'Q')	// left-down switch
 					{
-						levelData[x,y].type = CellType.Trench;
-						levelData[x,y].pathOption = PathOption.Continue;
+						levelData[x,y].type = CellType.Switch;
+						levelData[x,y].pathOption = PathOption.Left;
+						levelData[x,y].switchOption = PathOption.Down;
+					}
+					else if (c == 'W') // left-up
+					{
+						levelData[x,y].type = CellType.Switch;
+						levelData[x,y].pathOption = PathOption.Left;
+						levelData[x,y].switchOption = PathOption.Up;
+					}
+					else if(c == 'E') // left-right
+					{
+						levelData[x,y].type = CellType.Switch;
+						levelData[x,y].pathOption = PathOption.Left;
+						levelData[x,y].switchOption = PathOption.Right;
+					}
+					else if(c == 'R') // right-down
+					{
+						levelData[x,y].type = CellType.Switch;
+						levelData[x,y].pathOption = PathOption.Right;
+						levelData[x,y].switchOption = PathOption.Down;
+					}
+					else if(c == 'Y') // right-up
+					{
+						levelData[x,y].type = CellType.Switch;
+						levelData[x,y].pathOption = PathOption.Right;
+						levelData[x,y].switchOption = PathOption.Up;
+					}
+					else if(c=='U') // up-down
+					{
+						levelData[x,y].type = CellType.Switch;
+						levelData[x,y].pathOption = PathOption.Up;
+						levelData[x,y].switchOption = PathOption.Down;
 					}
 					// bridge
 					else if (c == 'B')
@@ -204,7 +247,6 @@ namespace TTG
 						levelData[x,y].type = CellType.FishPile;
 						levelData[x,y].pathOption = PathOption.Stop;
 					}
-					
 					//spawners
 					else if(c == '1') //spawn dacing downwards
 					{

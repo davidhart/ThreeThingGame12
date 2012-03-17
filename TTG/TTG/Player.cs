@@ -135,7 +135,7 @@ namespace TTG
 				for(int i = 0; i < enemies.Length; ++i)
 				{
 					float distance = Vector2.Distance(enemies[i].GetPosition().Xz, position.Xz);
-					if(distance <= atkRange)
+					if(distance <= atkRange && enemies[i].Health > 0)
 					{
 						target = enemies[i];
 						break;

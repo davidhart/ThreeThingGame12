@@ -27,6 +27,7 @@ namespace TTG
 		Down,
 		Left,
 		Right,
+		Stop,
 	}
 	
 	
@@ -205,7 +206,7 @@ namespace TTG
 					else if (c == 'F')
 					{
 						levelData[x,y].type = CellType.FishPile;
-						levelData[x,y].pathOption = PathOption.Continue;
+						levelData[x,y].pathOption = PathOption.Stop;
 					}
 					
 					//spawners

@@ -15,7 +15,8 @@ namespace TTG
 		Left = 0,
 		Right = 1,
 		Up = 2,
-		Down = 3
+		Down = 3,
+		Stop = 4
 	}
 	
 	class EnemyData
@@ -43,17 +44,19 @@ namespace TTG
 			                                     new Vector3(0, 0, 1), 
 			                                     new Vector3(0, 0, 0));
 			
-			xOffsets = new int[4];
+			xOffsets = new int[5];
 			xOffsets[0] = -1; // left
 			xOffsets[1] = 1;  // right
 			xOffsets[2] = 0;  // up
 			xOffsets[3] = 0;  // down
+			xOffsets[4] = 0;
 			
-			yOffsets = new int[4];
+			yOffsets = new int[5];
 			yOffsets[0] = 0;  // left
 			yOffsets[1] = 0;  // right
 			yOffsets[2] = -1; // up
 			yOffsets[3] = 1;  // down
+			yOffsets[4] = 0;
 		}
 		
 		public static Matrix4 GetOrientationMatrix(Direction direction)
@@ -137,33 +140,44 @@ namespace TTG
 		
 		public override void Draw ()
 		{
-			Matrix4 world = Matrix4.Translation(GetPosition()) * Matrix4.Scale(new Vector3(0.6f)) * EnemyData.GetOrientationMatrix(direction);	
-			type.model.SetWorldMatrix(ref world);			
-			type.model.SetAnimationState(state);
-			type.model.Update();
-			type.model.Draw(graphics, program);
+			if(direction != Direction.Stop)
+			{
+				Matrix4 world = Matrix4.Translation(GetPosition()) * Matrix4.Scale(new Vector3(0.6f)) * EnemyData.GetOrientationMatrix(direction);	
+				type.model.SetWorldMatrix(ref world);			
+				type.model.SetAnimationState(state);
+				type.model.Update();
+				type.model.Draw(graphics, program);
+			}
 		}
 		
 		public override void Update (float dt)
 		{
-			state.Update(dt * type.speed * 1.2f);
-			
-			offset += dt * type.speed;
-			
-			while (offset > 1)
+			if(direction != Direction.Stop)
 			{
-				// Move one tile in current direction
-				offset -= 1;
-				xTilePos += EnemyData.GetXOffset(direction);
-				yTilePos += EnemyData.GetYOffset(direction);
+				state.Update(dt * type.speed * 1.2f);
 				
-				// Check for direction changes in new cell
-				PathOption p = level.GetCellPathOption(xTilePos, yTilePos);
+				offset += dt * type.speed;
+			
+				while (offset > 1)
+				{
+					// Move one tile in current direction
+					offset -= 1;
+					xTilePos += EnemyData.GetXOffset(direction);
+					yTilePos += EnemyData.GetYOffset(direction);
 				
-				if (p == PathOption.Left)       direction = Direction.Left;
-				else if (p == PathOption.Right) direction = Direction.Right;
-				else if (p == PathOption.Down)  direction = Direction.Down;
-				else if (p == PathOption.Up)	direction = Direction.Up;
+					// Check for direction changes in new cell
+					PathOption p = level.GetCellPathOption(xTilePos, yTilePos);
+				
+					if (p == PathOption.Left)       direction = Direction.Left;
+					else if (p == PathOption.Right) direction = Direction.Right;
+					else if (p == PathOption.Down)  direction = Direction.Down;
+					else if (p == PathOption.Up)	direction = Direction.Up;
+					else if (p == PathOption.Stop)
+					{
+						health = 0;
+						direction = Direction.Stop;
+					}
+				}
 			}
 		}
 		

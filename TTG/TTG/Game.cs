@@ -67,7 +67,7 @@ namespace TTG
 			program.SetUniformValue(4, ref color);
 			
 			
-			level = new Level(graphics, program);
+			level = new Level(graphics, program, upgrade, spriteBatch);
 			level.Load("testlevel.txt");
 			
 			basicEnemy = new EnemyType();

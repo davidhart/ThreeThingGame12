@@ -68,12 +68,10 @@ namespace TTG
 		private LevelCell[,] levelData;
 		private int width;
 		private int height;
-		//private int fish;
 		
 		private Model[] models;
 		private Model fishPileModel;
 		private Model bridgeModel;
-		//private Model turretPlacementModel;
 		
 		private BasicProgram program;
 		private GraphicsContext graphics;
@@ -83,17 +81,11 @@ namespace TTG
 		
 		List<Turret> turretPlacements = new List<Turret>();
 		
-		int turretCounter = 0; 
-		
 		List<MapObject> bridges;
 		List<MapObject> fishPiles;
-		//List<MapObject> turretPlacements;
 		
-
-		
-		//Scene scene;
-		//Label fishLabel, healthLabel, pointsLabel;
-		//Button bearImage, fishImage, pointsImage;
+		UpgradeUI upgradeUI;
+		SpriteBatch spritebatch;
 		
 		public Vector2 SpawnPos
 		{
@@ -118,20 +110,19 @@ namespace TTG
 			}
 		}
 		
-		public Level(GraphicsContext graphics, BasicProgram program)
+		public Level(GraphicsContext graphics, BasicProgram program, UpgradeUI uUi, SpriteBatch sb)
 		{
 			this.graphics = graphics;
 			this.program = program;
-			
+			upgradeUI = uUi;
 			models = new Model[17];
 			for (int i = 0; i < models.Length; ++i)
 			{
 				models[i] = new Model("mapparts/part" + i.ToString() + ".mdx", 0);	
 			}
-			
+			spritebatch = sb;
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 			fishPileModel = new Model("mapparts/fish.mdx", 0);
-			//turretPlacementModel = new Model("mapparts/turretbase.mdx", 0);
 		}
 		
 		public void Load(string filename)
@@ -155,7 +146,6 @@ namespace TTG
 		{
 			string [] lines = fileContents.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 			
-			//turretPlacement
 			width = lines[0].Length; // Assume all lines are the same length;
 			height = lines.Length;
 			levelData = new LevelCell[width, height];
@@ -364,9 +354,10 @@ namespace TTG
 			{
 				turretPlacements[i].Draw();
 			}
-			
-			
-
+			if(upgrading)
+			{
+				upgradeUI.Draw(spritebatch);
+			}
 		}
 		
 		public void Update(UpgradeUI ui, GamePadData data, Vector2 playerPos)
@@ -379,8 +370,20 @@ namespace TTG
 					float dist = Vector2.Distance(playerPos, turretPlacements[i].GetPosition().Xz);
 					if(dist <= UPGRADEDIST)
 					{
-						
+						if(upgrading)
+						{
+							upgrading =  false;
+						}
+						else
+						{
+							upgrading = true;
+						}
 					}
+					if(upgrading)
+					{
+						upgradeUI.Update();
+					}
+					
 				}
 			}
 		}

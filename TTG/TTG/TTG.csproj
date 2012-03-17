@@ -53,6 +53,7 @@
     <Compile Include="BitmapFont.cs" />
     <Compile Include="TurretPlacement.cs" />
     <Compile Include="UpgradeUI.cs" />
+    <Compile Include="Particle.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />

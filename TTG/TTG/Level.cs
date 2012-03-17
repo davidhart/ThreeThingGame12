@@ -71,6 +71,8 @@ namespace TTG
 		Vector2 spawnPos;
 		Direction spawnDir;
 		
+		List<Vector2> turretPos;
+		
 		List<MapObject> bridges;
 		List<MapObject> fishPiles;
 		List<MapObject> turretPlacements;
@@ -144,6 +146,7 @@ namespace TTG
 			bridges = new List<MapObject>();
 			fishPiles = new List<MapObject>();
 			turretPlacements = new List<MapObject>();
+			turretPos = new List<Vector2>();
 			
 			// map characters onto type
 			for (int y = 0; y < height; ++y)
@@ -231,6 +234,7 @@ namespace TTG
 					{
 						levelData[x,y].type = CellType.TurretPlacement;
 						levelData[x,y].pathOption = PathOption.Continue;
+						turretPos.Add(new Vector2(x,y));
 					}
 					else // represented by character #
 					{

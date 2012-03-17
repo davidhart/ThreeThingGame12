@@ -15,7 +15,8 @@ namespace TTG
 		Trench,
 		Platform,
 		Bridge,
-		FishPile
+		FishPile,
+		TurretPlacement
 	}
 	
 	public enum PathOption
@@ -62,6 +63,7 @@ namespace TTG
 		private Model[] models;
 		private Model fishPileModel;
 		private Model bridgeModel;
+		private Model turretPlacementModel;
 		
 		private BasicProgram program;
 		private GraphicsContext graphics;
@@ -71,6 +73,7 @@ namespace TTG
 		
 		List<MapObject> bridges;
 		List<MapObject> fishPiles;
+		List<MapObject> turretPlacements;
 		
 		//Scene scene;
 		//Label fishLabel, healthLabel, pointsLabel;
@@ -112,6 +115,7 @@ namespace TTG
 			
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 			fishPileModel = new Model("mapparts/fish.mdx", 0);
+			turretPlacementModel = new Model("mapparts/turretbase.mdx", 0);
 		}
 		
 		public void Load(string filename)
@@ -139,6 +143,7 @@ namespace TTG
 			levelData = new LevelCell[width, height];
 			bridges = new List<MapObject>();
 			fishPiles = new List<MapObject>();
+			turretPlacements = new List<MapObject>();
 			
 			// map characters onto type
 			for (int y = 0; y < height; ++y)
@@ -222,6 +227,11 @@ namespace TTG
 						spawnPos = new Vector2(x,y);
 						spawnDir = Direction.Right;
 					}
+					else if(c == 'T')	// Turret placement
+					{
+						levelData[x,y].type = CellType.TurretPlacement;
+						levelData[x,y].pathOption = PathOption.Continue;
+					}
 					else // represented by character #
 					{
 						levelData[x,y].type = CellType.Platform;
@@ -236,6 +246,14 @@ namespace TTG
 					if (!IsCellTrench(x, y))
 					{
 						levelData[x,y].modelLookup = 16;
+						
+						if(levelData[x,y].type == CellType.TurretPlacement)
+						{
+							Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y*2.0f));
+							MapObject f = new MapObject();
+							f.worldMatrix = world;
+							turretPlacements.Add(f);
+						}
 					}
 					else
 					{
@@ -329,6 +347,13 @@ namespace TTG
 				fishPileModel.SetWorldMatrix(ref fishPiles[i].worldMatrix);
 				fishPileModel.Update();
 				fishPileModel.Draw(graphics, program);
+			}
+			
+			for(int i = 0 ; i < turretPlacements.Count; ++i)
+			{
+				turretPlacementModel.SetWorldMatrix(ref turretPlacements[i].worldMatrix);
+				turretPlacementModel.Update();
+				turretPlacementModel.Draw(graphics, program);
 			}
 		}
 		

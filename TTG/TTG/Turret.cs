@@ -167,7 +167,7 @@ namespace TTG
 		public Vector3 GetPosition ()
 		{
 			return new Vector3 ((xTilePos + EnemyData.GetXOffset (0) * offset) * 2, 
-			                   -1, 
+			                   0.75f, 
 			                   (yTilePos + EnemyData.GetYOffset (0) * offset) * 2);	
 		}
 	}

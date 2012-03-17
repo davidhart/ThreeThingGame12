@@ -240,7 +240,7 @@ namespace TTG
 					}
 					else if(c == 'T')	// Turret placement
 					{
-						//levelData[x,y].type = CellType.TurretPlacement;
+						levelData[x,y].type = CellType.TurretPlacement;
 						levelData[x,y].pathOption = PathOption.Continue;
 						turretPlacements.Add(new Turret(graphics, this, program, new Vector2(x,y) ));
 					}
@@ -258,6 +258,7 @@ namespace TTG
 					if (!IsCellTrench(x, y))
 					{
 						levelData[x,y].modelLookup = 16;
+						
 					}
 					else
 					{

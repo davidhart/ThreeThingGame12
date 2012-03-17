@@ -41,7 +41,7 @@ namespace TTG
 			
 			for(int i = 0; i < maxParticles; ++i)
 			{
-				particles[i].pos = Vector3(0,0,0);
+				particles[i].pos = new Vector3(0,0,0);
 				particles[i].orgVel = GenerateRandomVec3(vel, rand);
 				particles[i].vel = particles[i].orgVel;
 				particles[i].orgLife = particles[i].life = GenerateRandomFloat (life.min, life.max, rand);

@@ -60,15 +60,17 @@ namespace TTG
 		/// <param name='Pos'>
 		/// Position of player.
 		/// </param>
-		public void PlaceTurret(Vector2 PlayerPos)
+		public bool PlaceTurret(Vector2 PlayerPos)
 		{
 			for(int i = 0; i < placement.Length; ++i)
 			{
 				if(placement[i].position.Distance(PlayerPos) < distanceFromPlacement)
 				{
 					placement[i].placed = true;
+					return true;
 				}
 			}
+			return false;
 		}
 	}
 }

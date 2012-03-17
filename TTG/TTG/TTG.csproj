@@ -52,6 +52,7 @@
     <Compile Include="GameUI.cs" />
     <Compile Include="BitmapFont.cs" />
     <Compile Include="TurretPlacement.cs" />
+    <Compile Include="UpgradeUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -97,6 +98,7 @@
     <Content Include="mapparts\bridge.mdx" />
     <Content Include="mapparts\fish.mdx" />
     <Content Include="mapparts\turretbase.mdx" />
+    <Content Include="assets\placeholder.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

@@ -5,6 +5,7 @@ using System.IO;
 
 using Sce.Pss.Core;
 using Sce.Pss.Core.Graphics;
+using Sce.Pss.Core.Input;
 
 using Sce.Pss.HighLevel.UI;
 
@@ -79,6 +80,8 @@ namespace TTG
 		List<MapObject> fishPiles;
 		List<MapObject> turretPlacements;
 		
+		Turret [] turrets;
+		
 		//Scene scene;
 		//Label fishLabel, healthLabel, pointsLabel;
 		//Button bearImage, fishImage, pointsImage;
@@ -131,6 +134,8 @@ namespace TTG
 				string fileContents = tr.ReadToEnd();
 				
 				GenerateLevel(fileContents);
+				
+				turrets = new Turret[turretPlacements.Count];
 			}
 			catch
 			{
@@ -328,7 +333,7 @@ namespace TTG
 		}
 		
 		public void Draw()
-		{	
+		{			
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
@@ -363,8 +368,16 @@ namespace TTG
 			}
 		}
 		
-		public void Update()
+		public void Update(UpgradeUI ui, GamePadData data, Vector2 playerPos)
 		{
+			if(data.ButtonsDown == GamePadButtons.Triangle)
+			{
+				for(int i = 0; i < turrets.Length; ++i)
+				{
+					
+					ui.show = !ui.show;
+				}
+			}
 		}
 	}
 }

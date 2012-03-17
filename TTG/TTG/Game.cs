@@ -42,6 +42,8 @@ namespace TTG
 		private SpriteBatch spriteBatch;
 		
 		GameUI UI;
+		UpgradeUI upgrade;
+		
 		
 		public Game ()
 		{
@@ -87,6 +89,7 @@ namespace TTG
 			
 			spriteBatch = new SpriteBatch(graphics);
 			UI = new GameUI();
+			upgrade = new UpgradeUI();
 		}
 		
 		public void Load()
@@ -126,7 +129,7 @@ namespace TTG
 				{
 					testEnemy[i].Update(dt);
 				}
-				level.Update();
+				level.Update(upgrade, gamePadData, player.GetPosition().Xy);
 				break;
 			}
 			}
@@ -140,26 +143,24 @@ namespace TTG
 			
 			switch (gameState)
 			{
-			case GameState.Title:
-			{
-				titleScreen.Draw();
-				break;
+				case GameState.Title:
+				{
+					titleScreen.Draw();
+					break;
+				}
+				case GameState.Help:
+				{
+					break;
+				}
+				case GameState.Playing:
+				{
+					RenderModel();
+					graphics.Clear(ClearMask.Depth);
+					UI.Draw(spriteBatch, player.Health, player.Points, player.Fish);					
+					upgrade.Draw (spriteBatch);
+					break;
+				}
 			}
-			case GameState.Help:
-			{
-				break;
-			}
-			case GameState.Playing:
-			{
-				RenderModel();
-				graphics.Clear(ClearMask.Depth);
-				UI.Draw(spriteBatch, player.Health, player.Points, player.Fish);
-				break;
-			}
-			}
-			
-			
-			
 			
 			// Present the screen
 			graphics.SwapBuffers ();

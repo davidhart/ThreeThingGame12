@@ -16,13 +16,15 @@ namespace TTG
 		{
 			public Vector2 position;
 			public bool placed;
-			public int level;
 		};
+		
+		public float distanceFromPlacement;
 		
 		private List<Placements> placement;
 		
 		public TurretPlacement ()
 		{
+			placement = new List<Placements>();
 		}
 		
 		/// <summary>
@@ -50,7 +52,6 @@ namespace TTG
 			Placements p;
 			p.position = Pos;
 			p.placed = false;
-			p.level = 0;
 		}
 		
 		/// <summary>
@@ -61,10 +62,14 @@ namespace TTG
 		/// </param>
 		public void PlaceTurret(Vector2 Pos)
 		{
-			
+			for(int i = 0; i < placement.Count; ++i)
+			{
+				if(placement[i].position.Distance(Pos) < distanceFromPlacement)
+				{
+					placement[i].placed = true;
+				}
+			}
 		}
-		
-		
 	}
 }
 

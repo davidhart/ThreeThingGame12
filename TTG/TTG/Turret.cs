@@ -79,7 +79,7 @@ namespace TTG
 			{
 				for(int i = 0; i < enemies.Length; ++i)
 				{
-					float distance = Vector2.Distance(target.GetPosition().Xy, position);
+					float distance = Vector2.Distance(enemies[i].GetPosition().Xz, position);
 					if(distance <= atkRange)
 					{
 						target = enemies[i];

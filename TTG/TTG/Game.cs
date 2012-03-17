@@ -59,6 +59,7 @@ namespace TTG
 			graphics = new GraphicsContext ();
 			graphics.SetViewport(0, 0, graphics.Screen.Width, graphics.Screen.Height);
 			UISystem.Initialize(graphics);
+			spriteBatch = new SpriteBatch(graphics);
 			
 			// Custom Program with color attribute (for demonstration)
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
@@ -66,8 +67,8 @@ namespace TTG
 			Vector4 color = new Vector4(1, 1, 1, 1);
 			program.SetUniformValue(4, ref color);
 			
-			
-			level = new Level(graphics, program, upgrade, spriteBatch);
+			upgrade = new UpgradeUI();
+			level = new Level(graphics, program, upgrade, spriteBatch, 15);
 			level.Load("testlevel.txt");
 			
 			basicEnemy = new EnemyType();
@@ -91,9 +92,9 @@ namespace TTG
 			
 			player = new Player(graphics, program);
 			
-			spriteBatch = new SpriteBatch(graphics);
+		
 			UI = new GameUI();
-			upgrade = new UpgradeUI();
+
 			billboardBatch = new BillboardBatch(graphics);
 			testTexture = new Texture2D("assets/CoinIcon.png", false);
 			camera = new Camera(Vector3.Zero, Vector3.Zero, new Vector3(0, 0, -1));
@@ -115,7 +116,8 @@ namespace TTG
 			
 			var gamePadData = GamePad.GetData (0);			
 			
-			
+	
+
 			
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
@@ -136,7 +138,7 @@ namespace TTG
 				{
 					testEnemy[i].Update(dt);
 				}
-				level.Update(upgrade, gamePadData, player.GetPosition().Xy);
+				level.Update(upgrade, gamePadData, player.GetPosition().Xz);
 				break;
 			}
 			}

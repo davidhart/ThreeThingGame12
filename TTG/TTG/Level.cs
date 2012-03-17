@@ -35,8 +35,6 @@ namespace TTG
 		Stop,
 	}
 	
-	
-	
 	struct LevelCell
 	{
 		public CellType type;
@@ -74,8 +72,16 @@ namespace TTG
 	
 	public class Level
 	{	
-		bool upgrading = false;
+		//Enemy waves
+		List<Enemy[]> waves = new List<Enemy[]>();
+		int maxWaves;
+		int waveNumber;
+		
+		//Wave size
+		Random rand = new Random();
+		
 		const int UPGRADEDIST = 2;
+		
 		private LevelCell[,] levelData;
 		private int width;
 		private int height;
@@ -121,7 +127,11 @@ namespace TTG
 			}
 		}
 		
-		public Level(GraphicsContext graphics, BasicProgram program, UpgradeUI uUi, SpriteBatch sb)
+		public Level(GraphicsContext graphics, 
+		             BasicProgram program, 
+		             UpgradeUI uUi, 
+		             SpriteBatch sb, 
+		             int waveAmount)
 		{
 			this.graphics = graphics;
 			this.program = program;
@@ -134,6 +144,29 @@ namespace TTG
 			spritebatch = sb;
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 			fishPileModel = new Model("mapparts/fish.mdx", 0);
+			
+			for (int i = 0; i < waveAmount; ++i)
+			{
+				Enemy[] currentWave = new Enemy[rand.Next(10, 30)];
+				Enemy currentEnemy;
+				
+				if (i == waveAmount -1)
+				{
+					//boss
+				}
+				else if(i%3 == 0)
+				{
+					//Fast enemy
+				}
+				else if(i%5 == 0)
+				{
+					//slow enemy
+				}
+				else
+				{
+					//standard enemy
+				}
+			}
 		}
 		
 		public void Load(string filename)
@@ -396,37 +429,31 @@ namespace TTG
 			{
 				turretPlacements[i].Draw();
 			}
-			if(upgrading)
-			{
 				upgradeUI.Draw(spritebatch);
-			}
 		}
 		
 		public void Update(UpgradeUI ui, GamePadData data, Vector2 playerPos)
 		{
-			
+			upgradeUI.Update();
 			if(data.ButtonsDown == GamePadButtons.Triangle)
 			{
+				
 				for(int i = 0; i < turretPlacements.Count; ++i)
 				{
 					float dist = Vector2.Distance(playerPos, turretPlacements[i].GetPosition().Xz);
 					if(dist <= UPGRADEDIST)
 					{
-						if(upgrading)
-						{
-							upgrading =  false;
-						}
-						else
-						{
-							upgrading = true;
-						}
-					}
-					if(upgrading)
-					{
-						upgradeUI.Update();
+						Debug.WriteLine("Upgrade = true");
+						upgradeUI.show = true;
+						
 					}
 					
 				}
+			}
+			if(data.ButtonsDown == GamePadButtons.Square)
+			{
+				upgradeUI.show = false;
+				Debug.WriteLine("Upgrade = false");
 			}
 		}
 	}

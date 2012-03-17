@@ -25,18 +25,22 @@ namespace TTG
 		
 		public void Draw(SpriteBatch sb)
 		{
+			sb.Begin();
 			if(show)
 			{
-				sb.Begin();
+				
 				sb.Draw (textures[0], new Vector2(100,100));
 				sb.Draw (textures[1], new Vector2(200,200));
-				sb.End ();
+				
 			}
+			sb.End ();
 		}
 		
 		public void Update()
 		{
-			
+			if(show)
+			{
+			}
 		}
 	}
 }

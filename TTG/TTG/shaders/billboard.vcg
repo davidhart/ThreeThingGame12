@@ -1,0 +1,20 @@
+uniform float4x4 u_WorldMatrix;
+uniform float3 u_UpVector;
+uniform float3 u_RightVector;
+
+void main(float4 in a_Position    : POSITION,
+          float2 in a_TexCoord    : TEXCOORD0,
+          float4 in a_VertexColor : COLOR0,
+          float2 in a_SpriteSize : TEXCOORD1,
+          
+          float4 out v_Position   : POSITION,
+          float2 out v_TexCoord   : TEXCOORD0,
+          float4 out v_Color      : COLOR0)
+{
+	float4 pos = a_Position;
+	pos.xyz += u_RightVector * a_SpriteSize.x;
+	pos.xyz += u_UpVector * a_SpriteSize.y;
+	v_Position = mul(pos, u_WorldMatrix);
+	v_TexCoord = a_TexCoord;
+	v_Color = a_VertexColor;
+}

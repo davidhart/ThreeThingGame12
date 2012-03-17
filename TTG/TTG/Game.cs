@@ -40,6 +40,10 @@ namespace TTG
 		private Enemy[] testEnemy;
 		
 		private SpriteBatch spriteBatch;
+		private BillboardBatch billboardBatch;
+		private Texture2D testTexture;
+		
+		private Camera camera;
 		
 		GameUI UI;
 		UpgradeUI upgrade;
@@ -90,6 +94,9 @@ namespace TTG
 			spriteBatch = new SpriteBatch(graphics);
 			UI = new GameUI();
 			upgrade = new UpgradeUI();
+			billboardBatch = new BillboardBatch(graphics);
+			testTexture = new Texture2D("assets/CoinIcon.png", false);
+			camera = new Camera(Vector3.Zero, Vector3.Zero, new Vector3(0, 0, -1));
 		}
 		
 		public void Load()
@@ -174,14 +181,16 @@ namespace TTG
 		{
 			graphics.Enable( EnableMode.Blend ) ;
 			graphics.SetBlendFunc( BlendFuncMode.Add, BlendFuncFactor.SrcAlpha, BlendFuncFactor.OneMinusSrcAlpha ) ;
-			//graphics.Enable( EnableMode.CullFace ) ;
+			graphics.Enable( EnableMode.CullFace ) ;
 			graphics.SetCullFace( CullFaceMode.Back, CullFaceDirection.Ccw ) ;
 			graphics.Enable( EnableMode.DepthTest ) ;
 			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;						
 			
 			Matrix4 projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
-			Matrix4 viewMatrix = Matrix4.Translation(new Vector3(0, 0, -10));
-			viewMatrix = Matrix4.LookAt(cameraOffset + player.GetPosition(), player.GetPosition(), new Vector3(0, 0, -1));			
+			
+			
+			camera.SetPosition(cameraOffset + player.GetPosition());
+			camera.SetLookAt(player.GetPosition());		
 			
 			Vector3 litDirection = new Vector3 (0.0f, -1.0f, -1.0f).Normalize ();
 			Vector3 litColor = new Vector3 (1.0f, 1.0f, 1.0f);
@@ -192,6 +201,8 @@ namespace TTG
 			BasicParameters parameters = program.Parameters;
 
 			parameters.SetProjectionMatrix (ref projectionMatrix);
+			
+			Matrix4 viewMatrix = camera.GetMatrix();
 			parameters.SetViewMatrix (ref viewMatrix);
 
 			level.Draw();
@@ -201,6 +212,11 @@ namespace TTG
 			{
 				testEnemy[i].Draw();
 			}
+			
+			graphics.Disable(EnableMode.CullFace);
+			billboardBatch.Begin(camera, projectionMatrix);
+			billboardBatch.Draw(testTexture, player.GetPosition() + new Vector3(0, 3, 0), new Vector2(0.5f, 0.5f));
+			billboardBatch.End();
 		}
 	}
 }

@@ -54,6 +54,8 @@
     <Compile Include="TurretPlacement.cs" />
     <Compile Include="UpgradeUI.cs" />
     <Compile Include="Particle.cs" />
+    <Compile Include="BillboardBatch.cs" />
+    <Compile Include="Camera.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -64,6 +66,8 @@
     <ShaderProgram Include="shaders\model.vcg" />
     <ShaderProgram Include="shaders\sprite.fcg" />
     <ShaderProgram Include="shaders\sprite.vcg" />
+    <ShaderProgram Include="shaders\billboard.vcg" />
+    <ShaderProgram Include="shaders\billboard.fcg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Sce\Sce.Pss.CSharp.targets" />
   <ItemGroup>

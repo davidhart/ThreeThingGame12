@@ -10,67 +10,42 @@ using Sce.Pss.HighLevel.UI;
 
 namespace TTG
 {
+	public enum TurretType
+	{
+		MG
+	};
 	public class TurretPlacement
 	{
-		public struct Placements
-		{
-			public Vector2 position;
-			public bool placed;
-		};
+		Turret placementTurret;
+		public Vector2 Position;
+		public bool Placed;
+		Vector2 gridPos;
 		
 		public float distanceFromPlacement;
 		
-		private Placements[] placement;
 		
-		public TurretPlacement ()
+		public TurretPlacement (Vector2 inGridPos)
 		{
-			placement = new Placements[100];
+			
 		}
 		
-		/// <summary>
-		/// Gets the placement details.
-		/// </summary>
-		/// <returns>
-		/// The placement details.
-		/// </returns>
-		/// <param name='num'>
-		/// Position in the list
-		/// </param>
-		public Placements GetPlacementDetails(int num)
+		public void SetPlacement(TurretType type)
 		{
-			return placement[num];
 		}
 		
-		/// <summary>
-		/// Sets the placement details.
-		/// </summary>
-		/// <param name='Pos'>
-		/// Position.
-		/// </param>
-		public void SetPlacementDetails(Vector2 Pos)
+		public void Update(float dt, Enemy[] enemies)
 		{
-			Placements p;
-			p.position = Pos;
-			p.placed = false;
-		}
-		
-		/// <summary>
-		/// Places the turret.
-		/// </summary>
-		/// <param name='Pos'>
-		/// Position of player.
-		/// </param>
-		public bool PlaceTurret(Vector2 PlayerPos)
-		{
-			for(int i = 0; i < placement.Length; ++i)
+			if(Placed)
 			{
-				if(placement[i].position.Distance(PlayerPos) < distanceFromPlacement)
-				{
-					placement[i].placed = true;
-					return true;
-				}
+				placementTurret.Update(dt, enemies);
 			}
-			return false;
+		}
+		public void Draw()
+		{
+			if(Placed)
+			{
+				placementTurret.Draw();
+			}
 		}
 	}
 }

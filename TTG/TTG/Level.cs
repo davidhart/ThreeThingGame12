@@ -66,7 +66,7 @@ namespace TTG
 		private Model[] models;
 		private Model fishPileModel;
 		private Model bridgeModel;
-		private Model turretPlacementModel;
+		//private Model turretPlacementModel;
 		
 		private BasicProgram program;
 		private GraphicsContext graphics;
@@ -74,13 +74,15 @@ namespace TTG
 		Vector2 spawnPos;
 		Direction spawnDir;
 		
-		List<Vector2> turretPos;
+		List<Turret> turretPlacements = new List<Turret>();
+		
+		int turretCounter = 0; 
 		
 		List<MapObject> bridges;
 		List<MapObject> fishPiles;
-		List<MapObject> turretPlacements;
+		//List<MapObject> turretPlacements;
 		
-		Turret [] turrets;
+
 		
 		//Scene scene;
 		//Label fishLabel, healthLabel, pointsLabel;
@@ -122,7 +124,7 @@ namespace TTG
 			
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 			fishPileModel = new Model("mapparts/fish.mdx", 0);
-			turretPlacementModel = new Model("mapparts/turretbase.mdx", 0);
+			//turretPlacementModel = new Model("mapparts/turretbase.mdx", 0);
 		}
 		
 		public void Load(string filename)
@@ -135,7 +137,6 @@ namespace TTG
 				
 				GenerateLevel(fileContents);
 				
-				turrets = new Turret[turretPlacements.Count];
 			}
 			catch
 			{
@@ -147,13 +148,12 @@ namespace TTG
 		{
 			string [] lines = fileContents.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 			
+			//turretPlacement
 			width = lines[0].Length; // Assume all lines are the same length;
 			height = lines.Length;
 			levelData = new LevelCell[width, height];
 			bridges = new List<MapObject>();
 			fishPiles = new List<MapObject>();
-			turretPlacements = new List<MapObject>();
-			turretPos = new List<Vector2>();
 			
 			// map characters onto type
 			for (int y = 0; y < height; ++y)
@@ -239,9 +239,9 @@ namespace TTG
 					}
 					else if(c == 'T')	// Turret placement
 					{
-						levelData[x,y].type = CellType.TurretPlacement;
+						//levelData[x,y].type = CellType.TurretPlacement;
 						levelData[x,y].pathOption = PathOption.Continue;
-						turretPos.Add(new Vector2(x,y));
+						turretPlacements.Add(new Turret(graphics, this, program, new Vector2(x,y) ));
 					}
 					else // represented by character #
 					{
@@ -257,14 +257,6 @@ namespace TTG
 					if (!IsCellTrench(x, y))
 					{
 						levelData[x,y].modelLookup = 16;
-						
-						if(levelData[x,y].type == CellType.TurretPlacement)
-						{
-							Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y*2.0f));
-							MapObject f = new MapObject();
-							f.worldMatrix = world;
-							turretPlacements.Add(f);
-						}
 					}
 					else
 					{
@@ -344,6 +336,7 @@ namespace TTG
 					models[index].Update();
 					models[index].Draw(graphics, program);
 				}
+
 			}
 			
 			for (int i = 0; i < bridges.Count; ++i)
@@ -359,24 +352,22 @@ namespace TTG
 				fishPileModel.Update();
 				fishPileModel.Draw(graphics, program);
 			}
-			
-			for(int i = 0 ; i < turretPlacements.Count; ++i)
+			for (int i = 0; i < turretPlacements.Count; ++i)
 			{
-				turretPlacementModel.SetWorldMatrix(ref turretPlacements[i].worldMatrix);
-				turretPlacementModel.Update();
-				turretPlacementModel.Draw(graphics, program);
+				turretPlacements[i].Draw();
 			}
+			
+
 		}
 		
 		public void Update(UpgradeUI ui, GamePadData data, Vector2 playerPos)
 		{
 			if(data.ButtonsDown == GamePadButtons.Triangle)
 			{
-				for(int i = 0; i < turrets.Length; ++i)
-				{
-					
-					ui.show = !ui.show;
-				}
+				//for(int i = 0; i < turrets.Length; ++i)
+				//{
+					//ui.show = !ui.show;
+				//}
 			}
 		}
 	}

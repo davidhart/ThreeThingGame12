@@ -2,72 +2,99 @@ using System;
 using Sce.Pss.Core;
 using Sce.Pss.Core.Graphics;
 
+using System.Collections;
+
 namespace TTG
 {
 	public class Turret : GameObject3D
 	{
-		public enum TurretType
+		#region Fields
+		protected byte atkDmg;
+		public byte AtDmg
 		{
-			MachineGun,
-			Flamethrower,
-			Rocket,
-			Sniper
+			get
+			{
+				return atkDmg;
+			}
+			set
+			{
+				atkDmg = value;
+			}
 		}
 		
-		int targetRadius;
+		protected float atkRange;
+		public float AtkRange
+		{
+			get
+			{
+				return atkRange;
+			}
+			set
+			{
+				atkRange = value;
+			}
+		}
 		
-		public TurretType TType;
+		protected float atkSpeed;
+		public float AtkSpeed
+		{
+			get
+			{
+				return atkSpeed;
+			}
+			set
+			{
+				atkSpeed = value;
+			}
+		}
+		
+		Vector2 postion;
+		
+		public Vector2 Position
+		{
+			get
+			{
+				return postion;
+			}
+			set
+			{
+				postion = value;
+			}
+		}
+		
+		Enemy target;
+		
+		#endregion
 		
 		public Turret (GraphicsContext graphics)
 			: base (graphics)
 		{
 		}
 		
-		public override void Update (float dt)
+		public override void Update (float dt, Enemy[] enemies)
 		{
-			switch (TType)
+			if(target == null)
 			{
-			case TurretType.MachineGun:
-			{
-				break;
+				for(int i = 0; i < enemies.Length; ++i)
+				{
+					float distance = Vector2.Distance(target, postion);
+					if(distance <= atkRange)
+					{
+						target = enemies[i];
+						break;
+					}
+				}
 			}
-			case TurretType.Flamethrower:
+			else if(target.Health <= 0)
 			{
-				break;
-			}
-			case TurretType.Rocket:
-			{
-				break;
-			}
-			case TurretType.Sniper:
-			{
-				break;
-			}
+				target =  null;
 			}
 			base.Update (dt);
+			    
 		}
-		
 		public override void Draw ()
 		{
-			switch (TType)
-			{
-			case TurretType.MachineGun:
-			{
-				break;
-			}
-			case TurretType.Flamethrower:
-			{
-				break;
-			}
-			case TurretType.Rocket:
-			{
-				break;
-			}
-			case TurretType.Sniper:
-			{
-				break;
-			}
-			}
+			
 			base.Draw ();
 		}
 	}

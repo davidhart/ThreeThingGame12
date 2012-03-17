@@ -22,6 +22,8 @@ namespace TTG
 		Model lowerModel;
 		Model upperModel;
 		
+		Enemy target = null;
+		
 		float health = 100, points = 0, fish = 1000;
 		
 		public float Health
@@ -114,8 +116,39 @@ namespace TTG
 			
 		}
 		
-		public void Update (GamePadData padData, float dt)
-		{			
+		public void Update (GamePadData padData, float dt, Enemy [] enemies)
+		{
+			//Turrent targeting
+			//if(target == null)
+			//{
+				//for(int i = 0; i < enemies.Length; ++i)
+				//{
+					//float distance = Vector2.Distance(target.GetPosition().Xy, position);
+					//if(distance <= atkRange)
+					//{
+						//target = enemies[i];
+						//break;
+					//}
+				//}
+			//}
+			//else
+			//{
+				//if(target.Health <= 0)
+				//{
+					//target =  null;
+				//}
+				//else
+				//{
+					//target.Health -= atkDmg * dt;
+					//float distance = Vector2.Distance(target);
+					//if(distance > atkRange)
+					//{
+						//target = null;
+					//}
+				//}
+				
+			//}
+			
 			if (padData.Buttons.HasFlag(GamePadButtons.Right))
 			{
 				angle -= turnSpeed * dt;

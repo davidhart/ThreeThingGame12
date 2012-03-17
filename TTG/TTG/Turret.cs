@@ -6,11 +6,14 @@ using System.Collections;
 
 namespace TTG
 {
-	public class Turret : GameObject3D
+	public class Turret
 	{
+		
 		#region Fields
+		
+		
 		protected byte atkDmg;
-		public byte AtDmg
+		public byte AtkDmg
 		{
 			get
 			{
@@ -48,54 +51,65 @@ namespace TTG
 			}
 		}
 		
-		Vector2 postion;
+		Vector2 position;
 		
 		public Vector2 Position
 		{
 			get
 			{
-				return postion;
+				return position;
 			}
 			set
 			{
-				postion = value;
+				position = value;
 			}
 		}
 		
-		Enemy target;
+		Enemy target = null;
 		
 		#endregion
 		
 		public Turret (GraphicsContext graphics)
-			: base (graphics)
 		{
 		}
 		
-		//public override void Update (float dt, Enemy[] enemies)
-		//{
-		//	if(target == null)
-		//	{
-		//		for(int i = 0; i < enemies.Length; ++i)
-		//		{
-		//			float distance = Vector2.Distance(target, postion);
-		//			if(distance <= atkRange)
-		//			{
-		//				target = enemies[i];
-		//				break;
-		//			}
-		//		}
-		//	}
-		//	else if(target.Health <= 0)
-		//	{
-		//		target =  null;
-		//	}
-		//	base.Update (dt);
-		//	    
-		//}
-		public override void Draw ()
+		public void Update (float dt, Enemy[] enemies)
+		{
+			if(target == null)
+			{
+				for(int i = 0; i < enemies.Length; ++i)
+				{
+					float distance = Vector2.Distance(target.GetPosition().Xy, position);
+					if(distance <= atkRange)
+					{
+						target = enemies[i];
+						break;
+					}
+				}
+			}
+			else
+			{
+				if(target.Health <= 0)
+				{
+					target =  null;
+				}
+				
+				else
+				{
+					target.Health -= (atkDmg) * dt;
+					float distance = Vector2.Distance(target.GetPosition().Xy, position);
+					if(distance > atkRange)
+					{
+						target = null;
+					}
+				}
+				
+			}
+			    
+		}
+		public void Draw ()
 		{
 			
-			base.Draw ();
 		}
 	}
 }

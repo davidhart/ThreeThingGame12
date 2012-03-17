@@ -121,7 +121,7 @@ namespace TTG
 			}
 			case GameState.Playing:
 			{
-				player.Update(gamePadData, dt);
+				player.Update(gamePadData, dt, testEnemy);
 				for(int i = 0; i < 10; ++i)
 				{
 					testEnemy[i].Update(dt);

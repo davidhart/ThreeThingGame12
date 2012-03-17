@@ -28,6 +28,8 @@ namespace TTG
 		Right,
 	}
 	
+	
+	
 	struct LevelCell
 	{
 		public CellType type;

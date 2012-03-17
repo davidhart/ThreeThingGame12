@@ -401,17 +401,19 @@ namespace TTG
 		// Tank / World collision
 		public bool CollisionDetection(Vector3 testPosition)
 		{
-			int cellX = ((int)testPosition.X / 2);
-			int cellZ = ((int)testPosition.Z / 2);
+			float cellX = (float)Math.Round(testPosition.X / 2.0f);
+			float cellZ = (float)Math.Round(testPosition.Z / 2.0f);
 			
 			if(cellX < 0 || cellZ < 0 || cellX > width - 1 || cellZ > height - 1)  
 			{
+				Debug.WriteLine("cell x = " + (int)cellX + ", pos x = " + testPosition.X/2.0f + " : cell z = " + (int)cellZ + ", pos z = " + testPosition.Z/2.0f);
 				return true;
 			}
 			else
 			{
-				LevelCell cell = levelData[cellX, cellZ];
-				return (cell.type != CellType.Platform) ? true : false;
+				LevelCell cell = levelData[(int)cellX, (int)cellZ];
+				Debug.WriteLine("cell x = " + (int)cellX + ", pos x = " + testPosition.X/2.0f + " : cell z = " + (int)cellZ + ", pos z = " + testPosition.Z/2.0f);
+				return (cell.type != CellType.Platform && cell.type != CellType.Bridge) ? true : false;
 			}
 		}
 		

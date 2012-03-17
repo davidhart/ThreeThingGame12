@@ -66,7 +66,7 @@ namespace TTG
 		GraphicsContext graphics;
 		BasicProgram program;
 		
-		static Matrix4 tankScale = Matrix4.Scale(new Vector3(0.5f));
+		static Matrix4 tankScale = Matrix4.Scale(new Vector3(0.4f));
 		
 		bool drawBuyMenuIcon;
 		
@@ -93,7 +93,7 @@ namespace TTG
 			buyMenuIconOffset = new Vector3(0, 4, 0);
 			buyMenuIconSize = new Vector2(0.75f, 0.75f);
 			
-			position = new Vector3(0, 1.65f, 0);
+			position = new Vector3(0, 1.5f, 0);
 		}
 		
 		public void DrawBuyMenuIcon(bool enable)
@@ -217,11 +217,12 @@ namespace TTG
 			// collision detection
 			// bounding sphere
 			float radius = 1.0f;
-			Vector3 centre = new Vector3(1.7f, 0, 1.5f);
+			Vector3 centre = new Vector3(0.4f, 0, 0.1f);
+			
 			
 			
 			Vector3 testPosition = position + new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
-			bool test = level.CollisionDetection(testPosition + centre);
+			bool test = level.CollisionDetection(testPosition);
 			Debug.WriteLine(test);
 			if(test == false) position = testPosition;
 			//position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;

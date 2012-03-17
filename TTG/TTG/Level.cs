@@ -11,6 +11,10 @@ using Sce.Pss.HighLevel.UI;
 
 namespace TTG
 {
+	enum LevelState
+	{
+		
+	}
 	enum CellType
 	{
 		Trench,
@@ -59,6 +63,8 @@ namespace TTG
 	
 	public class Level
 	{	
+		bool upgrading = false;
+		const int UPGRADEDIST = 2;
 		private LevelCell[,] levelData;
 		private int width;
 		private int height;
@@ -359,17 +365,23 @@ namespace TTG
 				turretPlacements[i].Draw();
 			}
 			
+			
 
 		}
 		
 		public void Update(UpgradeUI ui, GamePadData data, Vector2 playerPos)
 		{
+			
 			if(data.ButtonsDown == GamePadButtons.Triangle)
 			{
-				//for(int i = 0; i < turrets.Length; ++i)
-				//{
-					//ui.show = !ui.show;
-				//}
+				for(int i = 0; i < turretPlacements.Count; ++i)
+				{
+					float dist = Vector2.Distance(playerPos, turretPlacements[i].GetPosition().Xz);
+					if(dist <= UPGRADEDIST)
+					{
+						
+					}
+				}
 			}
 		}
 	}

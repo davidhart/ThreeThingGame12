@@ -221,7 +221,7 @@ namespace TTG
 			
 			
 			Vector3 testPosition = position + new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
-			bool test = level.CollisionDetection(testPosition);
+			bool test = level.CollisionDetection(testPosition + centre);
 			Debug.WriteLine(test);
 			if(test == false) position = testPosition;
 			//position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;

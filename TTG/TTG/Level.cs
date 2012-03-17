@@ -9,8 +9,6 @@ using Sce.Pss.Core.Input;
 
 using Sce.Pss.HighLevel.UI;
 
-using Tutorial.Utility;
-
 namespace TTG
 {
 	enum LevelState
@@ -106,7 +104,7 @@ namespace TTG
 		UpgradeUI upgradeUI;
 		SpriteBatch spritebatch;
 		
-		DebugString debugString;
+		
 		
 		public Vector2 SpawnPos
 		{
@@ -140,7 +138,7 @@ namespace TTG
 			this.graphics = graphics;
 			this.program = program;
 			upgradeUI = uUi;
-			debugString = new DebugString(graphics, new Texture2D("assets/fonts/DebugFont.png", false), 10, 20);
+			
 			
 			models = new Model[17];
 			for (int i = 0; i < models.Length; ++i)
@@ -406,24 +404,13 @@ namespace TTG
 			int cellX = ((int)testPosition.X / 2);
 			int cellZ = ((int)testPosition.Z / 2);
 			
-			if(cellX < 0 || cellZ < 0 || cellX > width - 2 || cellZ > height - 1)  
+			if(cellX < 0 || cellZ < 0 || cellX > width - 1 || cellZ > height - 1)  
 			{
 				return true;
 			}
 			else
 			{
 				LevelCell cell = levelData[cellX, cellZ];
-#if DEBUG
-				debugString.Clear();
-				debugString.WriteLine("");
-				debugString.WriteLine("");
-				debugString.WriteLine("");
-				debugString.WriteLine("");
-				debugString.WriteLine("");
-				debugString.WriteLine("Cell X: " + cellX + ", Pos.x: " + testPosition.X);
-				debugString.WriteLine("Cell Z: " + cellZ + ", Pos.z: " + testPosition.Z);
-				debugString.WriteLine("type: " + cell.type);
-#endif
 				return (cell.type != CellType.Platform) ? true : false;
 			}
 		}
@@ -434,9 +421,7 @@ namespace TTG
 		}
 		
 		public void Draw()
-		{			
-			//debugString.Render();
-			
+		{						
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)

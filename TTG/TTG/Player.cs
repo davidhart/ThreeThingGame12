@@ -9,11 +9,7 @@ using System.Diagnostics;
 namespace TTG
 {
 	public class Player
-	{
-		/*
-		float speed = 0, direction = 0;
-		const float acceleration = 5, turn = 3, deceleration = 3;*/
-		
+	{		
 		Vector3 position;
 		float angle;
 		
@@ -70,22 +66,38 @@ namespace TTG
 		
 		static Matrix4 tankScale = Matrix4.Scale(new Vector3(0.5f));
 		
-		public Player (GraphicsContext graphics, BasicProgram program) 
+		bool drawBuyMenuIcon;
+		
+		Texture2D buyMenuIcon;
+		BillboardBatch billboardBatch;
+		
+		Vector3 buyMenuIconOffset;
+		Vector2 buyMenuIconSize;
+		
+		public Player (GraphicsContext graphics, BasicProgram program, BillboardBatch billboardBatch) 
 		{
 			this.graphics = graphics;
 			this.program = program;
+			this.billboardBatch = billboardBatch;
 			
 			lowerModel = new Model("assets/tank_lower.mdx", 0);
 			upperModel = new Model("assets/tank_upper.mdx", 0);
 			
+			buyMenuIcon = new Texture2D("assets/crossButton.png", false);
+			drawBuyMenuIcon = false;
+			buyMenuIconOffset = new Vector3(0, 4, 0);
+			buyMenuIconSize = new Vector2(0.75f, 0.75f);
+			
 			position = new Vector3(0, 1.65f, 0);
 		}
 		
-		public void Draw ()
+		public void DrawBuyMenuIcon(bool enable)
 		{
-			//rotate the model by direction variable
-			//translate the model by acceleration depending on direction
-			//Matrix4 world = Matrix4.Identity;
+			drawBuyMenuIcon = enable;	
+		}
+		
+		public void Draw (Camera camera)
+		{
 			Matrix4 world = Matrix4.Translation(position) * tankScale;
 			
 			Matrix4 tank = world * Matrix4.RotationY(angle);
@@ -125,6 +137,12 @@ namespace TTG
 			upperModel.Update();
 			upperModel.Draw(graphics, program);
 			
+			if (drawBuyMenuIcon)
+			{
+				billboardBatch.Begin();
+				billboardBatch.Draw(buyMenuIcon, GetPosition() + buyMenuIconOffset, buyMenuIconSize);
+				billboardBatch.End();
+			}
 		}
 		
 		public void Update (GamePadData padData, float dt, Enemy [] enemies)

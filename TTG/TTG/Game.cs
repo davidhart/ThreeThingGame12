@@ -40,14 +40,13 @@ namespace TTG
 		private Enemy[] testEnemy;
 		
 		private SpriteBatch spriteBatch;
-		private BillboardBatch billboardBatch;
-		private Texture2D testTexture;
 		
 		private Camera camera;
 		
 		GameUI UI;
 		UpgradeUI upgrade;
-		
+		BillboardBatch billboardBatch;
+		Matrix4 projectionMatrix;
 		
 		public Game ()
 		{
@@ -58,22 +57,36 @@ namespace TTG
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			graphics.SetViewport(0, 0, graphics.Screen.Width, graphics.Screen.Height);
-			UISystem.Initialize(graphics);
+			
 			spriteBatch = new SpriteBatch(graphics);
+			billboardBatch = new BillboardBatch(graphics);
 			
-			// Custom Program with color attribute (for demonstration)
-			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
-			program.SetUniformBinding(4, "Color");
-			Vector4 color = new Vector4(1, 1, 1, 1);
-			program.SetUniformValue(4, ref color);
+			UISystem.Initialize(graphics);
 			
-			upgrade = new UpgradeUI();
-			level = new Level(graphics, program, upgrade, spriteBatch, 15);
-			level.Load("testlevel.txt");
+			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");			
 			
 			basicEnemy = new EnemyType();
 			basicEnemy.model = new Model("penguin.mdx", 0);
 			basicEnemy.speed = 1.2f;
+			
+			cameraOffset = new Vector3(0, 13, 10);
+			
+			stopwatch = new Stopwatch();
+			stopwatch.Start();
+			titleScreen = new TitleScreen();
+			titleScreen.Initialise(graphics, this);
+			
+			player = new Player(graphics, program, billboardBatch);
+			
+			UI = new GameUI();
+			upgrade = new UpgradeUI();
+
+			camera = new Camera(Vector3.Zero, Vector3.Zero, new Vector3(0, 0, -1));
+					
+			projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
+		
+			level = new Level(graphics, program, upgrade, spriteBatch, 15);
+			level.Load("testlevel.txt");
 			
 			testEnemy = new Enemy[10];
 			for(int i = 0; i < 10; ++i)
@@ -82,22 +95,6 @@ namespace TTG
 				testEnemy[i].SetPosition((int)level.SpawnPos.X, (int)level.SpawnPos.Y, level.SpawnDir);
 				
 			}
-						
-			cameraOffset = new Vector3(0, 13, 10);
-			
-			stopwatch = new Stopwatch();
-			stopwatch.Start();
-			titleScreen = new TitleScreen();
-			titleScreen.Initialise(graphics, this);
-			
-			player = new Player(graphics, program);
-			
-		
-			UI = new GameUI();
-
-			billboardBatch = new BillboardBatch(graphics);
-			testTexture = new Texture2D("assets/CoinIcon.png", false);
-			camera = new Camera(Vector3.Zero, Vector3.Zero, new Vector3(0, 0, -1));
 		}
 		
 		public void Load()
@@ -114,10 +111,7 @@ namespace TTG
 			
 			float elapsed = stopwatch.ElapsedMilliseconds / 1000.0f;			
 			
-			var gamePadData = GamePad.GetData (0);			
-			
-	
-
+			var gamePadData = GamePad.GetData (0);
 			
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
@@ -138,7 +132,7 @@ namespace TTG
 				{
 					testEnemy[i].Update(dt);
 				}
-				level.Update(upgrade, gamePadData, player.GetPosition().Xz);
+				level.Update(upgrade, gamePadData, player.GetPosition().Xy);
 				break;
 			}
 			}
@@ -163,10 +157,7 @@ namespace TTG
 				}
 				case GameState.Playing:
 				{
-					RenderModel();
-					graphics.Clear(ClearMask.Depth);
-					UI.Draw(spriteBatch, player.Health, player.Points, player.Fish);					
-					upgrade.Draw (spriteBatch);
+					DrawGame();
 					break;
 				}
 			}
@@ -179,26 +170,19 @@ namespace TTG
 		{
 		}
 		
-		public void RenderModel()
+		public void DrawGame()
 		{
-			graphics.Enable( EnableMode.Blend ) ;
+			//graphics.Enable( EnableMode.Blend ) ;
 			graphics.SetBlendFunc( BlendFuncMode.Add, BlendFuncFactor.SrcAlpha, BlendFuncFactor.OneMinusSrcAlpha ) ;
 			graphics.Enable( EnableMode.CullFace ) ;
 			graphics.SetCullFace( CullFaceMode.Back, CullFaceDirection.Ccw ) ;
 			graphics.Enable( EnableMode.DepthTest ) ;
 			graphics.SetDepthFunc( DepthFuncMode.LEqual, true ) ;						
 			
-			Matrix4 projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
-			
-			
 			camera.SetPosition(cameraOffset + player.GetPosition());
-			camera.SetLookAt(player.GetPosition());		
+			camera.SetLookAt(player.GetPosition());	
 			
-			Vector3 litDirection = new Vector3 (0.0f, -1.0f, -1.0f).Normalize ();
-			Vector3 litColor = new Vector3 (1.0f, 1.0f, 1.0f);
-
-			Vector3 litAmbient = new Vector3 (0.3f, 0.3f, 0.3f);
-			Vector3 fogColor = new Vector3 (0.0f, 0.5f, 1.0f);
+			billboardBatch.SetCamera(camera, projectionMatrix);
 
 			BasicParameters parameters = program.Parameters;
 
@@ -209,16 +193,20 @@ namespace TTG
 
 			level.Draw();
 			
-			player.Draw();
+			player.Draw(camera);
+			
+			
+			
+			graphics.Disable( EnableMode.CullFace );
+			
 			for(int i = 0; i < 10; ++i)
 			{
 				testEnemy[i].Draw();
 			}
 			
-			graphics.Disable(EnableMode.CullFace);
-			billboardBatch.Begin(camera, projectionMatrix);
-			billboardBatch.Draw(testTexture, player.GetPosition() + new Vector3(0, 3, 0), new Vector2(0.5f, 0.5f));
-			billboardBatch.End();
+			graphics.Clear(ClearMask.Depth);
+			UI.Draw(spriteBatch, player.Health, player.Points, player.Fish);					
+			upgrade.Draw (spriteBatch);
 		}
 	}
 }

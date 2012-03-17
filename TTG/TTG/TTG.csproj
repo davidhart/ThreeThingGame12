@@ -104,6 +104,7 @@
     <Content Include="mapparts\fish.mdx" />
     <Content Include="mapparts\turretbase.mdx" />
     <Content Include="assets\placeholder.png" />
+    <Content Include="assets\crossButton.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

@@ -429,7 +429,7 @@ namespace TTG
 			{
 				turretPlacements[i].Draw();
 			}
-				upgradeUI.Draw(spritebatch);
+			upgradeUI.Draw(spritebatch);
 		}
 		
 		public void Update(UpgradeUI ui, GamePadData data, Vector2 playerPos)

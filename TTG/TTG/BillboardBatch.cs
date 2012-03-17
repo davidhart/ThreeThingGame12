@@ -34,6 +34,9 @@ namespace TTG
 		const int UpVectorUniformIndex = 1;
 		const int RightVectorUniformIndex = 2;
 		
+		Camera camera;
+		Matrix4 projectionMatrix;
+		
 		public BillboardBatch (GraphicsContext graphics)
 		{
 			this.graphics = graphics;
@@ -79,7 +82,7 @@ namespace TTG
 			buffer.SetIndices(indices);			
 		}
 		
-		public void Begin(Camera camera, Matrix4 projectionMatrix)
+		public void Begin()
 		{
 			Debug.Assert(sprites == 0);
 			
@@ -98,6 +101,12 @@ namespace TTG
 		public void End()
 		{
 			Flush();
+		}
+		
+		public void SetCamera(Camera camera, Matrix4 projectionMatrix)
+		{
+			this.camera = camera;
+			this.projectionMatrix = projectionMatrix;
 		}
 		
 		public void Draw(Texture2D texture, Vector3 position, Vector2 size)
@@ -130,16 +139,16 @@ namespace TTG
 			vertices[sprites * 4 * 3 + 11] = position.Z;
 			
 			textureCoordinates[sprites * 8] = 0.0f;
-			textureCoordinates[sprites * 8 + 1] = 0.0f;
+			textureCoordinates[sprites * 8 + 1] = 1.0f;
 			
 			textureCoordinates[sprites * 8 + 2] = 1.0f;
-			textureCoordinates[sprites * 8 + 3] = 0.0f;
+			textureCoordinates[sprites * 8 + 3] = 1.0f;
 			
 			textureCoordinates[sprites * 8 + 4] = 1.0f;
-			textureCoordinates[sprites * 8 + 5] = 1.0f;
+			textureCoordinates[sprites * 8 + 5] = 0.0f;
 			
 			textureCoordinates[sprites * 8 + 6] = 0.0f;
-			textureCoordinates[sprites * 8 + 7] = 1.0f;
+			textureCoordinates[sprites * 8 + 7] = 0.0f;
 			
 			colours[sprites * 16] = color.R;
 			colours[sprites * 16 + 1] = color.G;
@@ -162,16 +171,16 @@ namespace TTG
 			colours[sprites * 16 + 15] = color.A;
 			
 			spriteSizes[sprites * 8] = -size.X;
-			spriteSizes[sprites * 8 + 1] = -size.Y;
+			spriteSizes[sprites * 8 + 1] = size.Y;
 			
 			spriteSizes[sprites * 8 + 2] = size.X;
-			spriteSizes[sprites * 8 + 3] = -size.Y;
+			spriteSizes[sprites * 8 + 3] = size.Y;
 			
 			spriteSizes[sprites * 8 + 4] = size.X;
-			spriteSizes[sprites * 8 + 5] = size.Y;
+			spriteSizes[sprites * 8 + 5] = -size.Y;
 			
 			spriteSizes[sprites * 8 + 6] = -size.X;
-			spriteSizes[sprites * 8 + 7] = size.Y;
+			spriteSizes[sprites * 8 + 7] = -size.Y;
 			
 			sprites++;
 			

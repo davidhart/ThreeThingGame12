@@ -69,7 +69,7 @@ namespace TTG {
 		static byte[] loadDefaultProgram() {
 			if ( defaultProgram == null ) {
 				Assembly assembly = Assembly.GetExecutingAssembly() ;
-				string resname = "TTG.Model.shaders.Basic.cgx" ;
+				string resname = "TTG.shaders.Basic.cgx" ;
 				if ( assembly.GetManifestResourceInfo( resname ) == null ) {
 					throw new FileNotFoundException( "Resource not found.", resname ) ;
 				}

@@ -1,7 +1,5 @@
 uniform sampler2D Texture0 : TEXUNIT0 ;
 
-uniform float4 Color;
-
 void main(
 	float2 in v_TexCoord	: TEXCOORD0,
 	float3 in v_Normal 		: TEXCOORD1,
@@ -11,5 +9,5 @@ void main(
 	float NdotL = saturate(dot(normalize(v_Normal), float3(0, 1, 0))) * 0.6f + 0.4f;
 
 	//color = float4(v_TexCoord.x, v_TexCoord.y, 0, 1);
-	color = tex2D(Texture0, v_TexCoord) * Color * float4(NdotL, NdotL, NdotL, 1);
+	color = tex2D(Texture0, v_TexCoord) * float4(NdotL, NdotL, NdotL, 1);
 }

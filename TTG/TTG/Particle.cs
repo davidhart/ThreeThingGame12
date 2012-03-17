@@ -5,20 +5,20 @@ using Sce.Pss.Core.Graphics;
 
 namespace TTG
 {
-	public class ParticleEmitter
+	public struct Vec3MinMax
 	{
-		public struct Vec3MinMax
-		{
-			public Vector3 min;
-			public Vector3 max;
-		};
+		public Vector3 min;
+		public Vector3 max;
+	};
 		
-		public struct FloatMinMax
-		{
-			public float min;
-			public float max;
-		};
-		
+	public struct FloatMinMax
+	{
+		public float min;
+		public float max;
+	};
+	
+	public class ParticleEmitter
+	{		
 		private struct Particle
 		{
 			public float life;
@@ -29,9 +29,12 @@ namespace TTG
 		};
 		
 		private Particle[] particles;
+		private Texture2D texture;
 		
-		public ParticleEmitter ()
-		{}
+		public ParticleEmitter (Texture2D texture)
+		{
+			this.texture = texture;
+		}
 		
 		public void Initialize(int maxParticles, Vec3MinMax vel, FloatMinMax life)
 		{
@@ -69,13 +72,18 @@ namespace TTG
 				if(particles[i].life > 0.0f)
 				{
 					particles[i].pos += particles[i].vel * dt;
+					particles[i].life -= dt;
 				}
 			}
 		}
 		
-		public void Draw()
+		public void Draw(BillboardBatch batch)
 		{
-			
+			for (int i = 0; i < particles.Length; ++i)
+			{
+				if (particles[i].life > 0)
+					batch.Draw(texture, particles[i].pos, new Vector2(1));
+			}
 		}
 	}
 }

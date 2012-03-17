@@ -46,7 +46,7 @@ namespace TTG
 		
 		public bool IsTrench()
 		{
-			return type == CellType.Trench || type == CellType.Bridge || type == CellType.FishPile;
+			return type == CellType.Trench || type == CellType.Bridge || type == CellType.FishPile || type == CellType.Switch;
 		}
 		
 		public PathOption GetPathingOption()

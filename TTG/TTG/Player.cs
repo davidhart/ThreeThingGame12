@@ -139,6 +139,7 @@ namespace TTG
 					{
 						target = enemies[i];
 						break;
+
 					}
 				}
 			}

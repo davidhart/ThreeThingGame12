@@ -14,6 +14,8 @@ namespace TTG
 		private Texture2D [] textures;
 		public bool show { get; set; }
 		
+		public Turret turret;
+		
 		public UpgradeUI ()
 		{
 			textures = new Texture2D[2];
@@ -36,11 +38,34 @@ namespace TTG
 			sb.End ();
 		}
 		
-		public void Update()
+		public bool Update(GamePadData data)
 		{
 			if(show)
 			{
+				if(data.ButtonsDown.HasFlag(GamePadButtons.Cross))
+				{
+					//quit
+					show = false;
+				}
+				if(data.ButtonsDown.HasFlag(GamePadButtons.Square))
+				{
+					//Machine gun
+					turret.SetType(TurretTypes.machineGunTurret);
+					show = false;
+				}
+				if(data.ButtonsDown.HasFlag(GamePadButtons.Triangle))
+				{
+					//flamer/icer
+					show = false;
+				}
+				if(data.ButtonsDown.HasFlag(GamePadButtons.Circle))
+				{
+					//sniper
+					show = false;
+				}
+				return true;
 			}
+			return false;
 		}
 	}
 }

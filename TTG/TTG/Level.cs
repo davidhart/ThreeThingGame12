@@ -13,7 +13,8 @@ namespace TTG
 {
 	enum LevelState
 	{
-		
+		Playing,
+		Upgrading
 	}
 	enum CellType
 	{
@@ -24,6 +25,7 @@ namespace TTG
 		TurretPlacement,
 		Switch
 	}
+	
 	
 	public enum PathOption
 	{
@@ -42,6 +44,8 @@ namespace TTG
 		public PathOption switchOption;
 		public byte modelLookup;
 		
+		
+		
 		public bool IsTrench()
 		{
 			return type == CellType.Trench || type == CellType.Bridge || type == CellType.FishPile || type == CellType.Switch;
@@ -57,8 +61,7 @@ namespace TTG
 			return pathOption;			
 		}
 		
-		private void Switch()
-		{
+		private void Switch(){
 			PathOption temp = switchOption;
 			switchOption = pathOption;
 			pathOption = temp;
@@ -72,15 +75,17 @@ namespace TTG
 	
 	public class Level
 	{	
+		LevelState levelState = LevelState.Playing;
 		//Enemy waves
-		List<Enemy[]> waves = new List<Enemy[]>();
+		/*
+		List<Enemy[]> waves = new List<Enemy[]>();*/
 		int maxWaves;
 		int waveNumber;
 		
 		//Wave size
 		Random rand = new Random();
 		
-		const int UPGRADEDIST = 2;
+		const float UPGRADEDIST = 3.5f;
 		
 		private LevelCell[,] levelData;
 		private int width;
@@ -104,6 +109,7 @@ namespace TTG
 		UpgradeUI upgradeUI;
 		SpriteBatch spritebatch;
 		
+		Enemy[] enemies;
 		
 		
 		public Vector2 SpawnPos
@@ -149,6 +155,7 @@ namespace TTG
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 			fishPileModel = new Model("mapparts/fish.mdx", 0);
 			
+			/*
 			for (int i = 0; i < waveAmount; ++i)
 			{
 				Enemy[] currentWave = new Enemy[rand.Next(10, 30)];
@@ -170,7 +177,7 @@ namespace TTG
 				{
 					//standard enemy
 				}
-			}
+			}*/
 		}
 		
 		public void Load(string filename)
@@ -357,7 +364,7 @@ namespace TTG
 							else
 								orientation = new Matrix4(new Vector3(0, 0, 1),
 								                          new Vector3(0, 1, 0),
-								                          new Vector3(1, 0, 0),
+								                          new Vector3(-1, 0, 0),
 								                          new Vector3(0, 0, 0));
 							
 							Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y * 2.0f)) * orientation;
@@ -379,6 +386,26 @@ namespace TTG
 				}
 			}
 			
+			InitialiseWaves();
+			 
+		}
+		
+		void InitialiseWaves()
+		{
+			EnemyTypes.Initialise();
+			enemies = new Enemy[100];
+			
+			for (int i = 0; i < enemies.Length; i++)
+			{
+				enemies[i] = new Enemy(graphics, EnemyTypes.basicEnemy, this, program);
+				enemies[i].SetPosition((int)SpawnPos.X, (int)spawnPos.Y, SpawnDir);
+				enemies[i].SpawnTime = 2 * i;
+			}
+		}
+		
+		public Enemy[] GetEnemies()
+		{
+			return enemies;
 		}
 		
 		bool IsCellTrench(int x, int y)
@@ -406,13 +433,13 @@ namespace TTG
 			
 			if(cellX < 0 || cellZ < 0 || cellX > width - 1 || cellZ > height - 1)  
 			{
-				Debug.WriteLine("cell x = " + (int)cellX + ", pos x = " + testPosition.X/2.0f + " : cell z = " + (int)cellZ + ", pos z = " + testPosition.Z/2.0f);
+				//Debug.WriteLine("cell x = " + (int)cellX + ", pos x = " + testPosition.X/2.0f + " : cell z = " + (int)cellZ + ", pos z = " + testPosition.Z/2.0f);
 				return true;
 			}
 			else
 			{
 				LevelCell cell = levelData[(int)cellX, (int)cellZ];
-				Debug.WriteLine("cell x = " + (int)cellX + ", pos x = " + testPosition.X/2.0f + " : cell z = " + (int)cellZ + ", pos z = " + testPosition.Z/2.0f);
+				//Debug.WriteLine("cell x = " + (int)cellX + ", pos x = " + testPosition.X/2.0f + " : cell z = " + (int)cellZ + ", pos z = " + testPosition.Z/2.0f);
 				return (cell.type != CellType.Platform && cell.type != CellType.Bridge) ? true : false;
 			}
 		}
@@ -423,7 +450,14 @@ namespace TTG
 		}
 		
 		public void Draw()
-		{						
+		{				
+			graphics.Disable( EnableMode.CullFace );			
+			for (int i = 0; i < enemies.Length; i++)
+			{
+				enemies[i].Draw();	
+			}
+			graphics.Enable(EnableMode.CullFace);
+			
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
@@ -454,31 +488,51 @@ namespace TTG
 			{
 				turretPlacements[i].Draw();
 			}
+			
 			upgradeUI.Draw(spritebatch);
 		}
 		
-		public void Update(UpgradeUI ui, GamePadData data, Vector2 playerPos)
+		public void Update (float dt, UpgradeUI ui, GamePadData data, Player player)
 		{
-			upgradeUI.Update();
-			if(data.ButtonsDown == GamePadButtons.Triangle)
+			for (int i = 0; i < enemies.Length; i++)
 			{
-				
-				for(int i = 0; i < turretPlacements.Count; ++i)
+				enemies[i].Update(dt);	
+			}
+			
+			for (int i = 0; i < turretPlacements.Count; i++)
+			{
+				turretPlacements[i].Update(dt, enemies);
+			}
+			
+			// If we moved away from selected turret, hide menu
+			if (upgradeUI.show)
+			{
+				float dist = Vector2.Distance(player.GetPosition ().Xz, upgradeUI.turret.GetPosition ().Xz);
+				if (dist > UPGRADEDIST)
 				{
-					float dist = Vector2.Distance(playerPos, turretPlacements[i].GetPosition().Xz);
-					if(dist <= UPGRADEDIST)
-					{
-						Debug.WriteLine("Upgrade = true");
-						upgradeUI.show = true;
-						
-					}
-					
+					upgradeUI.show = false;
 				}
 			}
-			if(data.ButtonsDown == GamePadButtons.Square)
+			
+			if (!upgradeUI.Update(data))
 			{
-				upgradeUI.show = false;
-				Debug.WriteLine("Upgrade = false");
+				player.DrawBuyMenuIcon (false);
+			
+				for (int i = 0; i < turretPlacements.Count; ++i)
+				{
+					float dist = Vector2.Distance (player.GetPosition ().Xz, turretPlacements [i].GetPosition ().Xz);
+				
+					if (dist <= UPGRADEDIST)
+					{
+						player.DrawBuyMenuIcon (true);
+					
+						if (data.ButtonsDown.HasFlag (GamePadButtons.Cross) && !upgradeUI.show)
+						{
+							upgradeUI.show = true;
+							upgradeUI.turret = turretPlacements [i];
+						}
+					}					
+				}
 			}
 		}
 	}

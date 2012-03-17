@@ -117,7 +117,7 @@ namespace TTG
 			
 			if(target == null)
 			{
-				turretTarget = new Vector3(0, position.Y, 0);
+				turretTarget = position;
 			}
 			else
 			{
@@ -135,7 +135,7 @@ namespace TTG
 			}
 			else
 			{
-				turret = world;	
+				turret = tank;	
 			}
 			
 			upperModel.SetWorldMatrix( ref turret );
@@ -223,7 +223,7 @@ namespace TTG
 			
 			Vector3 testPosition = position + new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
 			bool test = level.CollisionDetection(testPosition);
-			Debug.WriteLine(test);
+			//Debug.WriteLine(test);
 			if(test == false) position = testPosition;
 			//position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
 			//Debug.WriteLine(position.ToString());

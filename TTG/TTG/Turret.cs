@@ -3,115 +3,72 @@ using Sce.Pss.Core;
 using Sce.Pss.Core.Graphics;
 
 using System.Collections;
+using System.Diagnostics;
 
 namespace TTG
 {
-	
-	
-	public class TurretData
+	public class TurretType
 	{
-		static int[] xOffsets; // x offset for each direction
-		static int[] yOffsets; // y offset for each direction
-		
-		static void Initialise ()
+		public Model model;
+		public byte AtkDmg;
+		public float AtkRange;
+		public float AtkSpeed;
+	}
+	
+	public class TurretTypes
+	{
+		public static void Initialise()
 		{
-			xOffsets = new int[4];
-			xOffsets [0] = -1; // left
-			xOffsets [1] = 1;  // right
-			xOffsets [2] = 0;  // up
-			xOffsets [3] = 0;  // down
+			if (machineGunTurret != null)
+				return;
 			
-			yOffsets = new int[4];
-			yOffsets [0] = 0;  // left
-			yOffsets [1] = 0;  // right
-			yOffsets [2] = -1; // up
-			yOffsets [3] = 1;  // down
+			machineGunTurret = new TurretType();
+			machineGunTurret.AtkRange = 4;
+			machineGunTurret.AtkSpeed = 0.5f;
+			machineGunTurret.AtkDmg = 2;
+			machineGunTurret.model = TurretModels.machineGunTurret;
 		}
 		
-		public static int GetXOffset (Direction direction)
+		public static TurretType machineGunTurret;
+	}
+	
+	public class TurretModels
+	{
+		public static void Initialise()
 		{
-			if (xOffsets == null) {
-				Initialise ();	
-			}
+			if (turretPlacement != null)
+				return;
 			
-			return xOffsets [(int)direction];
+			turretPlacement = new Model("mapparts/turretbase.mdx", 0);
+			machineGunTurret = new Model("assets/turret.mdx", 0);
 		}
 		
-		public static int GetYOffset (Direction direction)
-		{
-			if (yOffsets == null) {
-				Initialise ();	
-			}
-			
-			return yOffsets [(int)direction];
-		}
-		
+		public static Model turretPlacement;
+		public static Model machineGunTurret;
 	}
 
 	public class Turret
 	{
-		Model model, turretPlacementModel;
-		
-		#region Stats
-		protected byte atkDmg;
-
-		public byte AtkDmg {
-			get {
-				return atkDmg;
-			}
-			set {
-				atkDmg = value;
-			}
-		}
-		
-		protected float atkRange;
-
-		public float AtkRange {
-			get {
-				return atkRange;
-			}
-			set {
-				atkRange = value;
-			}
-		}
-		
-		protected float atkSpeed;
-
-		public float AtkSpeed {
-			get {
-				return atkSpeed;
-			}
-			set {
-				atkSpeed = value;
-			}
-		}
-		
-		#endregion
-		
 		Level level;
 		int xTilePos;
 		int yTilePos;
 		BasicProgram program;
-		float offset; // offset in direction, 0 is exactly on the tile, 1.0 is on the next tile
-		
+
 		GraphicsContext graphics;
-		
-		bool Placed = false;
+
 		Enemy target = null;
+		TurretType type;
 		
 		public Turret (GraphicsContext inGraphics, Level level, BasicProgram program, Vector2 tilePos)
 		{
+			TurretModels.Initialise();
+			TurretTypes.Initialise();
+			
 			graphics = inGraphics;
 			this.level = level;
 			this.program = program;
-			turretPlacementModel = new Model("mapparts/turretbase.mdx", 0);
 			xTilePos = (int)tilePos.X;
 			yTilePos = (int)tilePos.Y;
-		}
-		
-		public void SetModel(Model inModel)
-		{
-			model = inModel;
 		}
 		
 		public void SetPosition (int tileX, int tileY)
@@ -122,53 +79,86 @@ namespace TTG
 		
 		public void Update (float dt, Enemy[] enemies)
 		{
-			if (Placed) 
+			if (type == null)
+				return;
+			
+			if (target == null)
 			{
-				if (target == null) {
-					for (int i = 0; i < enemies.Length; ++i) {
-						float distance = Vector2.Distance (enemies[i].GetPosition().Xz, GetPosition().Xz);
-						if (distance <= atkRange) {
-							target = enemies [i];
-							break;
-						}
+				for (int i = 0; i < enemies.Length; ++i)
+				{
+					float distance = Vector2.Distance (enemies[i].GetPosition().Xz, GetPosition().Xz);
+					if (distance <= type.AtkRange)
+					{
+						target = enemies[i];
+						break;
 					}
-				} 
-				else {
-					if (target.Health <= 0) {
-						target = null;
-					} else {
-						target.Health -= (atkDmg) * dt;
-						float distance = Vector2.Distance (target.GetPosition().Xy, GetPosition().Xz);
-						if (distance > atkRange) {
-							target = null;
-						}
-					}
-				
 				}
-			}   
+			} 
+			
+			if (target != null)
+			{
+				target.Health -= (type.AtkDmg) * dt;
+				
+				if (target.Health <= 0)
+				{
+					target = null;
+				} else
+				{
+					float distance = Vector2.Distance (target.GetPosition().Xz, GetPosition().Xz);
+					if (distance > type.AtkRange)
+					{
+						target = null;
+					}
+				}
+			}  
+		}
+		
+		public void SetType(TurretType type)
+		{
+			this.type = type;	
 		}
 		
 		public void Draw ()
 		{
-			Matrix4 world = Matrix4.Translation (GetPosition ()) * Matrix4.Scale (new Vector3 (0.6f));	
+			Matrix4 world = Matrix4.Translation (GetPosition());
 			
-			turretPlacementModel.SetWorldMatrix (ref world);
-			turretPlacementModel.Update ();
-			turretPlacementModel.Draw (graphics, program);
+			Matrix4 turret;
 			
-			if (Placed) 
+			if (target != null && type != null)
 			{
-				model.SetWorldMatrix (ref world);			
-				model.Update ();
-				model.Draw (graphics, program);
+				Vector3 turretTarget = target.GetPosition();
+				
+				Vector3 turretDirection = (turretTarget - new Vector3(GetPosition().X, turretTarget.Y, GetPosition().Z)).Normalize();
+				Vector3 up = new Vector3(0, 1, 0);
+			
+				turret = world * new Matrix4(turretDirection, up, turretDirection.Cross(up), Vector3.Zero);
+			}
+			else
+			{
+				turret = world;	
+			}			
+			
+			// no turret placed
+			if (type == null)
+			{			
+				TurretModels.turretPlacement.SetWorldMatrix (ref turret);
+				TurretModels.turretPlacement.Update ();
+				TurretModels.turretPlacement.Draw (graphics, program);
+			}
+			// draw turret model
+			else
+			{
+				type.model.SetWorldMatrix (ref turret);
+				type.model.Update ();
+				type.model.Draw (graphics, program);
 			}
 		}
 		
 		public Vector3 GetPosition ()
 		{
-			return new Vector3 ((xTilePos + EnemyData.GetXOffset (0) * offset) * 2, 
-			                   0.75f, 
-			                   (yTilePos + EnemyData.GetYOffset (0) * offset) * 2);	
+			return new Vector3 ((xTilePos) * 2, 
+			                   	0, 
+			                   	(yTilePos) * 2);
 		}
 	}
 }

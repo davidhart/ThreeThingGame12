@@ -4,10 +4,25 @@ using Sce.Pss.Core.Graphics;
 
 namespace TTG
 {
-	public struct EnemyType
+	public class EnemyType
 	{
 		public Model model;
 		public float speed;
+	}
+	
+	public class EnemyTypes
+	{
+		static public void Initialise()
+		{
+			if (basicEnemy != null)
+				return;
+			
+			basicEnemy = new EnemyType();
+			basicEnemy.model = new Model("penguin.mdx", 0);
+			basicEnemy.speed = 1.0f;
+		}
+		
+		static public EnemyType basicEnemy;
 	}
 	
 	public enum Direction
@@ -94,7 +109,7 @@ namespace TTG
 		static Matrix4 [] orientationMatrices; // rotation matrix for each direction
 	}
 	
-	public class Enemy : GameObject3D
+	public class Enemy
 	{	    
 		protected float health = 50;
 		public float Health
@@ -119,10 +134,13 @@ namespace TTG
 		
 		private Direction direction;
 		private float offset; // offset in direction, 0 is exactly on the tile, 1.0 is on the next tile
+		private GraphicsContext graphics;
+		
+		public float SpawnTime;
 		
 		public Enemy (GraphicsContext graphics, EnemyType type, Level level, BasicProgram program)
-			: base(graphics)
 		{
+			this.graphics = graphics;
 			this.type = type;
 			this.level = level;
 			this.program = program;
@@ -138,8 +156,11 @@ namespace TTG
 			this.direction = direction;
 		}
 		
-		public override void Draw ()
+		public void Draw ()
 		{
+			if (SpawnTime > 0 || health <= 0)
+				return;
+			
 			if(direction != Direction.Stop)
 			{
 				Matrix4 world = Matrix4.Translation(GetPosition()) * Matrix4.Scale(new Vector3(0.6f)) * EnemyData.GetOrientationMatrix(direction);	
@@ -150,11 +171,25 @@ namespace TTG
 			}
 		}
 		
-		public override void Update (float dt)
+		public void Update (float dt)
 		{
+			if (SpawnTime > 0)
+			{
+				SpawnTime -= dt;
+							
+				if (SpawnTime > 0)
+				{
+					return;
+				}
+				else
+				{
+					dt = -SpawnTime;	
+				}
+			}
+			
 			if(direction != Direction.Stop)
 			{
-				state.Update(dt * type.speed * 1.2f);
+				state.Update(dt * type.speed);
 				
 				offset += dt * type.speed;
 			

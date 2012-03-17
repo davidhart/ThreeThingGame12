@@ -103,9 +103,9 @@
     <Content Include="mapparts\bridge.mdx" />
     <Content Include="mapparts\fish.mdx" />
     <Content Include="mapparts\turretbase.mdx" />
-    <Content Include="assets\fonts\DebugFont.png" />
     <Content Include="assets\placeholder.png" />
     <Content Include="assets\crossButton.png" />
+    <Content Include="assets\turret.mdx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

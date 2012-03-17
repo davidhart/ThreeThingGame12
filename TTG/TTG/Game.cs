@@ -36,9 +36,6 @@ namespace TTG
 		private Level level;
 		private Player player;
 		
-		private EnemyType basicEnemy;
-		private Enemy[] testEnemy;
-		
 		private SpriteBatch spriteBatch;
 		
 		private Camera camera;
@@ -63,11 +60,7 @@ namespace TTG
 			
 			UISystem.Initialize(graphics);
 			
-			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");			
-			
-			basicEnemy = new EnemyType();
-			basicEnemy.model = new Model("penguin.mdx", 0);
-			basicEnemy.speed = 1.2f;
+			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
 			
 			cameraOffset = new Vector3(0, 13, 10);
 			
@@ -85,14 +78,6 @@ namespace TTG
 		
 			level = new Level(graphics, program, upgrade, spriteBatch, 15);
 			level.Load("testlevel.txt");
-			
-			testEnemy = new Enemy[10];
-			for(int i = 0; i < 10; ++i)
-			{
-				testEnemy[i] = new Enemy(graphics, basicEnemy, level, program);
-				testEnemy[i].SetPosition((int)level.SpawnPos.X, (int)level.SpawnPos.Y, level.SpawnDir);
-				
-			}
 			
 			player = new Player(graphics, program, billboardBatch, level);
 		}
@@ -127,12 +112,8 @@ namespace TTG
 			}
 			case GameState.Playing:
 			{
-				player.Update(gamePadData, dt, testEnemy);
-				for(int i = 0; i < 10; ++i)
-				{
-					testEnemy[i].Update(dt);
-				}
-				level.Update(upgrade, gamePadData, player.GetPosition().Xy);
+				player.Update(gamePadData, dt, level.GetEnemies());
+				level.Update(dt, upgrade, gamePadData, player);
 				break;
 			}
 			}
@@ -195,15 +176,7 @@ namespace TTG
 			
 			player.Draw(camera);
 			
-			
-			
 			graphics.Disable( EnableMode.CullFace );
-			
-			for(int i = 0; i < 10; ++i)
-			{
-				testEnemy[i].Draw();
-			}
-			
 			graphics.Clear(ClearMask.Depth);
 			UI.Draw(spriteBatch, player.Health, player.Points, player.Fish);					
 			upgrade.Draw (spriteBatch);

@@ -10,10 +10,6 @@ using Sce.Pss.HighLevel.UI;
 
 namespace TTG
 {
-	public enum TurretType
-	{
-		MG
-	};
 	public class TurretPlacement
 	{
 		Turret placementTurret;

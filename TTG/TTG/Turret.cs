@@ -71,27 +71,27 @@ namespace TTG
 		{
 		}
 		
-		public override void Update (float dt, Enemy[] enemies)
-		{
-			if(target == null)
-			{
-				for(int i = 0; i < enemies.Length; ++i)
-				{
-					float distance = Vector2.Distance(target, postion);
-					if(distance <= atkRange)
-					{
-						target = enemies[i];
-						break;
-					}
-				}
-			}
-			else if(target.Health <= 0)
-			{
-				target =  null;
-			}
-			base.Update (dt);
-			    
-		}
+		//public override void Update (float dt, Enemy[] enemies)
+		//{
+		//	if(target == null)
+		//	{
+		//		for(int i = 0; i < enemies.Length; ++i)
+		//		{
+		//			float distance = Vector2.Distance(target, postion);
+		//			if(distance <= atkRange)
+		//			{
+		//				target = enemies[i];
+		//				break;
+		//			}
+		//		}
+		//	}
+		//	else if(target.Health <= 0)
+		//	{
+		//		target =  null;
+		//	}
+		//	base.Update (dt);
+		//	    
+		//}
 		public override void Draw ()
 		{
 			

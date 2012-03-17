@@ -20,11 +20,11 @@ namespace TTG
 		
 		public float distanceFromPlacement;
 		
-		private List<Placements> placement;
+		private Placements[] placement;
 		
 		public TurretPlacement ()
 		{
-			placement = new List<Placements>();
+			placement = new Placements[100];
 		}
 		
 		/// <summary>
@@ -60,11 +60,11 @@ namespace TTG
 		/// <param name='Pos'>
 		/// Position of player.
 		/// </param>
-		public void PlaceTurret(Vector2 Pos)
+		public void PlaceTurret(Vector2 PlayerPos)
 		{
-			for(int i = 0; i < placement.Count; ++i)
+			for(int i = 0; i < placement.Length; ++i)
 			{
-				if(placement[i].position.Distance(Pos) < distanceFromPlacement)
+				if(placement[i].position.Distance(PlayerPos) < distanceFromPlacement)
 				{
 					placement[i].placed = true;
 				}

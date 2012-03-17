@@ -37,7 +37,7 @@ namespace TTG
 		private Player player;
 		
 		private EnemyType basicEnemy;
-		private Enemy testEnemy;
+		private Enemy[] testEnemy;
 		
 		private SpriteBatch spriteBatch;
 		
@@ -68,9 +68,14 @@ namespace TTG
 			basicEnemy.model = new Model("penguin.mdx", 0);
 			basicEnemy.speed = 1.2f;
 			
-			testEnemy = new Enemy(graphics, basicEnemy, level, program);
-			testEnemy.SetPosition((int)level.SpawnPos.X, (int)level.SpawnPos.Y, level.SpawnDir);
-			
+			testEnemy = new Enemy[10];
+			for(int i = 0; i < 10; ++i)
+			{
+				testEnemy[i] = new Enemy(graphics, basicEnemy, level, program);
+				testEnemy[i].SetPosition((int)level.SpawnPos.X, (int)level.SpawnPos.Y, level.SpawnDir);
+				
+			}
+						
 			cameraOffset = new Vector3(0, 13, 10);
 			
 			stopwatch = new Stopwatch();
@@ -117,7 +122,10 @@ namespace TTG
 			case GameState.Playing:
 			{
 				player.Update(gamePadData, dt);
-				testEnemy.Update(dt);
+				for(int i = 0; i < 10; ++i)
+				{
+					testEnemy[i].Update(dt);
+				}
 				level.Update();
 				break;
 			}
@@ -186,8 +194,12 @@ namespace TTG
 			parameters.SetViewMatrix (ref viewMatrix);
 
 			level.Draw();
-			testEnemy.Draw();
+			
 			player.Draw();
+			for(int i = 0; i < 10; ++i)
+			{
+				testEnemy[i].Draw();
+			}
 		}
 	}
 }

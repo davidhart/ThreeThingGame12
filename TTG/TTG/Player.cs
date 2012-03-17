@@ -62,6 +62,9 @@ namespace TTG
 			}
 		}
 		
+		float atkRange = 5;
+		float atkDmg = 0.5f;
+		
 		GraphicsContext graphics;
 		BasicProgram program;
 		
@@ -93,8 +96,16 @@ namespace TTG
 			lowerModel.Update();
 			lowerModel.Draw(graphics, program);
 			
-			Vector3 turretTarget = new Vector3(0, position.Y, 0);
+			Vector3 turretTarget;
 			
+			if(target == null)
+			{
+				turretTarget = new Vector3(0, position.Y, 0);
+			}
+			else
+			{
+				turretTarget = new Vector3(target.GetPosition().X, position.Y, target.GetPosition().Z);
+			}
 			Vector3 turretDirection = (turretTarget - position).Normalize();
 			
 			Matrix4 turret;
@@ -118,36 +129,36 @@ namespace TTG
 		
 		public void Update (GamePadData padData, float dt, Enemy [] enemies)
 		{
-			//Turrent targeting
-			//if(target == null)
-			//{
-				//for(int i = 0; i < enemies.Length; ++i)
-				//{
-					//float distance = Vector2.Distance(target.GetPosition().Xy, position);
-					//if(distance <= atkRange)
-					//{
-						//target = enemies[i];
-						//break;
-					//}
-				//}
-			//}
-			//else
-			//{
-				//if(target.Health <= 0)
-				//{
-					//target =  null;
-				//}
-				//else
-				//{
-					//target.Health -= atkDmg * dt;
-					//float distance = Vector2.Distance(target);
-					//if(distance > atkRange)
-					//{
-						//target = null;
-					//}
-				//}
+			//Turret targeting
+			if(target == null)
+			{
+				for(int i = 0; i < enemies.Length; ++i)
+				{
+					float distance = Vector2.Distance(enemies[i].GetPosition().Xz, position.Xz);
+					if(distance <= atkRange)
+					{
+						target = enemies[i];
+						break;
+					}
+				}
+			}
+			else
+			{
+				if(target.Health <= 0)
+				{
+					target =  null;
+				}
+				else
+				{
+					target.Health -= atkDmg * dt;
+					float distance = Vector2.Distance(target.GetPosition().Xz, position.Xz);
+					if(distance > atkRange)
+					{
+						target = null;
+					}
+				}
 				
-			//}
+			}
 			
 			if (padData.Buttons.HasFlag(GamePadButtons.Right))
 			{

@@ -93,7 +93,7 @@ namespace TTG
 	
 	public class Enemy : GameObject3D
 	{	    
-		protected float health;
+		protected float health = 50;
 		public float Health
 		{
 			get

@@ -18,6 +18,8 @@ namespace TTG
 		Model lowerModel;
 		Model upperModel;
 		
+		Level level;
+		
 		Enemy target = null;
 		
 		float health = 100, points = 0, fish = 1000;
@@ -73,8 +75,8 @@ namespace TTG
 		
 		Vector3 buyMenuIconOffset;
 		Vector2 buyMenuIconSize;
-		
-		public Player (GraphicsContext graphics, BasicProgram program, BillboardBatch billboardBatch) 
+
+		public Player (GraphicsContext graphics, BasicProgram program, BillboardBatch billboardBatch, Level level) 
 		{
 			this.graphics = graphics;
 			this.program = program;
@@ -82,6 +84,9 @@ namespace TTG
 			
 			lowerModel = new Model("assets/tank_lower.mdx", 0);
 			upperModel = new Model("assets/tank_upper.mdx", 0);
+			
+			// reference to level, to access tile data (used for collisions)
+			this.level = level;
 			
 			buyMenuIcon = new Texture2D("assets/crossButton.png", false);
 			drawBuyMenuIcon = false;
@@ -209,16 +214,24 @@ namespace TTG
 				forward *= 0;
 			}
 			
-			position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
+			// collision detection
+			// bounding sphere
+			float radius = 1.0f;
+			Vector3 centre = new Vector3(1.7f, 0, 1.5f);
 			
+			
+			Vector3 testPosition = position + new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
+			bool test = level.CollisionDetection(testPosition);
+			Debug.WriteLine(test);
+			if(test == false) position = testPosition;
+			//position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
+			//Debug.WriteLine(position.ToString());
 		}
 		
 		public Vector3 GetPosition()
 		{
 			return position;
 		}
-		
-		
 	}
 }
 

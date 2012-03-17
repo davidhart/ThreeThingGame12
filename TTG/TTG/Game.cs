@@ -76,8 +76,6 @@ namespace TTG
 			titleScreen = new TitleScreen();
 			titleScreen.Initialise(graphics, this);
 			
-			player = new Player(graphics, program, billboardBatch);
-			
 			UI = new GameUI();
 			upgrade = new UpgradeUI();
 
@@ -95,6 +93,8 @@ namespace TTG
 				testEnemy[i].SetPosition((int)level.SpawnPos.X, (int)level.SpawnPos.Y, level.SpawnDir);
 				
 			}
+			
+			player = new Player(graphics, program, billboardBatch, level);
 		}
 		
 		public void Load()
@@ -172,7 +172,7 @@ namespace TTG
 		
 		public void DrawGame()
 		{
-			//graphics.Enable( EnableMode.Blend ) ;
+			graphics.Enable( EnableMode.Blend ) ;
 			graphics.SetBlendFunc( BlendFuncMode.Add, BlendFuncFactor.SrcAlpha, BlendFuncFactor.OneMinusSrcAlpha ) ;
 			graphics.Enable( EnableMode.CullFace ) ;
 			graphics.SetCullFace( CullFaceMode.Back, CullFaceDirection.Ccw ) ;

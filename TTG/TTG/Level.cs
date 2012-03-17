@@ -9,6 +9,8 @@ using Sce.Pss.Core.Input;
 
 using Sce.Pss.HighLevel.UI;
 
+using Tutorial.Utility;
+
 namespace TTG
 {
 	enum LevelState
@@ -104,6 +106,8 @@ namespace TTG
 		UpgradeUI upgradeUI;
 		SpriteBatch spritebatch;
 		
+		DebugString debugString;
+		
 		public Vector2 SpawnPos
 		{
 			get
@@ -136,6 +140,8 @@ namespace TTG
 			this.graphics = graphics;
 			this.program = program;
 			upgradeUI = uUi;
+			debugString = new DebugString(graphics, new Texture2D("assets/fonts/DebugFont.png", false), 10, 20);
+			
 			models = new Model[17];
 			for (int i = 0; i < models.Length; ++i)
 			{
@@ -195,6 +201,8 @@ namespace TTG
 			levelData = new LevelCell[width, height];
 			bridges = new List<MapObject>();
 			fishPiles = new List<MapObject>();
+			
+			Debug.WriteLine("Width: " + width + ", Height: " + height);
 			
 			// map characters onto type
 			for (int y = 0; y < height; ++y)
@@ -392,6 +400,34 @@ namespace TTG
 			return levelData[x, y].IsTrench();
 		}
 		
+		// Tank / World collision
+		public bool CollisionDetection(Vector3 testPosition)
+		{
+			int cellX = ((int)testPosition.X / 2);
+			int cellZ = ((int)testPosition.Z / 2);
+			
+			if(cellX < 0 || cellZ < 0 || cellX > width - 2 || cellZ > height - 1)  
+			{
+				return true;
+			}
+			else
+			{
+				LevelCell cell = levelData[cellX, cellZ];
+#if DEBUG
+				debugString.Clear();
+				debugString.WriteLine("");
+				debugString.WriteLine("");
+				debugString.WriteLine("");
+				debugString.WriteLine("");
+				debugString.WriteLine("");
+				debugString.WriteLine("Cell X: " + cellX + ", Pos.x: " + testPosition.X);
+				debugString.WriteLine("Cell Z: " + cellZ + ", Pos.z: " + testPosition.Z);
+				debugString.WriteLine("type: " + cell.type);
+#endif
+				return (cell.type != CellType.Platform) ? true : false;
+			}
+		}
+		
 		public PathOption GetCellPathOption(int x, int y)
 		{
 			return levelData[x, y].GetPathingOption();	
@@ -399,12 +435,14 @@ namespace TTG
 		
 		public void Draw()
 		{			
+			//debugString.Render();
+			
 			for (int y = 0; y < height; y++)
 			{
 				for (int x = 0; x < width; x++)
 				{
 					byte index = levelData[x,y].modelLookup;
-					Matrix4 world = Matrix4.Translation(new Vector3(x * 2.0f, 0.0f, y * 2.0f));
+					Matrix4 world = Matrix4.Translation(new Vector3( x * 2.0f, 0.0f,  y * 2.0f));
 					models[index].SetWorldMatrix( ref world );
 					models[index].Update();
 					models[index].Draw(graphics, program);

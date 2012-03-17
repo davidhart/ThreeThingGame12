@@ -112,10 +112,6 @@
       <Project>{EAFF76CD-10CE-417A-B81A-88F0C87A9D2B}</Project>
       <Name>Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\..\Program Files\SCE\PSS\sample\Tutorial\TutoLib\TutoLib.csproj">
-      <Project>{0A29F05D-DB9F-4045-8F41-401F9FE31638}</Project>
-      <Name>TutoLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />

@@ -39,9 +39,7 @@ namespace TTG
 					sb.Draw (textures [0], new Vector2 (200, 200));
 					font.DrawText (sb, "BACK", new Vector2 (265, 232), 1.0f);
 					sb.Draw (textures [1], new Vector2 (300, 100));
-					font.DrawText (sb, "SNIPER", new Vector2 (365, 132), 1.0f);
-					sb.Draw (textures [2], new Vector2 (200, 0));
-					font.DrawText (sb, "ICER", new Vector2 (265, 32), 1.0f);
+					font.DrawText (sb, "ICER", new Vector2 (365, 132), 1.0f);
 				} else {
 					if (turret.type.nextUpgrade != null) {
 						sb.Draw (textures [3], new Vector2 (100, 100));
@@ -71,15 +69,9 @@ namespace TTG
 						turret.State = Turret.TurretState.Upgrade;
 						show = false;
 					}
-					if (data.ButtonsDown.HasFlag (GamePadButtons.Triangle)) {
-						//flamer/icer
+					if (data.ButtonsDown.HasFlag (GamePadButtons.Circle)) {
 						turret.SetType(TurretTypes.icerTurret);
 						turret.State = Turret.TurretState.Upgrade;
-						show = false;
-					}
-					if (data.ButtonsDown.HasFlag (GamePadButtons.Circle)) {
-						//sniper
-						//turret.State = Turret.TurretState.Upgrade;
 						show = false;
 					}
 				} 

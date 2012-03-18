@@ -18,7 +18,8 @@ namespace TTG
 		Title,
 		Help,
 		SplashScreen,
-		GameOver
+		GameOver,
+		Win
 	}
 	
 	public class Game
@@ -28,11 +29,12 @@ namespace TTG
 		private Stopwatch stopwatch;
 		
 		Texture2D gameOvertex;
-		
+		Texture2D bgTex;
+		Texture2D winTex;
 		private int frameCount;
 		private int prevTicks;
 		
-		public GameState gameState = GameState.SplashScreen;
+		public static GameState gameState = GameState.Title;
 		private TitleScreen titleScreen;
 		private SplashScreen splashScreen;
 		public bool IsRunning = true;
@@ -87,12 +89,15 @@ namespace TTG
 					
 			projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
 		
-			level = new Level(graphics, program, upgrade, spriteBatch, billboardBatch, 15);
+			level = new Level(graphics, program, upgrade, spriteBatch, billboardBatch, 5);
 			level.Load("testlevel.txt");
 			
 			player = new Player(graphics, program, billboardBatch, level);
 			
 			gameOvertex = new Texture2D("assets/gameOver.png", false);
+			bgTex = new Texture2D("assets/bg.png", false);
+			winTex = new Texture2D("assets/win.png",false);
+			
 		}
 		
 		public void Load()
@@ -143,19 +148,24 @@ namespace TTG
 				UpdateGameOver(gamePadData);
 				break;
 			}
+			case GameState.Win:
+			{
+				UpdateWin(gamePadData);
+				break;
+			}
 			}
 		}
 		
 		public void Draw()
 		{
 			// Clear the screen
-			graphics.SetClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+			graphics.SetClearColor (1.0f, 1.0f, 1.0f, 1.0f);
 			graphics.Clear ();
 			
 			switch (gameState)
 			{
 			case GameState.SplashScreen:
-			{
+			{             
 				splashScreen.Draw (spriteBatch);
 				break;
 			}
@@ -170,12 +180,20 @@ namespace TTG
 				}
 				case GameState.Playing:
 				{
+					spriteBatch.Begin();
+					spriteBatch.Draw(bgTex, new Vector2(0,0));
+					spriteBatch.End();     
 					DrawGame();
 					break;
 				}
 			case GameState.GameOver:
 			{
 				DrawGameOver();
+				break;
+			}
+			case GameState.Win:
+			{
+				DrawWin();
 				break;
 			}
 			}
@@ -227,6 +245,22 @@ namespace TTG
 		}
 		
 		public void UpdateGameOver(GamePadData data)
+		{
+			if (data.ButtonsDown.HasFlag (GamePadButtons.Cross)) 
+			{
+				level.Load("testlevel.txt");
+				gameState = GameState.Title;
+			}
+		}
+		
+		public void DrawWin()
+		{
+			spriteBatch.Begin();
+			spriteBatch.Draw(winTex, new Vector2(0,0));
+			spriteBatch.End();
+		}
+		
+		public void UpdateWin(GamePadData data)
 		{
 			if (data.ButtonsDown.HasFlag (GamePadButtons.Cross)) 
 			{

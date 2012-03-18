@@ -35,7 +35,7 @@ namespace TTG
 			timeOnScreen -= dt;
 			if(timeOnScreen <= 0.0f)
 			{
-				game.gameState = GameState.Title;
+				Game.gameState = GameState.Title;
 				background.Dispose();
 				TTG.Dispose();
 			}

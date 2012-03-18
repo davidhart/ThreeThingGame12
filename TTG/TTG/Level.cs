@@ -435,9 +435,9 @@ namespace TTG
 			//EnemyTypes.Initialise();
 			Enemy[] currentWave = waves[WaveNumber];
 			counter = waves[WaveNumber].Length;
+			
 			for (int i = 0; i < currentWave.Length; i++)
 			{
-				currentWave[i] = new Enemy(graphics, EnemyTypes.basicEnemy, this, program);
 				currentWave[i].SetPosition((int)SpawnPos.X, (int)spawnPos.Y, SpawnDir);
 				currentWave[i].SpawnTime = 2 * i;
 			}
@@ -457,11 +457,21 @@ namespace TTG
 				
 			}
 			
-			if (alldead)
+			if (alldead && WaveNumber < maxWaves)
 			{
 				WaveNumber++;
+				if(WaveNumber == maxWaves)
+				{
+					WaveNumber = 0;
+					Game.gameState = GameState.Win;
+				}
+				else
+				{
+					
 				InitialiseWaves();
+				}
 			}
+			
 		}
 		
 		public Enemy[] GetEnemies()

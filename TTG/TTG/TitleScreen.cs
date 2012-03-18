@@ -49,14 +49,14 @@ namespace TTG
 			else if(data.ButtonsDown.HasFlag(GamePadButtons.Cross) &&
 			        selectedItem == Selected.Start)
 			{
-				game.gameState = GameState.Playing;
+				Game.gameState = GameState.Playing;
 				
 				sound.Stop(0);
 			}
 			else if(data.ButtonsDown.HasFlag(GamePadButtons.Cross) && 
 			        selectedItem == Selected.Help)
 			{
-				game.gameState = GameState.Help;
+				Game.gameState = GameState.Help;
 				
 			}
 		}

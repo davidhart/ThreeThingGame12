@@ -56,6 +56,7 @@
     <Compile Include="Particle.cs" />
     <Compile Include="BillboardBatch.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="SoundSystem.cs" />
     <Compile Include="SplashScreen.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +113,7 @@
     <Content Include="assets\muzzleFlash.png" />
     <Content Include="assets\squarebutton.png" />
     <Content Include="assets\triangleButton.png" />
+    <Content Include="assets\sounds\titlemusic.wav" />
     <Content Include="assets\Splash.png" />
   </ItemGroup>
   <ItemGroup>
@@ -122,5 +124,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\" />
+    <Folder Include="assets\sounds\" />
   </ItemGroup>
 </Project>

@@ -7,6 +7,8 @@ using Sce.Pss.Core.Graphics;
 using Sce.Pss.Core.Input;
 using Sce.Pss.HighLevel.UI;
 
+using Sce.Pss.Core.Audio;
+
 namespace TTG
 {
 	public class TitleScreen
@@ -14,11 +16,16 @@ namespace TTG
 		Button startButton, helpButton, titleButton;
 		Game theGame;
 		
+		SoundSystem sound;
+		
 		public TitleScreen ()
 		{
+			
 		}
 		public void Initialise(GraphicsContext graphics, Game game)
 		{
+			sound = new SoundSystem();
+			sound.Play(0, 100, true);
 			
 			Scene scene = new Scene();
 			
@@ -47,6 +54,10 @@ namespace TTG
 		
 		public void Update(List<TouchData> dataList)
 		{
+			
+				
+			
+			
 			UISystem.Update(dataList);
 			startButton.ButtonAction += HandleStartButtonButtonAction;
 		}
@@ -54,6 +65,7 @@ namespace TTG
 		void HandleStartButtonButtonAction (object sender, TouchEventArgs e)
 		{
 			theGame.gameState = GameState.Playing;
+			sound.Stop(0);
 		}
 		public void Draw()
 		{

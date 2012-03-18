@@ -98,6 +98,8 @@ namespace TTG
 		private BasicProgram program;
 		private GraphicsContext graphics;
 		
+		int lives;
+		
 		Vector2 spawnPos;
 		Direction spawnDir;
 		
@@ -147,6 +149,7 @@ namespace TTG
 			this.program = program;
 			upgradeUI = uUi;
 			
+			lives = 0;
 			
 			models = new Model[17];
 			for (int i = 0; i < models.Length; ++i)
@@ -201,7 +204,7 @@ namespace TTG
 		}
 		
 		void GenerateLevel(string fileContents)
-		{
+		{			
 			string [] lines = fileContents.Split(System.Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 			
 			width = lines[0].Length; // Assume all lines are the same length;
@@ -390,7 +393,23 @@ namespace TTG
 			}
 			
 			InitialiseWaves();
-			 
+			
+			lives = 50;			 
+		}
+		
+		public int GetLives()
+		{
+			return lives;	
+		}
+		
+		public void RemoveLife()
+		{
+			lives--;
+			
+			if (lives == 0)
+			{
+				//Game over	
+			}
 		}
 		
 		void InitialiseWaves()

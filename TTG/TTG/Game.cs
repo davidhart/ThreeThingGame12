@@ -194,7 +194,7 @@ namespace TTG
 			
 			graphics.Disable( EnableMode.CullFace );
 			graphics.Clear(ClearMask.Depth);
-			UI.Draw(spriteBatch, player.Health, player.Points, player.Fish);					
+			UI.Draw(spriteBatch, player.Health, player.Points, level.GetLives());					
 			upgrade.Draw (spriteBatch);
 		}
 	}

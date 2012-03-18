@@ -24,8 +24,8 @@ namespace TTG
 			
 			machineGunTurret = new TurretType();
 			machineGunTurret.AtkRange = 4;
-			machineGunTurret.AtkSpeed = 0.5f;
-			machineGunTurret.AtkDmg = 2;
+			machineGunTurret.AtkSpeed = 1.0f;
+			machineGunTurret.AtkDmg = 10;
 			machineGunTurret.model = TurretModels.machineGunTurret;
 		}
 		

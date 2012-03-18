@@ -8,6 +8,7 @@ namespace TTG
 	{
 		public Model model;
 		public float speed;
+		public float health;
 	}
 	
 	public class EnemyTypes
@@ -20,6 +21,7 @@ namespace TTG
 			basicEnemy = new EnemyType();
 			basicEnemy.model = new Model("penguin.mdx", 0);
 			basicEnemy.speed = 1.0f;
+			basicEnemy.health = 50;
 		}
 		
 		static public EnemyType basicEnemy;
@@ -111,7 +113,7 @@ namespace TTG
 	
 	public class Enemy
 	{	    
-		protected float health = 50;
+		protected float health = 0;
 		public float Health
 		{
 			get
@@ -144,6 +146,7 @@ namespace TTG
 			this.type = type;
 			this.level = level;
 			this.program = program;
+			this.health = type.health;
 			
 			direction = Direction.Down;			
 			state = new AnimationState(type.model);
@@ -173,6 +176,9 @@ namespace TTG
 		
 		public void Update (float dt)
 		{
+			if (health <= 0)
+				return;
+			
 			if (SpawnTime > 0)
 			{
 				SpawnTime -= dt;
@@ -207,10 +213,13 @@ namespace TTG
 					else if (p == PathOption.Right) direction = Direction.Right;
 					else if (p == PathOption.Down)  direction = Direction.Down;
 					else if (p == PathOption.Up)	direction = Direction.Up;
+					
+					// Enemy reached the goal
 					else if (p == PathOption.Stop)
 					{
 						health = 0;
 						direction = Direction.Stop;
+						level.RemoveLife();
 					}
 					
 				}

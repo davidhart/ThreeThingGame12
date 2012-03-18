@@ -48,20 +48,8 @@ namespace TTG
 			}
 		}
 		
-		public float Fish
-		{
-			get
-			{
-				return fish;
-			}
-			set
-			{
-				fish = value;
-			}
-		}
-		
 		float atkRange = 5;
-		float atkDmg = 0.5f;
+		float atkDmg = 20.0f;
 		
 		GraphicsContext graphics;
 		BasicProgram program;

@@ -69,13 +69,14 @@ namespace TTG
 		static Matrix4 tankScale = Matrix4.Scale(new Vector3(0.4f));
 		
 		bool drawBuyMenuIcon;
-		
+		Texture2D muzzleFlash;
 		Texture2D buyMenuIcon;
 		BillboardBatch billboardBatch;
 		
 		Vector3 buyMenuIconOffset;
 		Vector2 buyMenuIconSize;
-
+		float elapsed;
+		
 		public Player (GraphicsContext graphics, BasicProgram program, BillboardBatch billboardBatch, Level level) 
 		{
 			this.graphics = graphics;
@@ -84,11 +85,13 @@ namespace TTG
 			
 			lowerModel = new Model("assets/tank_lower.mdx", 0);
 			upperModel = new Model("assets/tank_upper.mdx", 0);
-			
+
 			// reference to level, to access tile data (used for collisions)
 			this.level = level;
 			
 			buyMenuIcon = new Texture2D("assets/crossButton.png", false);
+			muzzleFlash = new Texture2D("assets/muzzleFlash.png", false);
+			
 			drawBuyMenuIcon = false;
 			buyMenuIconOffset = new Vector3(0, 4, 0);
 			buyMenuIconSize = new Vector2(0.75f, 0.75f);
@@ -142,6 +145,18 @@ namespace TTG
 			upperModel.Update();
 			upperModel.Draw(graphics, program);
 			
+			if (target != null)
+			{
+				// draw muzzle flash
+				if (Math.Sin(elapsed * 8.0f) > 0.3)
+				{
+					billboardBatch.Begin();
+					billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 0.9f, 0) + turretDirection.Normalize() * 1.1f, new Vector2(0.6f, 0.6f));
+					billboardBatch.End();
+				}
+			}
+			
+			
 			if (drawBuyMenuIcon)
 			{
 				billboardBatch.Begin();
@@ -181,7 +196,6 @@ namespace TTG
 						target = null;
 					}
 				}
-				
 			}
 			
 			if (padData.Buttons.HasFlag(GamePadButtons.Right))
@@ -227,6 +241,10 @@ namespace TTG
 			if(test == false) position = testPosition;
 			//position += new Vector3(forward.X, 0, forward.Y) * dt * forwardSpeed;
 			//Debug.WriteLine(position.ToString());
+			
+			elapsed += dt;
+			if (elapsed > 100)
+				elapsed -= 100;
 		}
 		
 		public Vector3 GetPosition()

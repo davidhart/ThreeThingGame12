@@ -188,9 +188,7 @@ namespace TTG
 				
 					// draw muzzle flash
 					if (Math.Sin(elapsed * 877.0f) > 0.3)
-					{
-						Debug.WriteLine("test");
-			
+					{			
 						billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 3.3f, 0) + turretDirection.Normalize() * 1.2f, new Vector2(1, 1));
 					}
 										

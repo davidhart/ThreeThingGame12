@@ -54,6 +54,7 @@ namespace TTG
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			graphics.SetViewport(0, 0, graphics.Screen.Width, graphics.Screen.Height);
+			Debug.WriteLine(graphics.Screen.Width.ToString() + " " + graphics.Screen.Height.ToString());
 			
 			spriteBatch = new SpriteBatch(graphics);
 			billboardBatch = new BillboardBatch(graphics);
@@ -76,7 +77,7 @@ namespace TTG
 					
 			projectionMatrix = Matrix4.Perspective(FMath.Radians(45.0f), graphics.Screen.AspectRatio, 1.0f, 1000000.0f);
 		
-			level = new Level(graphics, program, upgrade, spriteBatch, 15);
+			level = new Level(graphics, program, upgrade, spriteBatch, billboardBatch, 15);
 			level.Load("testlevel.txt");
 			
 			player = new Player(graphics, program, billboardBatch, level);

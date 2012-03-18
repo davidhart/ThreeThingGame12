@@ -114,7 +114,7 @@ namespace TTG
 			Draw (texture, position, size, new Rgba(255, 255, 255, 255));
 		}
 		
-		private void Draw(Texture2D texture, Vector3 position, Vector2 size, Rgba color)
+		public void Draw(Texture2D texture, Vector3 position, Vector2 size, Rgba color)
 		{
 			if (currentTexture != texture)
 			{

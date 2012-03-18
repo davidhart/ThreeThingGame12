@@ -108,6 +108,7 @@ namespace TTG
 		
 		UpgradeUI upgradeUI;
 		SpriteBatch spritebatch;
+		BillboardBatch billboardbatch;
 		
 		Enemy[] enemies;
 		
@@ -138,7 +139,8 @@ namespace TTG
 		public Level(GraphicsContext graphics, 
 		             BasicProgram program, 
 		             UpgradeUI uUi, 
-		             SpriteBatch sb, 
+		             SpriteBatch sb,
+		             BillboardBatch billboardbatch,
 		             int waveAmount)
 		{
 			this.graphics = graphics;
@@ -152,6 +154,7 @@ namespace TTG
 				models[i] = new Model("mapparts/part" + i.ToString() + ".mdx", 0);	
 			}
 			spritebatch = sb;
+			this.billboardbatch = billboardbatch;
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 			fishPileModel = new Model("mapparts/fish.mdx", 0);
 			
@@ -326,7 +329,7 @@ namespace TTG
 					{
 						levelData[x,y].type = CellType.TurretPlacement;
 						levelData[x,y].pathOption = PathOption.Continue;
-						turretPlacements.Add(new Turret(graphics, this, program, new Vector2(x,y) ));
+						turretPlacements.Add(new Turret(graphics, this, program, new Vector2(x,y), billboardbatch ));
 					}
 					else // represented by character #
 					{

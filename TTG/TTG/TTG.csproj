@@ -106,6 +106,11 @@
     <Content Include="assets\placeholder.png" />
     <Content Include="assets\crossButton.png" />
     <Content Include="assets\turret.mdx" />
+    <Content Include="assets\bloodSplat.png" />
+    <Content Include="assets\circleButton.png" />
+    <Content Include="assets\muzzleFlash.png" />
+    <Content Include="assets\squarebutton.png" />
+    <Content Include="assets\triangleButton.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

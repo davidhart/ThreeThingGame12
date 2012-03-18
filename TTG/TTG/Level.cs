@@ -532,6 +532,7 @@ namespace TTG
 						if (data.ButtonsDown.HasFlag (GamePadButtons.Cross) && !upgradeUI.show)
 						{
 							upgradeUI.show = true;
+							player.DrawBuyMenuIcon (false);
 							upgradeUI.turret = turretPlacements [i];
 						}
 					}					

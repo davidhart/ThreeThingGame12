@@ -59,7 +59,9 @@ namespace TTG
 		int xTilePos;
 		int yTilePos;
 		BasicProgram program;
-
+		
+		public int Level =1;
+		
 		GraphicsContext graphics;
 
 		Enemy target = null;
@@ -67,6 +69,15 @@ namespace TTG
 		
 		float elapsed;
 		BillboardBatch billboardBatch;
+		
+		public enum TurretState
+		{
+			Buy,
+			Upgrade
+		}
+		
+		public TurretState State = TurretState.Buy;
+		
 		
 		public Turret (GraphicsContext inGraphics, Level level, BasicProgram program, Vector2 tilePos,
 		               BillboardBatch billboardBatch)
@@ -183,7 +194,7 @@ namespace TTG
 						billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 3.3f, 0) + turretDirection.Normalize() * 1.2f, new Vector2(1, 1));
 					}
 										
-					float splashSize = 0.4f * (elapsed % 2) + 0.4f;
+					float splashSize = 0.2f * (elapsed % 2) + 0.4f;
 					float alpha = 1 - (elapsed % 2);
 					
 					billboardBatch.Draw(TurretModels.bloodSplat, target.GetPosition() + new Vector3(0, 1.0f, 0), new Vector2(splashSize),

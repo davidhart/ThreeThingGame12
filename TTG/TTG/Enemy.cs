@@ -163,7 +163,7 @@ namespace TTG
 			
 			if(direction != Direction.Stop)
 			{
-				Matrix4 world = Matrix4.Translation(GetPosition()) * Matrix4.Scale(new Vector3(0.6f)) * EnemyData.GetOrientationMatrix(direction);	
+				Matrix4 world = Matrix4.Translation(GetPosition()) * Matrix4.Scale(new Vector3(0.4f)) * EnemyData.GetOrientationMatrix(direction);	
 				type.model.SetWorldMatrix(ref world);			
 				type.model.SetAnimationState(state);
 				type.model.Update();

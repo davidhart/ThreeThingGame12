@@ -60,7 +60,7 @@ namespace TTG
             else if (character >= '0' && character <= '9')
                 charIndex = character - '0' + 26;
 
-            if (charIndex <= 0)
+            if (charIndex < 0)
                 return false;
 
             GetSourceRectFromIndex(charIndex + characterOffset, ref r);

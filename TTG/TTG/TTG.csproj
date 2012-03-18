@@ -115,6 +115,7 @@
     <Content Include="assets\triangleButton.png" />
     <Content Include="assets\sounds\titlemusic.wav" />
     <Content Include="assets\Splash.png" />
+    <Content Include="assets\Splash2.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

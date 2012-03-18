@@ -275,6 +275,9 @@ namespace TTG
 						float splashSize = 0.2f * (elapsed % 2) + 0.4f;
 						float alpha = 1 - (elapsed % 2);
 					
+						if (target.type == EnemyTypes.boss)
+							alpha = 0;
+						
 						billboardBatch.Draw(TurretModels.bloodSplat, target.GetPosition() + new Vector3(0, 1.0f, 0), new Vector2(splashSize),
 					                    	new Rgba(255, 255, 255, (byte)(alpha * 255.0f)));
 						

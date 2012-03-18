@@ -210,7 +210,7 @@ namespace TTG
 		}
 		
 		public void Update (float dt)
-		{
+		{			
 			if (health <= 0)
 				return;
 			

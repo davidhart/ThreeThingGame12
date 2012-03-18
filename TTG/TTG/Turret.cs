@@ -98,6 +98,7 @@ namespace TTG
 			
 			muzzleFlash = new Texture2D("assets/muzzleFlash.png", false);
 			bloodSplat = new Texture2D("assets/bloodSplat.png", false);
+			frostTexture = new Texture2D("assets/frost.png", false);
 		}
 		
 		public static Model turretPlacement;
@@ -105,6 +106,7 @@ namespace TTG
 		
 		public static Texture2D muzzleFlash;
 		public static Texture2D bloodSplat;
+		public static Texture2D frostTexture;
 	}
 
 	public class Turret
@@ -248,7 +250,7 @@ namespace TTG
 					
 					if (type == TurretTypes.icerTurret)
 					{
-						// draw muzzle flash
+						// draw muzzle flash for frost tower
 								
 						billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 3.3f, 0) + turretDirection.Normalize() * 1.2f, new Vector2(1, 1),
 						                    new Rgba(120, 200, 255, (byte)(Math.Sin(elapsed * 6)*100 + 100)));
@@ -256,7 +258,7 @@ namespace TTG
 						float splashSize = 0.2f * (elapsed % 2) + 0.4f;
 						float alpha = 1 - (elapsed % 2);
 					
-						billboardBatch.Draw(TurretModels.bloodSplat, target.GetPosition() + new Vector3(0, 1.0f, 0), new Vector2(splashSize),
+						billboardBatch.Draw(TurretModels.frostTexture, target.GetPosition() + new Vector3(0, 1.0f, 0), new Vector2(splashSize),
 					                    	new Rgba(255, 255, 255, (byte)(alpha * 255.0f)));
 					}
 					else

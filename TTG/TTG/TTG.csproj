@@ -118,6 +118,7 @@
     <Content Include="assets\Splash2.png" />
     <Content Include="assets\gameOver.png" />
     <Content Include="assets\pengIcon.png" />
+    <Content Include="assets\frost.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

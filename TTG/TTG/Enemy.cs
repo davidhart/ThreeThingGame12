@@ -190,11 +190,22 @@ namespace TTG
 			
 			if(direction != Direction.Stop)
 			{
+				Vector4 v = new Vector4(0, 0, 1, 1);
+				
+				if (speedMultiplier == 1.0f)
+					v = new Vector4(1);
+				
+				program.SetUniformValue(4, ref v);
+				
+				
 				Matrix4 world = Matrix4.Translation(GetPosition()) * Matrix4.Scale(new Vector3(0.4f)) * EnemyData.GetOrientationMatrix(direction);	
 				type.model.SetWorldMatrix(ref world);			
 				type.model.SetAnimationState(state);
 				type.model.Update();
 				type.model.Draw(graphics, program);
+				
+				v = new Vector4(1);
+				program.SetUniformValue(4, ref v);
 			}
 		}
 		

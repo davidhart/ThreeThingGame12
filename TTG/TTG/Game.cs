@@ -68,6 +68,7 @@ namespace TTG
 			UISystem.Initialize(graphics);
 			
 			program = new BasicProgram("shaders/model.cgx", "shaders/model.cgx");
+			program.SetUniformBinding(4, "u_color");
 			
 			cameraOffset = new Vector3(0, 13, 10);
 			

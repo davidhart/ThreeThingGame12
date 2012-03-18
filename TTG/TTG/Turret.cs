@@ -60,7 +60,7 @@ namespace TTG
 		int yTilePos;
 		BasicProgram program;
 		
-		public int Level =1;
+		public int Level = 1;
 		
 		GraphicsContext graphics;
 

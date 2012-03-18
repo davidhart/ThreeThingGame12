@@ -24,12 +24,12 @@ namespace TTG
 		{
 			spritebatch.Begin();
 			spritebatch.Draw(bearTex, new Vector2(0,0));
-			spritebatch.Draw(pointsTex, new Vector2(0,32));
-			spritebatch.Draw(fishTex, new Vector2(0, 64));
+			spritebatch.Draw(pointsTex, new Vector2(0,64));
+			spritebatch.Draw(fishTex, new Vector2(0, 64 + 32));
 			
-			font.DrawText(spritebatch, health.ToString(), new Vector2(34, 8), 2.0f);
-			font.DrawText(spritebatch, points.ToString(), new Vector2(34, 40), 2.0f);
-			font.DrawText(spritebatch, fish.ToString(), new Vector2(34, 72), 2.0f);
+			//font.DrawText(spritebatch, health.ToString(), new Vector2(34, 8), 2.0f);
+			font.DrawText(spritebatch, points.ToString(), new Vector2(34, 64 + 8), 2.0f);
+			font.DrawText(spritebatch, fish.ToString(), new Vector2(34, 64 + 8 + 32 + 8), 2.0f);
 			spritebatch.End();
 		}
 	}

@@ -22,7 +22,7 @@ namespace TTG
 		
 		Enemy target = null;
 		
-		float health = 100, points = 0, fish = 1000;
+		float health = 100, fish = 1000;
 		
 		float atkRange = 5;
 		float atkDmg = 20.0f;

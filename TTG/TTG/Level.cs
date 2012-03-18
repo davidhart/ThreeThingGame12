@@ -412,7 +412,7 @@ namespace TTG
 			
 			InitialiseWaves();
 			
-			lives = 50;			 
+			lives = 15;			 
 		}
 		
 		public int GetLives()
@@ -426,7 +426,8 @@ namespace TTG
 			
 			if (lives == 0)
 			{
-				//Game over	
+				Reset();
+				Game.gameState = GameState.GameOver;
 			}
 		}
 		
@@ -440,7 +441,19 @@ namespace TTG
 			{
 				currentWave[i].SetPosition((int)SpawnPos.X, (int)spawnPos.Y, SpawnDir);
 				currentWave[i].SpawnTime = 2 * i;
+				currentWave[i].Health = currentWave[i].type.health;
 			}
+		}
+		
+		public void Reset()
+		{
+			for (int i = 0; i < turretPlacements.Count; i++)
+			{
+				turretPlacements[i].type = null;	
+			}
+			
+			lives = 15;
+			Points = 1000;
 		}
 		
 		void NextWave()
@@ -464,6 +477,7 @@ namespace TTG
 				{
 					WaveNumber = 0;
 					Game.gameState = GameState.Win;
+					Reset ();
 				}
 				else
 				{

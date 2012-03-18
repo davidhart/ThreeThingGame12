@@ -32,7 +32,7 @@ namespace TTG
 		private int frameCount;
 		private int prevTicks;
 		
-		public GameState gameState = GameState.Playing;
+		public GameState gameState = GameState.SplashScreen;
 		private TitleScreen titleScreen;
 		private SplashScreen splashScreen;
 		public bool IsRunning = true;
@@ -75,7 +75,7 @@ namespace TTG
 			stopwatch.Start();
 			
 			titleScreen = new TitleScreen();
-			titleScreen.Initialise(graphics, this);
+			titleScreen.Initialise();
 			
 			splashScreen = new SplashScreen();
 			
@@ -120,7 +120,7 @@ namespace TTG
 			}
 			case GameState.Title:
 			{
-				titleScreen.Update(touchData);
+				titleScreen.Update();
 				break;
 			}
 			case GameState.Help:
@@ -160,7 +160,7 @@ namespace TTG
 			}
 				case GameState.Title:
 				{
-					titleScreen.Draw();
+					titleScreen.Draw(spriteBatch);
 					break;
 				}
 				case GameState.Help:

@@ -19,7 +19,6 @@ namespace TTG
 		public void Draw(SpriteBatch sb)
 		{
 			sb.Begin();
-			
 			if(timeOnScreen >= 4.5f)
 			{
 				sb.Draw (background, new Vector2(0,0));
@@ -37,6 +36,8 @@ namespace TTG
 			if(timeOnScreen <= 0.0f)
 			{
 				game.gameState = GameState.Title;
+				background.Dispose();
+				TTG.Dispose();
 			}
 		}
 	}

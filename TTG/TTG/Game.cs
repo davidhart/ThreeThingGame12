@@ -37,6 +37,7 @@ namespace TTG
 		public static GameState gameState = GameState.Title;
 		private TitleScreen titleScreen;
 		private SplashScreen splashScreen;
+		private HelpScreen helpScreen;
 		public bool IsRunning = true;
 		
 		private Vector3 cameraOffset;
@@ -85,6 +86,8 @@ namespace TTG
 			
 			titleScreen = new TitleScreen();
 			titleScreen.Initialise();
+			
+			helpScreen = new HelpScreen();
 			
 			splashScreen = new SplashScreen();
 			
@@ -138,6 +141,7 @@ namespace TTG
 			}
 			case GameState.Help:
 			{
+				helpScreen.Update(gamePadData);
 				break;
 			}
 			case GameState.Playing:
@@ -183,6 +187,7 @@ namespace TTG
 				}
 				case GameState.Help:
 				{
+					helpScreen.Draw(spriteBatch);
 					break;
 				}
 				case GameState.Playing:

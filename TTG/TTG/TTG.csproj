@@ -58,6 +58,7 @@
     <Compile Include="Camera.cs" />
     <Compile Include="SoundSystem.cs" />
     <Compile Include="SplashScreen.cs" />
+    <Compile Include="HelpScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <ShaderProgram Include="shaders\Simple.fcg" />
@@ -116,7 +117,6 @@
     <Content Include="assets\Splash.png" />
     <Content Include="assets\Splash2.png" />
     <Content Include="assets\sounds\One-eyed Maestro.mp3" />
-    <Content Include="assets\sounds\Sneaky Snitch.mp3" />
     <Content Include="assets\sounds\tankfiring.wav" />
     <Content Include="assets\sounds\turretgun.wav" />
     <Content Include="assets\gameOver.png" />
@@ -127,6 +127,9 @@
     <Content Include="assets\penguintank.mdx" />
     <Content Include="assets\sounds\penguin.wav" />
     <Content Include="assets\win.png" />
+    <Content Include="assets\help1.png" />
+    <Content Include="assets\help2.png" />
+    <Content Include="assets\help3.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

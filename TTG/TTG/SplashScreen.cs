@@ -7,7 +7,7 @@ namespace TTG
 	public class SplashScreen
 	{
 		Texture2D background;
-		float timeOnScreen = 3;
+		float timeOnScreen = 9;
 		public SplashScreen ()
 		{
 			background = new Texture2D("assets/Splash.png", false);

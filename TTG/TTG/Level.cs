@@ -78,12 +78,12 @@ namespace TTG
 		LevelState levelState = LevelState.Playing;
 		//Enemy waves
 		
-		List<Enemy[]> waves = new List<Enemy[]>();
+		public List<Enemy[]> waves = new List<Enemy[]>();
 		public int Points = 1000;
 		public int Fish =  100;
-		public int WaveNumber = 1;
+		public int WaveNumber = 0;
+		int maxWaves, counter;
 		
-		//Wave size
 		Random rand = new Random();
 		
 		const float UPGRADEDIST = 3.5f;
@@ -149,7 +149,7 @@ namespace TTG
 			this.graphics = graphics;
 			this.program = program;
 			upgradeUI = uUi;
-			
+			maxWaves = waveAmount;
 			lives = 0;
 			
 			models = new Model[17];
@@ -167,7 +167,6 @@ namespace TTG
 			{
 				
 				Enemy[] currentWave = new Enemy[waveAmount];
-				//Enemy currentEnemy;
 				
 				for (int j = 0; j < currentWave.Length; ++j)
 				{
@@ -211,19 +210,14 @@ namespace TTG
 		
 		public void Load(string filename)
 		{
-			try
-			{				
+		
 				TextReader tr = new StreamReader(filename);
 				
 				string fileContents = tr.ReadToEnd();
 				
 				GenerateLevel(fileContents);
-				
-			}
-			catch
-			{
-				throw new Exception("Cannot read level file");
-			}
+
+
 		}
 		
 		void GenerateLevel(string fileContents)
@@ -372,6 +366,7 @@ namespace TTG
 					{
 						levelData[x,y].modelLookup = 16;
 						
+						
 					}
 					else
 					{
@@ -438,13 +433,34 @@ namespace TTG
 		void InitialiseWaves()
 		{
 			//EnemyTypes.Initialise();
-			enemies = new Enemy[100];
-			
-			for (int i = 0; i < enemies.Length; i++)
+			Enemy[] currentWave = waves[WaveNumber];
+			counter = waves[WaveNumber].Length;
+			for (int i = 0; i < currentWave.Length; i++)
 			{
-				enemies[i] = new Enemy(graphics, EnemyTypes.basicEnemy, this, program);
-				enemies[i].SetPosition((int)SpawnPos.X, (int)spawnPos.Y, SpawnDir);
-				enemies[i].SpawnTime = 2 * i;
+				currentWave[i] = new Enemy(graphics, EnemyTypes.basicEnemy, this, program);
+				currentWave[i].SetPosition((int)SpawnPos.X, (int)spawnPos.Y, SpawnDir);
+				currentWave[i].SpawnTime = 2 * i;
+			}
+		}
+		
+		void NextWave()
+		{
+			bool alldead = true;
+			Enemy[] currentWave = waves[WaveNumber];
+			for (int i = 0; i < currentWave.Length; i++)
+			{
+				if(currentWave[i].Health > 0)
+				{
+					alldead = false;
+					break;
+				}
+				
+			}
+			
+			if (alldead)
+			{
+				WaveNumber++;
+				InitialiseWaves();
 			}
 		}
 		
@@ -539,6 +555,7 @@ namespace TTG
 		
 		public void Update (float dt, UpgradeUI ui, GamePadData data, Player player)
 		{
+			enemies = waves[WaveNumber];
 			for (int i = 0; i < enemies.Length; i++)
 			{
 				enemies[i].Update(dt);	
@@ -580,6 +597,7 @@ namespace TTG
 					}					
 				}
 			}
+			NextWave();
 		}
 	}
 }

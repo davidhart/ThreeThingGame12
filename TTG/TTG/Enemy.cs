@@ -34,7 +34,7 @@ namespace TTG
 			slowEnemy.speed = 0.5f;
 			
 			boss = new EnemyType();
-			boss.model = basicEnemy.model;
+			boss.model = new Model("penguin.mdx", 0);
 			boss.health = 100;
 			boss.speed = 1.5f;
 		}

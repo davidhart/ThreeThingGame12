@@ -186,7 +186,7 @@ namespace TTG
 				
 				if (target.Health <= 0)
 				{
-					target = null;
+					
 				} else
 				{
 					float distance = Vector2.Distance (target.GetPosition().Xz, GetPosition().Xz);

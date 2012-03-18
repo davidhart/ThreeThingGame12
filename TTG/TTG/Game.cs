@@ -129,7 +129,7 @@ namespace TTG
 			}
 			case GameState.Playing:
 			{
-				player.Update(gamePadData, dt, level.GetEnemies());
+				player.Update(gamePadData, dt, level.waves[level.WaveNumber]);
 				level.Update(dt, upgrade, gamePadData, player);
 				if(level.lives <=0)
 				{

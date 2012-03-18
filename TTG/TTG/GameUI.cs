@@ -30,7 +30,7 @@ namespace TTG
 			//font.DrawText(spritebatch, health.ToString(), new Vector2(34, 8), 2.0f);
 			font.DrawText(spritebatch, points.ToString(), new Vector2(34, 64 + 8), 2.0f);
 			font.DrawText(spritebatch, fish.ToString(), new Vector2(34, 64 + 8 + 32 + 8), 2.0f);
-			font.DrawText(spritebatch, "WAVE " + wave.ToString(), new Vector2(34, 64 + 8 + 32 + 8 + 32), 2.0f);
+			font.DrawText(spritebatch, "WAVE " + (wave + 1).ToString(), new Vector2(34, 64 + 8 + 32 + 8 + 32), 2.0f);
 			spritebatch.End();
 		}
 	}

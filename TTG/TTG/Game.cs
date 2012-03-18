@@ -15,7 +15,8 @@ namespace TTG
 	{
 		Playing,
 		Title,
-		Help
+		Help,
+		SplashScreen
 	}
 	
 	public class Game
@@ -27,8 +28,9 @@ namespace TTG
 		private int frameCount;
 		private int prevTicks;
 		
-		public GameState gameState = GameState.Title;
+		public GameState gameState = GameState.SplashScreen;
 		private TitleScreen titleScreen;
+		private SplashScreen splashScreen;
 		public bool IsRunning = true;
 		
 		private Vector3 cameraOffset;
@@ -67,8 +69,11 @@ namespace TTG
 			
 			stopwatch = new Stopwatch();
 			stopwatch.Start();
+			
 			titleScreen = new TitleScreen();
 			titleScreen.Initialise(graphics, this);
+			
+			splashScreen = new SplashScreen();
 			
 			UI = new GameUI();
 			upgrade = new UpgradeUI();
@@ -102,6 +107,11 @@ namespace TTG
 			List<TouchData> touchData = Touch.GetData(0);
 			switch (gameState)
 			{
+			case GameState.SplashScreen:
+			{
+				splashScreen.Update(dt, this);
+				break;
+			}
 			case GameState.Title:
 			{
 				titleScreen.Update(touchData);
@@ -128,6 +138,11 @@ namespace TTG
 			
 			switch (gameState)
 			{
+			case GameState.SplashScreen:
+			{
+				splashScreen.Draw (spriteBatch);
+				break;
+			}
 				case GameState.Title:
 				{
 					titleScreen.Draw();

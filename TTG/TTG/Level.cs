@@ -77,10 +77,11 @@ namespace TTG
 	{	
 		LevelState levelState = LevelState.Playing;
 		//Enemy waves
-		/*
-		List<Enemy[]> waves = new List<Enemy[]>();*/
-		int maxWaves;
-		int waveNumber;
+		
+		List<Enemy[]> waves = new List<Enemy[]>();
+		public int Points = 1000;
+		public int Fish =  100;
+		public int WaveNumber = 1;
 		
 		//Wave size
 		Random rand = new Random();
@@ -98,7 +99,7 @@ namespace TTG
 		private BasicProgram program;
 		private GraphicsContext graphics;
 		
-		int lives;
+		public int lives;
 		
 		Vector2 spawnPos;
 		Direction spawnDir;
@@ -161,29 +162,51 @@ namespace TTG
 			bridgeModel = new Model("mapparts/bridge.mdx", 0);
 			fishPileModel = new Model("mapparts/fish.mdx", 0);
 			
-			/*
+			EnemyTypes.Initialise();
 			for (int i = 0; i < waveAmount; ++i)
 			{
-				Enemy[] currentWave = new Enemy[rand.Next(10, 30)];
-				Enemy currentEnemy;
+				
+				Enemy[] currentWave = new Enemy[waveAmount];
+				//Enemy currentEnemy;
+				
+				for (int j = 0; j < currentWave.Length; ++j)
+				{
+					currentWave[j] = new Enemy(graphics, EnemyTypes.basicEnemy, this, program); 
+				}
 				
 				if (i == waveAmount -1)
 				{
 					//boss
+					for(int k = 0; k < currentWave.Length; ++k)
+					{
+						currentWave[k].type = EnemyTypes.boss;
+					}
+					waves.Add(currentWave);
 				}
 				else if(i%3 == 0)
 				{
 					//Fast enemy
+					for(int k = 0; k < currentWave.Length; ++k)
+					{
+						currentWave[k].type = EnemyTypes.fastEnemy;
+					}
+					waves.Add(currentWave);
 				}
 				else if(i%5 == 0)
 				{
 					//slow enemy
+					for(int k = 0; k < currentWave.Length; ++k)
+					{
+						currentWave[k].type = EnemyTypes.slowEnemy;
+					}
+					waves.Add(currentWave);
 				}
 				else
 				{
-					//standard enemy
+					//standard enemies
+					waves.Add(currentWave);
 				}
-			}*/
+			}
 		}
 		
 		public void Load(string filename)
@@ -414,7 +437,7 @@ namespace TTG
 		
 		void InitialiseWaves()
 		{
-			EnemyTypes.Initialise();
+			//EnemyTypes.Initialise();
 			enemies = new Enemy[100];
 			
 			for (int i = 0; i < enemies.Length; i++)
@@ -536,7 +559,7 @@ namespace TTG
 				}
 			}
 			
-			if (!upgradeUI.Update(data))
+			if (!upgradeUI.Update(data, ref Points))
 			{
 				player.DrawBuyMenuIcon (false);
 			

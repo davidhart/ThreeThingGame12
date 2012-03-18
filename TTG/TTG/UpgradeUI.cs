@@ -45,7 +45,7 @@ namespace TTG
 				} else {
 					if (turret.Level < 5) {
 						sb.Draw (textures [3], new Vector2 (100, 100));
-						font.DrawText (sb, "UPGRADE " + (1000 * turret.Level).ToString (), new Vector2 (165, 132), 1.0f);
+						font.DrawText (sb, "UPGRADE " + (100 * turret.Level).ToString (), new Vector2 (165, 132), 1.0f);
 					}
 					sb.Draw (textures [0], new Vector2 (200, 200));
 					font.DrawText (sb, "BACK", new Vector2 (265, 232), 1.0f);
@@ -56,7 +56,7 @@ namespace TTG
 			sb.End ();
 		}
 		
-		public bool Update (GamePadData data)
+		public bool Update (GamePadData data, ref int Points)
 		{
 			if (show) {
 				if (turret.State == Turret.TurretState.Buy) {
@@ -92,16 +92,20 @@ namespace TTG
 					if (data.ButtonsDown.HasFlag (GamePadButtons.Square)) 
 					{
 						//Upgrade
-						if(turret.Level < 5)
+						int cost = 100 * turret.Level;
+						if(turret.Level < 5 && Points >= cost)
 						{
+							Points -= cost;
+							turret.SetType (turret.type.nextUpgrade);
 							turret.Level++;
-							
 						}
 						show = false;
 					}
-					if (data.ButtonsDown.HasFlag (GamePadButtons.Triangle)) {
-						//flamer/icer
-						turret.State = Turret.TurretState.Upgrade;
+					if (data.ButtonsDown.HasFlag (GamePadButtons.Circle)) {
+						turret.type = null;
+						turret.Level = 1;
+						turret.State = Turret.TurretState.Buy;
+						Points += (int)(100 * (turret.Level/2));
 						show = false;
 					}
 				}

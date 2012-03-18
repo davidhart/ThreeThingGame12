@@ -24,30 +24,6 @@ namespace TTG
 		
 		float health = 100, points = 0, fish = 1000;
 		
-		public float Health
-		{
-			get
-			{
-				return health;
-			}
-			set
-			{
-				health = value;
-			}
-		}
-		
-		public float Points
-		{
-			get
-			{
-				return points;
-			}
-			set
-			{
-				points = value;
-			}
-		}
-		
 		float atkRange = 5;
 		float atkDmg = 20.0f;
 		

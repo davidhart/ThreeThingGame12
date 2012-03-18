@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Sce.Pss.Core;
 using Sce.Pss.Core.Environment;
 using Sce.Pss.Core.Graphics;
+using Sce.Pss.Core.Imaging;
 using Sce.Pss.Core.Input;
 using Sce.Pss.HighLevel.UI;
 
@@ -16,7 +17,8 @@ namespace TTG
 		Playing,
 		Title,
 		Help,
-		SplashScreen
+		SplashScreen,
+		GameOver
 	}
 	
 	public class Game
@@ -25,10 +27,12 @@ namespace TTG
 		private BasicProgram program;
 		private Stopwatch stopwatch;
 		
+		Texture2D gameOvertex;
+		
 		private int frameCount;
 		private int prevTicks;
 		
-		public GameState gameState = GameState.SplashScreen;
+		public GameState gameState = GameState.Playing;
 		private TitleScreen titleScreen;
 		private SplashScreen splashScreen;
 		public bool IsRunning = true;
@@ -86,6 +90,8 @@ namespace TTG
 			level.Load("testlevel.txt");
 			
 			player = new Player(graphics, program, billboardBatch, level);
+			
+			gameOvertex = new Texture2D("assets/gameOver.png", false);
 		}
 		
 		public void Load()
@@ -125,6 +131,15 @@ namespace TTG
 			{
 				player.Update(gamePadData, dt, level.GetEnemies());
 				level.Update(dt, upgrade, gamePadData, player);
+				if(level.lives <=0)
+				{
+					gameState = GameState.GameOver;
+				}
+				break;
+			}
+			case GameState.GameOver:
+			{
+				UpdateGameOver(gamePadData);
 				break;
 			}
 			}
@@ -157,6 +172,11 @@ namespace TTG
 					DrawGame();
 					break;
 				}
+			case GameState.GameOver:
+			{
+				DrawGameOver();
+				break;
+			}
 			}
 			
 			// Present the screen
@@ -194,9 +214,26 @@ namespace TTG
 			
 			graphics.Disable( EnableMode.CullFace );
 			graphics.Clear(ClearMask.Depth);
-			UI.Draw(spriteBatch, player.Health, player.Points, level.GetLives());					
+			UI.Draw(spriteBatch, level.Points, level.lives, ref level.WaveNumber);					
 			upgrade.Draw (spriteBatch);
 		}
+		
+		public void DrawGameOver()
+		{
+			spriteBatch.Begin();
+			spriteBatch.Draw(gameOvertex, new Vector2(0,0));
+			spriteBatch.End();
+		}
+		
+		public void UpdateGameOver(GamePadData data)
+		{
+			if (data.ButtonsDown.HasFlag (GamePadButtons.Cross)) 
+			{
+				level.Load("testlevel.txt");
+				gameState = GameState.Title;
+			}
+		}
+		
 	}
 }
 

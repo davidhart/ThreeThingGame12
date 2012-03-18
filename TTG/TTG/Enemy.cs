@@ -22,9 +22,27 @@ namespace TTG
 			basicEnemy.model = new Model("penguin.mdx", 0);
 			basicEnemy.speed = 1.0f;
 			basicEnemy.health = 50;
+			
+			fastEnemy = new EnemyType();
+			fastEnemy.model = basicEnemy.model;
+			fastEnemy.speed = 2.0f;
+			fastEnemy.health = 25;
+			
+			slowEnemy = new EnemyType();
+			slowEnemy.model = basicEnemy.model;
+			slowEnemy.health = 100;
+			slowEnemy.speed = 0.5f;
+			
+			boss = new EnemyType();
+			boss.model = basicEnemy.model;
+			boss.health = 100;
+			boss.speed = 1.5f;
 		}
 		
 		static public EnemyType basicEnemy;
+		static public EnemyType fastEnemy;
+		static public EnemyType slowEnemy;
+		static public EnemyType boss;
 	}
 	
 	public enum Direction
@@ -122,6 +140,11 @@ namespace TTG
 			}
 			set
 			{
+				if(health > 0 && value < 0)
+				{
+					level.Points += 35;	
+				}
+				
 				health = value;
 			}
 		}
@@ -131,7 +154,7 @@ namespace TTG
 		private int yTilePos;
 		
 		private AnimationState state;
-		private EnemyType type;
+		public EnemyType type;
 		private BasicProgram program;
 		
 		private Direction direction;

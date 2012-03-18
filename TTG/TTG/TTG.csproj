@@ -116,6 +116,8 @@
     <Content Include="assets\sounds\titlemusic.wav" />
     <Content Include="assets\Splash.png" />
     <Content Include="assets\Splash2.png" />
+    <Content Include="assets\gameOver.png" />
+    <Content Include="assets\pengIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

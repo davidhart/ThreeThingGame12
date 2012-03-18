@@ -13,7 +13,16 @@ namespace TTG
 		public byte AtkDmg;
 		public float AtkRange;
 		public float AtkSpeed;
+		public TurretType nextUpgrade;
 	}
+	
+	/*
+	public struct LevelModifier
+	{
+		public int DamageIncrease;
+		public int RangeIncrease;
+		public int SpeedIncrease;
+	}*/
 	
 	public class TurretTypes
 	{
@@ -22,14 +31,50 @@ namespace TTG
 			if (machineGunTurret != null)
 				return;
 			
+		
+			
 			machineGunTurret = new TurretType();
+			machineGunTurret2 = new TurretType();
+			machineGunTurret3 = new TurretType();
+			machineGunTurret4 = new TurretType();
+			machineGunTurret5 = new TurretType();
+		
 			machineGunTurret.AtkRange = 4;
 			machineGunTurret.AtkSpeed = 1.0f;
 			machineGunTurret.AtkDmg = 10;
 			machineGunTurret.model = TurretModels.machineGunTurret;
+			machineGunTurret.nextUpgrade = machineGunTurret2;
+			
+			machineGunTurret2.AtkRange = 5;
+			machineGunTurret2.AtkSpeed = 0.7f;
+			machineGunTurret2.AtkDmg = 4;
+			machineGunTurret2.model = TurretModels.machineGunTurret;
+			machineGunTurret2.nextUpgrade = machineGunTurret3;
+			
+			machineGunTurret3.AtkRange = 5;
+			machineGunTurret3.AtkSpeed = 1.0f;
+			machineGunTurret3.AtkDmg = 5;
+			machineGunTurret3.model = TurretModels.machineGunTurret;
+			machineGunTurret3.nextUpgrade = machineGunTurret4;
+			
+			machineGunTurret4.AtkRange = 5;
+			machineGunTurret4.AtkSpeed = 1.5f;
+			machineGunTurret4.AtkDmg = 10;
+			machineGunTurret4.model = TurretModels.machineGunTurret;
+			machineGunTurret4.nextUpgrade = machineGunTurret5;
+			
+			machineGunTurret5.AtkRange = 5;
+			machineGunTurret5.AtkSpeed = 1.5f;
+			machineGunTurret5.AtkDmg = 12;
+			machineGunTurret5.model = TurretModels.machineGunTurret;
+			machineGunTurret5.nextUpgrade = null;
 		}
-		
-		public static TurretType machineGunTurret;
+			public static TurretType machineGunTurret;
+			public static TurretType machineGunTurret2;
+			public static TurretType machineGunTurret3;
+			public static TurretType machineGunTurret4;
+			public static TurretType machineGunTurret5;
+
 	}
 	
 	public class TurretModels
@@ -65,7 +110,7 @@ namespace TTG
 		GraphicsContext graphics;
 
 		Enemy target = null;
-		TurretType type;
+		public TurretType type;
 		
 		float elapsed;
 		BillboardBatch billboardBatch;
@@ -100,6 +145,8 @@ namespace TTG
 			yTilePos = tileY;
 		}
 		
+		      
+		
 		public void Update (float dt, Enemy[] enemies)
 		{
 			if (type == null)
@@ -110,7 +157,7 @@ namespace TTG
 				for (int i = 0; i < enemies.Length; ++i)
 				{
 					float distance = Vector2.Distance (enemies[i].GetPosition().Xz, GetPosition().Xz);
-					if (distance <= type.AtkRange)
+					if (distance <= (type.AtkRange) && enemies[i].Health > 0)
 					{
 						target = enemies[i];
 						break;
@@ -120,7 +167,7 @@ namespace TTG
 			
 			if (target != null)
 			{
-				target.Health -= (type.AtkDmg) * dt;
+				target.Health -= (type.AtkDmg ) * dt;
 				
 				if (target.Health <= 0)
 				{

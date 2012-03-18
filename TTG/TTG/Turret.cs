@@ -38,6 +38,7 @@ namespace TTG
 			machineGunTurret3 = new TurretType();
 			machineGunTurret4 = new TurretType();
 			machineGunTurret5 = new TurretType();
+			icerTurret = new TurretType();
 		
 			machineGunTurret.AtkRange = 4;
 			machineGunTurret.AtkSpeed = 1.0f;
@@ -68,12 +69,20 @@ namespace TTG
 			machineGunTurret5.AtkDmg = 12;
 			machineGunTurret5.model = TurretModels.machineGunTurret;
 			machineGunTurret5.nextUpgrade = null;
+			
+			icerTurret.AtkRange = 4;
+			icerTurret.AtkSpeed = 0.3f;
+			icerTurret.AtkDmg = 1;
+			icerTurret.model = TurretModels.machineGunTurret;
+			icerTurret.nextUpgrade = null;
 		}
 			public static TurretType machineGunTurret;
 			public static TurretType machineGunTurret2;
 			public static TurretType machineGunTurret3;
 			public static TurretType machineGunTurret4;
 			public static TurretType machineGunTurret5;
+		
+			public static TurretType icerTurret;
 
 	}
 	
@@ -157,7 +166,7 @@ namespace TTG
 				for (int i = 0; i < enemies.Length; ++i)
 				{
 					float distance = Vector2.Distance (enemies[i].GetPosition().Xz, GetPosition().Xz);
-					if (distance <= (type.AtkRange) && enemies[i].Health > 0)
+					if (distance <= (type.AtkRange) && enemies[i].Health > 0 && enemies[i].SpawnTime <= 0)
 					{
 						target = enemies[i];
 						break;
@@ -167,6 +176,10 @@ namespace TTG
 			
 			if (target != null)
 			{
+				if(type == TurretTypes.icerTurret)
+				{
+					target.speedMultiplier = 0.5f;	
+				}
 				target.Health -= (type.AtkDmg ) * dt;
 				
 				if (target.Health <= 0)
@@ -232,18 +245,38 @@ namespace TTG
 				if (target != null)
 				{
 					billboardBatch.Begin();	
-				
-					// draw muzzle flash
-					if (Math.Sin(elapsed * 877.0f) > 0.3)
-					{			
-						billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 3.3f, 0) + turretDirection.Normalize() * 1.2f, new Vector2(1, 1));
-					}
-										
-					float splashSize = 0.2f * (elapsed % 2) + 0.4f;
-					float alpha = 1 - (elapsed % 2);
 					
-					billboardBatch.Draw(TurretModels.bloodSplat, target.GetPosition() + new Vector3(0, 1.0f, 0), new Vector2(splashSize),
-					                    new Rgba(255, 255, 255, (byte)(alpha * 255.0f)));
+					if (type == TurretTypes.icerTurret)
+					{
+						// draw muzzle flash
+								
+						billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 3.3f, 0) + turretDirection.Normalize() * 1.2f, new Vector2(1, 1),
+						                    new Rgba(120, 200, 255, (byte)(Math.Sin(elapsed * 6)*100 + 100)));
+										
+						float splashSize = 0.2f * (elapsed % 2) + 0.4f;
+						float alpha = 1 - (elapsed % 2);
+					
+						billboardBatch.Draw(TurretModels.bloodSplat, target.GetPosition() + new Vector3(0, 1.0f, 0), new Vector2(splashSize),
+					                    	new Rgba(255, 255, 255, (byte)(alpha * 255.0f)));
+					}
+					else
+					{
+
+				
+						// draw muzzle flash
+						if (Math.Sin(elapsed * 877.0f) > 0.3)
+						{			
+							billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 3.3f, 0) + turretDirection.Normalize() * 1.2f, new Vector2(1, 1));
+						}
+										
+						float splashSize = 0.2f * (elapsed % 2) + 0.4f;
+						float alpha = 1 - (elapsed % 2);
+					
+						billboardBatch.Draw(TurretModels.bloodSplat, target.GetPosition() + new Vector3(0, 1.0f, 0), new Vector2(splashSize),
+					                    	new Rgba(255, 255, 255, (byte)(alpha * 255.0f)));
+						
+					}
+					
 					billboardBatch.End();
 				}
 			}

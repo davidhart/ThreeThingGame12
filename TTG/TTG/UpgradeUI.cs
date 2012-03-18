@@ -43,7 +43,7 @@ namespace TTG
 					sb.Draw (textures [2], new Vector2 (200, 0));
 					font.DrawText (sb, "ICER", new Vector2 (265, 32), 1.0f);
 				} else {
-					if (turret.Level < 5) {
+					if (turret.type.nextUpgrade != null) {
 						sb.Draw (textures [3], new Vector2 (100, 100));
 						font.DrawText (sb, "UPGRADE " + (100 * turret.Level).ToString (), new Vector2 (165, 132), 1.0f);
 					}
@@ -73,12 +73,13 @@ namespace TTG
 					}
 					if (data.ButtonsDown.HasFlag (GamePadButtons.Triangle)) {
 						//flamer/icer
+						turret.SetType(TurretTypes.icerTurret);
 						turret.State = Turret.TurretState.Upgrade;
 						show = false;
 					}
 					if (data.ButtonsDown.HasFlag (GamePadButtons.Circle)) {
 						//sniper
-						turret.State = Turret.TurretState.Upgrade;
+						//turret.State = Turret.TurretState.Upgrade;
 						show = false;
 					}
 				} 
@@ -89,17 +90,22 @@ namespace TTG
 						
 						show = false;
 					}
-					if (data.ButtonsDown.HasFlag (GamePadButtons.Square)) 
+					
+					if (turret.type.nextUpgrade != null)
 					{
-						//Upgrade
-						int cost = 100 * turret.Level;
-						if(turret.Level < 5 && Points >= cost)
+						if (data.ButtonsDown.HasFlag (GamePadButtons.Square)) 
 						{
-							Points -= cost;
-							turret.SetType (turret.type.nextUpgrade);
-							turret.Level++;
+						//Upgrade
+						
+							int cost = 100 * turret.Level;
+							if(turret.Level < 5 && Points >= cost)
+							{
+								Points -= cost;
+								turret.SetType (turret.type.nextUpgrade);
+								turret.Level++;
+							}
+							show = false;
 						}
-						show = false;
 					}
 					if (data.ButtonsDown.HasFlag (GamePadButtons.Circle)) {
 						turret.type = null;

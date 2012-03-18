@@ -132,6 +132,7 @@ namespace TTG
 	public class Enemy
 	{	    
 		protected float health = 0;
+		public float speedMultiplier = 1;
 		public float Health
 		{
 			get
@@ -218,9 +219,9 @@ namespace TTG
 			
 			if(direction != Direction.Stop)
 			{
-				state.Update(dt * type.speed);
+				state.Update(dt * type.speed * speedMultiplier);
 				
-				offset += dt * type.speed;
+				offset += dt * type.speed * speedMultiplier;
 			
 				while (offset > 1)
 				{

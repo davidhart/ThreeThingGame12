@@ -129,7 +129,6 @@
     <Content Include="assets\win.png" />
     <Content Include="assets\help1.png" />
     <Content Include="assets\help2.png" />
-    <Content Include="assets\help3.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj">

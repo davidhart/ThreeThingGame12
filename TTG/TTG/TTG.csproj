@@ -113,15 +113,19 @@
     <Content Include="assets\muzzleFlash.png" />
     <Content Include="assets\squarebutton.png" />
     <Content Include="assets\triangleButton.png" />
-    <Content Include="assets\sounds\titlemusic.wav" />
     <Content Include="assets\Splash.png" />
     <Content Include="assets\Splash2.png" />
+    <Content Include="assets\sounds\One-eyed Maestro.mp3" />
+    <Content Include="assets\sounds\Sneaky Snitch.mp3" />
+    <Content Include="assets\sounds\tankfiring.wav" />
+    <Content Include="assets\sounds\turretgun.wav" />
     <Content Include="assets\gameOver.png" />
     <Content Include="assets\pengIcon.png" />
     <Content Include="assets\frost.png" />
     <Content Include="assets\bg.png" />
     <Content Include="assets\selection.png" />
     <Content Include="assets\penguintank.mdx" />
+    <Content Include="assets\sounds\penguin.wav" />
     <Content Include="assets\win.png" />
   </ItemGroup>
   <ItemGroup>

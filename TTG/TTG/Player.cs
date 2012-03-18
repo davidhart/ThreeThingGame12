@@ -114,6 +114,7 @@ namespace TTG
 				// draw muzzle flash
 				if (Math.Sin(elapsed * 8.0f) > 0.3)
 				{
+					SoundSystem.PlaySound("turret", 0.5f, false);
 					billboardBatch.Begin();
 					billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 0.9f, 0) + turretDirection.Normalize() * 1.1f, new Vector2(0.6f, 0.6f));
 					billboardBatch.End();

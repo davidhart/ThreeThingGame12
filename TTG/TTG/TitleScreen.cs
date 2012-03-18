@@ -18,7 +18,7 @@ namespace TTG
 			Help,
 		};
 		
-		SoundSystem sound;
+		//SoundSystem sound;
 		Texture2D title;
 		Texture2D frost;
 		Selected selectedItem;
@@ -32,8 +32,12 @@ namespace TTG
 		
 		public void Initialise()
 		{
-			sound = new SoundSystem();
-			sound.Play(0, 100, true);
+			//sound = new SoundSystem();
+			//sound.Play(1, 1.0f, true);
+			
+			SoundSystem.PlayBgm("title", 1.0f, true);
+			
+			
 		}
 		
 		public void Update(GamePadData data, Game game)
@@ -51,7 +55,7 @@ namespace TTG
 			{
 				Game.gameState = GameState.Playing;
 				
-				sound.Stop(0);
+				//SoundSystem.StopBgm("title");
 			}
 			else if(data.ButtonsDown.HasFlag(GamePadButtons.Cross) && 
 			        selectedItem == Selected.Help)

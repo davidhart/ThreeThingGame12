@@ -265,11 +265,12 @@ namespace TTG
 					else
 					{
 
-				
+						
 						// draw muzzle flash
 						if (Math.Sin(elapsed * 877.0f) > 0.3)
 						{			
 							billboardBatch.Draw(TurretModels.muzzleFlash, GetPosition() + new Vector3(0, 3.3f, 0) + turretDirection.Normalize() * 1.2f, new Vector2(1, 1));
+							SoundSystem.PlaySound("tank", 0.5f, false);
 						}
 										
 						float splashSize = 0.2f * (elapsed % 2) + 0.4f;

@@ -58,7 +58,13 @@ namespace TTG
 		}
 		
 		public void Initialise()
-		{			
+		{		
+			SoundSystem.AddBgm("title", "assets/sounds/One-eyed Maestro.mp3");
+			//SoundSystem.AddBgm("game", "assets/sounds/Sneaky Snitch.mp3");
+			SoundSystem.AddSound("tank", "assets/sounds/tankfiring.wav");
+			SoundSystem.AddSound("turret", "assets/sounds/turretgun.wav");
+			SoundSystem.AddSound("penguin", "assets/sounds/penguin.wav");
+			
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			graphics.SetViewport(0, 0, graphics.Screen.Width, graphics.Screen.Height);
@@ -121,6 +127,7 @@ namespace TTG
 			{
 			case GameState.SplashScreen:
 			{
+				
 				splashScreen.Update(dt, this);
 				break;
 			}

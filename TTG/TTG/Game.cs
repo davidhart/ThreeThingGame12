@@ -120,7 +120,7 @@ namespace TTG
 			}
 			case GameState.Title:
 			{
-				titleScreen.Update();
+				titleScreen.Update(gamePadData, this);
 				break;
 			}
 			case GameState.Help:

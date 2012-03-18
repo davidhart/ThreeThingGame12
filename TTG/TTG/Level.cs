@@ -512,7 +512,8 @@ namespace TTG
 		
 		public void Draw()
 		{				
-			graphics.Disable( EnableMode.CullFace );			
+			graphics.Disable( EnableMode.CullFace );
+			enemies = waves[WaveNumber];
 			for (int i = 0; i < enemies.Length; i++)
 			{
 				enemies[i].Draw();	

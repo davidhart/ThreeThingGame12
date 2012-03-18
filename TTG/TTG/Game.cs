@@ -34,7 +34,7 @@ namespace TTG
 		private int frameCount;
 		private int prevTicks;
 		
-		public static GameState gameState = GameState.Title;
+		public static GameState gameState = GameState.SplashScreen;
 		private TitleScreen titleScreen;
 		private SplashScreen splashScreen;
 		private HelpScreen helpScreen;
